@@ -11,9 +11,11 @@ import Header from "@/components/Header";
 import FileUpload from "@/components/FileUpload";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useAssessments } from "@/hooks/useAssessments";
 
 const NewAssessment = () => {
   const navigate = useNavigate();
+  const { createAssessment } = useAssessments();
   const [formData, setFormData] = useState({
     systemName: "",
     environment: "",
@@ -24,12 +26,13 @@ const NewAssessment = () => {
     criticalityLevel: ""
   });
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -42,16 +45,35 @@ const NewAssessment = () => {
       return;
     }
 
-    // Mock assessment creation
-    const assessmentId = Math.random().toString(36).substr(2, 9);
-    
-    toast({
-      title: "Assessment Created",
-      description: `Assessment "${formData.systemName}" has been created successfully with ${uploadedFiles.length} document(s)`,
-    });
+    setIsSubmitting(true);
 
-    // Navigate to agent hub
-    navigate(`/assessment/${assessmentId}/agents`);
+    try {
+      const assessment = await createAssessment.mutateAsync({
+        systemName: formData.systemName,
+        environment: formData.environment,
+        complianceScope: formData.complianceScope,
+        ownerName: formData.ownerName || undefined,
+        ownerRole: formData.ownerRole || undefined,
+        description: formData.description || undefined,
+        criticalityLevel: formData.criticalityLevel || undefined,
+      });
+      
+      toast({
+        title: "Assessment Created",
+        description: `Assessment "${formData.systemName}" has been created successfully with ${uploadedFiles.length} document(s)`,
+      });
+
+      // Navigate to agent hub with the real assessment ID
+      navigate(`/assessment/${assessment.id}/agents`);
+    } catch (error: any) {
+      toast({
+        title: "Error Creating Assessment",
+        description: error.message || "Failed to create assessment",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -223,6 +245,7 @@ const NewAssessment = () => {
                 type="button" 
                 variant="outline" 
                 onClick={() => navigate("/dashboard")}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
@@ -231,8 +254,9 @@ const NewAssessment = () => {
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8"
                 size="lg"
+                disabled={isSubmitting}
               >
-                Begin Assessment
+                {isSubmitting ? "Creating..." : "Begin Assessment"}
               </Button>
             </div>
           </form>

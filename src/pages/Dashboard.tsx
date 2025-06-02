@@ -5,58 +5,11 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import AnalyticsCards from "@/components/dashboard/AnalyticsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 import AssessmentsList from "@/components/dashboard/AssessmentsList";
+import { useAssessments } from "@/hooks/useAssessments";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  // Mock assessment data - will be replaced with real data later
-  const assessments = [
-    {
-      id: "1",
-      systemName: "Customer Portal System",
-      environment: "Production",
-      scope: "NIST 800-53",
-      status: "in-progress" as const,
-      owner: "John Smith",
-      lastUpdated: "2 days ago"
-    },
-    {
-      id: "2", 
-      systemName: "Internal HR Database",
-      environment: "Development",
-      scope: "HIPAA",
-      status: "completed" as const,
-      owner: "Sarah Johnson",
-      lastUpdated: "1 week ago"
-    },
-    {
-      id: "3",
-      systemName: "Financial Reporting System",
-      environment: "Test",
-      scope: "CMMC Level 2",
-      status: "not-started" as const,
-      owner: "Mike Davis",
-      lastUpdated: "3 days ago"
-    },
-    {
-      id: "4",
-      systemName: "Employee Mobile App",
-      environment: "Production",
-      scope: "ISO 27001",
-      status: "completed" as const,
-      owner: "Lisa Chen",
-      lastUpdated: "5 days ago"
-    },
-    {
-      id: "5",
-      systemName: "Cloud Infrastructure",
-      environment: "Production",
-      scope: "SOC 2 Type II",
-      status: "in-progress" as const,
-      owner: "David Rodriguez",
-      lastUpdated: "1 day ago"
-    }
-  ];
+  const { assessments, isLoading } = useAssessments();
 
   const handleViewAssessment = (id: string) => {
     navigate(`/assessment/${id}/agents`);
@@ -66,9 +19,31 @@ const Dashboard = () => {
     navigate("/assessment/new");
   };
 
-  const completedAssessments = assessments.filter(a => a.status === 'completed').length;
-  const inProgressAssessments = assessments.filter(a => a.status === 'in-progress').length;
+  // Transform assessments data to match the expected format
+  const transformedAssessments = assessments.map(assessment => ({
+    id: assessment.id,
+    systemName: assessment.system_name,
+    environment: assessment.environment,
+    scope: assessment.compliance_scope,
+    status: assessment.status,
+    owner: assessment.owner_name || "Unknown",
+    lastUpdated: new Date(assessment.updated_at).toLocaleDateString()
+  }));
+
+  const completedAssessments = transformedAssessments.filter(a => a.status === 'completed').length;
+  const inProgressAssessments = transformedAssessments.filter(a => a.status === 'in-progress').length;
   const averageComplianceScore = 82; // Mock data - calculate from compliance frameworks
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="text-center">Loading assessments...</div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -78,7 +53,7 @@ const Dashboard = () => {
         <DashboardHeader onNewAssessment={handleNewAssessment} />
 
         <AnalyticsCards
-          totalAssessments={assessments.length}
+          totalAssessments={transformedAssessments.length}
           completedAssessments={completedAssessments}
           inProgressAssessments={inProgressAssessments}
           averageComplianceScore={averageComplianceScore}
@@ -87,7 +62,7 @@ const Dashboard = () => {
         <DashboardCharts />
 
         <AssessmentsList
-          assessments={assessments}
+          assessments={transformedAssessments}
           onViewAssessment={handleViewAssessment}
           onNewAssessment={handleNewAssessment}
         />

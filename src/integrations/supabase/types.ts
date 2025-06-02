@@ -45,6 +45,51 @@ export type Database = {
         }
         Relationships: []
       }
+      assessments: {
+        Row: {
+          compliance_scope: string
+          created_at: string
+          criticality_level: string | null
+          description: string | null
+          environment: string
+          id: string
+          owner_name: string | null
+          owner_role: string | null
+          status: string
+          system_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          compliance_scope: string
+          created_at?: string
+          criticality_level?: string | null
+          description?: string | null
+          environment: string
+          id?: string
+          owner_name?: string | null
+          owner_role?: string | null
+          status?: string
+          system_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          compliance_scope?: string
+          created_at?: string
+          criticality_level?: string | null
+          description?: string | null
+          environment?: string
+          id?: string
+          owner_name?: string | null
+          owner_role?: string | null
+          status?: string
+          system_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
