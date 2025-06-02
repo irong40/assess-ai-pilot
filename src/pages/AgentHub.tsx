@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,17 +11,17 @@ const AgentHub = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   
-  const user = {
-    email: "admin@company.com",
-    role: "admin"
-  };
-
   // Mock assessment data
   const assessment = {
     id: id,
     systemName: "Customer Portal System",
     environment: "Production",
     scope: "NIST 800-53"
+  };
+
+  const user = {
+    email: "admin@company.com",
+    role: "admin"
   };
 
   const agents = [
@@ -189,7 +188,7 @@ const AgentHub = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header user={user} />
+      <Header />
       
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
