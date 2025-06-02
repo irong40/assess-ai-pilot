@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NewAssessment from "./pages/NewAssessment";
 import AgentHub from "./pages/AgentHub";
+import AgentPolicy from "./pages/AgentPolicy";
+import AgentPhysical from "./pages/AgentPhysical";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/assessment/new" element={<NewAssessment />} />
           <Route path="/assessment/:id/agents" element={<AgentHub />} />
+          <Route path="/assessment/:id/agents/policy" element={<AgentPolicy />} />
+          <Route path="/assessment/:id/agents/physical" element={<AgentPhysical />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
