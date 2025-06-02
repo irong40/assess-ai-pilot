@@ -11,35 +11,35 @@ const Index = () => {
   const features = [
     {
       icon: <Bot className="h-8 w-8 text-blue-600" />,
-      title: "AI-Powered Agents",
-      description: "15 specialized AI agents designed to analyze different aspects of cybersecurity",
-      highlight: "15 Agents"
+      title: "AI-Powered Analysis",
+      description: "Experience our early AI agents analyzing cybersecurity frameworks and compliance requirements",
+      highlight: "Live Demo"
     },
     {
       icon: <Shield className="h-8 w-8 text-green-600" />,
-      title: "Compliance Framework", 
-      description: "Being built with NIST, HIPAA, CMMC, and other compliance frameworks in mind",
-      highlight: "Framework Ready"
+      title: "Framework Foundation", 
+      description: "Built with NIST, HIPAA, and CMMC compliance standards as our core foundation",
+      highlight: "Standards Ready"
     },
     {
       icon: <CheckCircle className="h-8 w-8 text-purple-600" />,
-      title: "Automated Reports",
-      description: "Working towards generating comprehensive assessment reports automatically",
-      highlight: "In Development"
+      title: "Early Access Benefits",
+      description: "Get first access to new features and directly influence product development",
+      highlight: "Shape the Future"
     },
     {
       icon: <Users className="h-8 w-8 text-orange-600" />,
-      title: "Role-Based Access",
-      description: "Designed for ISSO, ISSM, and Admin roles with tailored interfaces",
-      highlight: "Multi-Role"
+      title: "Expert-Designed",
+      description: "Created by cybersecurity professionals for ISSO, ISSM, and security teams",
+      highlight: "By Experts"
     }
   ];
 
   const stats = [
-    { number: "15", label: "AI Agents", icon: <Bot className="h-5 w-5" /> },
-    { number: "Early", label: "Access", icon: <Target className="h-5 w-5" /> },
-    { number: "Future", label: "Automation", icon: <Zap className="h-5 w-5" /> },
-    { number: "Beta", label: "Testing", icon: <Users className="h-5 w-5" /> }
+    { number: "Early", label: "Development", icon: <Sparkles className="h-5 w-5" /> },
+    { number: "Live", label: "Demo", icon: <Eye className="h-5 w-5" /> },
+    { number: "Direct", label: "Input", icon: <Target className="h-5 w-5" /> },
+    { number: "Free", label: "Access", icon: <Users className="h-5 w-5" /> }
   ];
 
   const backgroundStyle = {
@@ -72,7 +72,7 @@ const Index = () => {
             className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
             <Eye className="h-4 w-4 mr-2" />
-            View Demo
+            Try Demo
           </Button>
         </div>
       </header>
@@ -84,12 +84,12 @@ const Index = () => {
             <div className="flex items-center justify-center mb-6">
               <Sparkles className="h-6 w-6 text-yellow-400 mr-2 animate-pulse" />
               <span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">
-                Currently in Early Development
+                Early Access Available Now
               </span>
             </div>
             
             <h2 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
-              AI-Powered
+              The Future of
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent block">
                 Cybersecurity
               </span>
@@ -97,15 +97,30 @@ const Index = () => {
             </h2>
             
             <p className="text-xl text-slate-300 mb-6 leading-relaxed max-w-3xl mx-auto">
-              We're building the future of cybersecurity compliance with 15 specialized AI agents. 
-              Get early access and help shape this revolutionary platform.
+              We're building 15 specialized AI agents to revolutionize compliance assessments. 
+              Join early and help shape the platform that will transform cybersecurity.
             </p>
 
-            <div className="bg-blue-500/10 border border-blue-400/30 rounded-lg p-4 mb-10 max-w-2xl mx-auto">
-              <p className="text-blue-200 text-sm">
-                <strong>What you get today:</strong> Access to our development environment, 
-                early features, and the ability to provide feedback that shapes the product.
-              </p>
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/30 rounded-lg p-6 mb-10 max-w-2xl mx-auto">
+              <h3 className="text-blue-200 font-semibold mb-3">What You Get Today:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-blue-100">
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                  <span>Live demo of AI assessment tools</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                  <span>Early access to new features</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                  <span>Direct line to product team</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                  <span>Help shape the roadmap</span>
+                </div>
+              </div>
             </div>
             
             {/* Stats Bar */}
@@ -122,32 +137,31 @@ const Index = () => {
             </div>
             
             {/* Primary CTA */}
-            <div className="mb-6">
+            <div className="mb-8">
               <Button 
                 onClick={() => navigate("/auth")}
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                Get Early Access Now
+                Get Free Early Access
                 <ArrowRight className="h-6 w-6 ml-3" />
               </Button>
             </div>
 
-            {/* Secondary Action */}
-            <div className="flex items-center justify-center space-x-4 text-sm text-slate-300">
-              <span>Want to see what we're building?</span>
+            <p className="text-sm text-slate-400 mb-4">
+              ✓ Completely free • ✓ No credit card required • ✓ Instant access
+            </p>
+
+            <div className="text-sm text-slate-400">
+              Want to see it first?{" "}
               <Button 
                 onClick={() => navigate("/dashboard")}
                 variant="link"
-                className="text-blue-400 hover:text-blue-300 p-0 h-auto font-normal"
+                className="text-blue-400 hover:text-blue-300 p-0 h-auto font-normal text-sm underline"
               >
-                View Demo →
+                Try the demo
               </Button>
             </div>
-
-            <p className="text-sm text-slate-400 mt-6">
-              Free early access • Shape the future • No commitment required
-            </p>
           </div>
         </div>
 
@@ -155,10 +169,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto mb-20">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-white mb-4">
-              What We're Building
+              Experience the Future Today
             </h3>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Our vision for transforming cybersecurity assessments with AI technology
+              See what's possible when AI meets cybersecurity expertise
             </p>
           </div>
           
@@ -195,11 +209,11 @@ const Index = () => {
           <Card className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20 backdrop-blur-lg border-white/20">
             <CardContent className="p-8 md:p-12">
               <h3 className="text-3xl font-bold text-white mb-4">
-                Ready to Shape the Future of Cybersecurity?
+                Join the Cybersecurity Revolution
               </h3>
               <p className="text-slate-300 mb-8 text-lg">
-                Join our early development community. Get access to the latest features, 
-                provide feedback, and help us build the ultimate AI-powered compliance platform.
+                Be among the first to experience AI-powered compliance assessments. 
+                Your feedback will directly shape the future of cybersecurity technology.
               </p>
               
               <Button 
@@ -207,15 +221,15 @@ const Index = () => {
                 size="lg"
                 className="bg-white text-slate-900 hover:bg-slate-100 font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-300 mb-6"
               >
-                Start Your Early Access
+                Start Your Free Access
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
               
               <div className="flex items-center justify-center space-x-6 text-sm text-slate-400">
-                <span>✓ Free access</span>
-                <span>✓ Early features</span>
-                <span>✓ Direct feedback channel</span>
+                <span>✓ Instant access</span>
+                <span>✓ Live demo included</span>
                 <span>✓ Shape the product</span>
+                <span>✓ Expert community</span>
               </div>
             </CardContent>
           </Card>
@@ -225,7 +239,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="container mx-auto px-4 py-8 mt-16 border-t border-white/10 relative z-10">
         <div className="text-center text-slate-400 text-sm">
-          <p>&copy; 2024 Sentinel AI. Building the future of cybersecurity compliance with artificial intelligence.</p>
+          <p>&copy; 2024 Sentinel AI. Transforming cybersecurity compliance with artificial intelligence.</p>
         </div>
       </footer>
     </div>
