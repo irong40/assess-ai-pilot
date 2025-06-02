@@ -1,9 +1,11 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Upload, Bot, CheckCircle } from "lucide-react";
+import { ArrowLeft, Bot, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
+import FileUpload from "@/components/FileUpload";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
@@ -13,6 +15,7 @@ const AgentPhysical = () => {
   const [analysis, setAnalysis] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -43,7 +46,10 @@ const AgentPhysical = () => {
 3. Audit and deactivate unused access credentials
 4. Install additional surveillance in server areas
 
-## Compliance Score: 78/100`;
+## Compliance Score: 78/100
+
+## Uploaded Documents Analysis
+${uploadedFiles.length > 0 ? `Analyzed ${uploadedFiles.length} document(s) including facility layouts and security procedures.` : 'No additional documents provided for analysis.'}`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -90,16 +96,11 @@ const AgentPhysical = () => {
                 <CardTitle>Assessment Input</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                  <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-                  <h3 className="font-medium text-slate-900 mb-2">Upload Physical Security Documents</h3>
-                  <p className="text-sm text-slate-600 mb-4">
-                    Facility layouts, access control policies, surveillance documentation
-                  </p>
-                  <Button variant="outline" size="sm">
-                    Select Files
-                  </Button>
-                </div>
+                <FileUpload
+                  onUploadComplete={setUploadedFiles}
+                  acceptedTypes=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.dwg"
+                  maxFiles={5}
+                />
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">

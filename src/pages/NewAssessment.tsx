@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload, ArrowLeft, Shield, FileText } from "lucide-react";
+import { ArrowLeft, Shield, FileText } from "lucide-react";
 import Header from "@/components/Header";
+import FileUpload from "@/components/FileUpload";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
@@ -21,6 +23,7 @@ const NewAssessment = () => {
     description: "",
     criticalityLevel: ""
   });
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -44,7 +47,7 @@ const NewAssessment = () => {
     
     toast({
       title: "Assessment Created",
-      description: `Assessment "${formData.systemName}" has been created successfully`,
+      description: `Assessment "${formData.systemName}" has been created successfully with ${uploadedFiles.length} document(s)`,
     });
 
     // Navigate to agent hub
@@ -207,16 +210,11 @@ const NewAssessment = () => {
                 <CardTitle>Document Upload</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
-                  <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-slate-900 mb-2">Upload System Documents</h3>
-                  <p className="text-slate-600 mb-4">
-                    System Security Plans (SSP), network diagrams, configuration files, and other relevant documentation
-                  </p>
-                  <Button variant="outline" type="button">
-                    Select Files
-                  </Button>
-                </div>
+                <FileUpload
+                  onUploadComplete={setUploadedFiles}
+                  acceptedTypes=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.xlsx,.csv"
+                  maxFiles={10}
+                />
               </CardContent>
             </Card>
 

@@ -2,8 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
+import FileUpload from "@/components/FileUpload";
 
 interface ReportConfig {
   reportTitle: string;
@@ -17,6 +16,12 @@ interface ReportConfigurationProps {
 }
 
 const ReportConfiguration = ({ config, onConfigChange }: ReportConfigurationProps) => {
+  const handleLogoUpload = (files: any[]) => {
+    if (files.length > 0) {
+      onConfigChange('organizationLogo', files[0].url);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -56,15 +61,13 @@ const ReportConfiguration = ({ config, onConfigChange }: ReportConfigurationProp
           </div>
         </div>
 
-        <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center">
-          <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-          <h3 className="font-medium text-slate-900 mb-2">Upload Organization Logo</h3>
-          <p className="text-sm text-slate-600 mb-4">
-            PNG or SVG format, recommended size 200x80px
-          </p>
-          <Button variant="outline" size="sm">
-            Select Logo
-          </Button>
+        <div className="space-y-2">
+          <Label>Organization Logo</Label>
+          <FileUpload
+            onUploadComplete={handleLogoUpload}
+            acceptedTypes=".png,.jpg,.jpeg,.svg"
+            maxFiles={1}
+          />
         </div>
       </CardContent>
     </Card>
