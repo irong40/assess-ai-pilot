@@ -12,34 +12,34 @@ const Index = () => {
     {
       icon: <Bot className="h-8 w-8 text-blue-600" />,
       title: "AI-Powered Agents",
-      description: "15 specialized AI agents analyze every aspect of your cybersecurity posture",
+      description: "15 specialized AI agents designed to analyze different aspects of cybersecurity",
       highlight: "15 Agents"
     },
     {
       icon: <Shield className="h-8 w-8 text-green-600" />,
-      title: "Compliance Ready", 
-      description: "Built for NIST, HIPAA, CMMC, and other major compliance frameworks",
-      highlight: "Multi-Framework"
+      title: "Compliance Framework", 
+      description: "Being built with NIST, HIPAA, CMMC, and other compliance frameworks in mind",
+      highlight: "Framework Ready"
     },
     {
       icon: <CheckCircle className="h-8 w-8 text-purple-600" />,
       title: "Automated Reports",
-      description: "Generate comprehensive assessment reports with POAM tables automatically",
-      highlight: "Auto-Generated"
+      description: "Working towards generating comprehensive assessment reports automatically",
+      highlight: "In Development"
     },
     {
       icon: <Users className="h-8 w-8 text-orange-600" />,
-      title: "Role-Based Workflow",
-      description: "ISSO, ISSM, and Admin roles with tailored interfaces and permissions",
-      highlight: "3 User Roles"
+      title: "Role-Based Access",
+      description: "Designed for ISSO, ISSM, and Admin roles with tailored interfaces",
+      highlight: "Multi-Role"
     }
   ];
 
   const stats = [
-    { number: "99.9%", label: "Uptime", icon: <Target className="h-5 w-5" /> },
     { number: "15", label: "AI Agents", icon: <Bot className="h-5 w-5" /> },
-    { number: "500+", label: "Organizations", icon: <Users className="h-5 w-5" /> },
-    { number: "<24h", label: "Assessment Time", icon: <Zap className="h-5 w-5" /> }
+    { number: "Early", label: "Access", icon: <Target className="h-5 w-5" /> },
+    { number: "Future", label: "Automation", icon: <Zap className="h-5 w-5" /> },
+    { number: "Beta", label: "Testing", icon: <Users className="h-5 w-5" /> }
   ];
 
   const backgroundStyle = {
@@ -57,7 +57,7 @@ const Index = () => {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <Shield className="h-8 w-8 text-blue-400" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
             </div>
             <div>
               <h1 className="text-xl font-bold text-white">Sentinel AI</h1>
@@ -70,7 +70,7 @@ const Index = () => {
             variant="outline"
             className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
-            Sign In
+            Early Access
           </Button>
         </div>
       </header>
@@ -81,8 +81,8 @@ const Index = () => {
           <div className="max-w-5xl mx-auto">
             <div className="flex items-center justify-center mb-6">
               <Sparkles className="h-6 w-6 text-yellow-400 mr-2 animate-pulse" />
-              <span className="text-sm font-semibold text-blue-300 uppercase tracking-wider">
-                Next-Generation Security
+              <span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">
+                Early Development
               </span>
             </div>
             
@@ -95,8 +95,8 @@ const Index = () => {
             </h2>
             
             <p className="text-xl text-slate-300 mb-10 leading-relaxed max-w-3xl mx-auto">
-              Leverage 15 specialized AI agents to conduct comprehensive security assessments, 
-              ensure compliance, and generate detailed reports automatically — all in minutes, not months.
+              We're building a platform with 15 specialized AI agents designed to revolutionize 
+              cybersecurity assessments and compliance reporting. Join us early to help shape the future.
             </p>
             
             {/* Stats Bar */}
@@ -119,7 +119,7 @@ const Index = () => {
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
               >
-                Start Free Assessment
+                Request Early Access
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
               
@@ -129,12 +129,12 @@ const Index = () => {
                 size="lg"
                 className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg transition-all duration-300"
               >
-                View Live Demo
+                View Development
               </Button>
             </div>
 
             <p className="text-sm text-slate-400 mt-4">
-              No credit card required • Full assessment in under 30 minutes
+              Early development stage • Help us build the future of cybersecurity
             </p>
           </div>
         </div>
@@ -143,10 +143,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto mb-20">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-white mb-4">
-              Why Choose Sentinel AI?
+              What We're Building
             </h3>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Transform your security assessments with cutting-edge AI technology
+              Our vision for transforming cybersecurity assessments with AI technology
             </p>
           </div>
           
@@ -183,19 +183,18 @@ const Index = () => {
           <Card className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20 backdrop-blur-lg border-white/20">
             <CardContent className="p-8 md:p-12">
               <div className="flex items-center justify-center mb-6">
-                <div className="flex -space-x-2">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 border-2 border-white/20"></div>
-                  ))}
+                <div className="flex items-center space-x-2">
+                  <Bot className="h-8 w-8 text-blue-400" />
+                  <span className="text-white font-semibold">Join the Early Development Journey</span>
                 </div>
-                <span className="ml-4 text-white font-semibold">500+ Organizations Trust Sentinel AI</span>
               </div>
               
               <h3 className="text-3xl font-bold text-white mb-4">
-                Ready to Transform Your Security Assessments?
+                Ready to Help Shape the Future?
               </h3>
               <p className="text-slate-300 mb-8 text-lg">
-                Join organizations already using AI to streamline their compliance processes and reduce assessment time by 90%
+                We're actively developing this platform and looking for early users to provide feedback 
+                and help us build something truly revolutionary for cybersecurity professionals.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -204,7 +203,7 @@ const Index = () => {
                   size="lg"
                   className="bg-white text-slate-900 hover:bg-slate-100 font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-300"
                 >
-                  Start Free Trial
+                  Get Early Access
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
                 
@@ -214,14 +213,14 @@ const Index = () => {
                   size="lg"
                   className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3"
                 >
-                  Schedule Demo
+                  View Progress
                 </Button>
               </div>
               
               <div className="flex items-center justify-center mt-6 space-x-6 text-sm text-slate-400">
-                <span>✓ 30-day free trial</span>
-                <span>✓ No setup fees</span>
-                <span>✓ Cancel anytime</span>
+                <span>✓ Early development</span>
+                <span>✓ Active feedback</span>
+                <span>✓ Shape the product</span>
               </div>
             </CardContent>
           </Card>
@@ -231,7 +230,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="container mx-auto px-4 py-8 mt-16 border-t border-white/10 relative z-10">
         <div className="text-center text-slate-400 text-sm">
-          <p>&copy; 2024 Sentinel AI. Transforming cybersecurity compliance with artificial intelligence.</p>
+          <p>&copy; 2024 Sentinel AI. Building the future of cybersecurity compliance with artificial intelligence.</p>
         </div>
       </footer>
     </div>
