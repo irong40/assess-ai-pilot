@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,13 +12,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
-  // Mock user data - replace with actual auth
-  const user = {
-    email: "admin@company.com",
-    role: "admin"
-  };
-
-  // Mock assessment data
+  // Mock assessment data - will be replaced with real data later
   const assessments = [
     {
       id: "1",
@@ -67,7 +60,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header user={user} />
+      <Header />
       
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">

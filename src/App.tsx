@@ -4,7 +4,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import NewAssessment from "./pages/NewAssessment";
 import AgentHub from "./pages/AgentHub";
@@ -31,30 +34,33 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/assessment/new" element={<NewAssessment />} />
-          <Route path="/assessment/:id/agents" element={<AgentHub />} />
-          <Route path="/assessment/:id/agents/policy" element={<AgentPolicy />} />
-          <Route path="/assessment/:id/agents/physical" element={<AgentPhysical />} />
-          <Route path="/assessment/:id/agents/network" element={<AgentNetwork />} />
-          <Route path="/assessment/:id/agents/access" element={<AgentAccess />} />
-          <Route path="/assessment/:id/agents/data" element={<AgentData />} />
-          <Route path="/assessment/:id/agents/incident" element={<AgentIncident />} />
-          <Route path="/assessment/:id/agents/compliance" element={<AgentCompliance />} />
-          <Route path="/assessment/:id/agents/vulnerability" element={<AgentVulnerability />} />
-          <Route path="/assessment/:id/agents/training" element={<AgentTraining />} />
-          <Route path="/assessment/:id/agents/continuity" element={<AgentContinuity />} />
-          <Route path="/assessment/:id/lead-summary" element={<LeadSummary />} />
-          <Route path="/assessment/:id/issm-review" element={<ISSMReview />} />
-          <Route path="/assessment/:id/report" element={<ReportBuilder />} />
-          <Route path="/assessment/:id/feedback" element={<Feedback />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/assessment/new" element={<ProtectedRoute><NewAssessment /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents" element={<ProtectedRoute><AgentHub /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/policy" element={<ProtectedRoute><AgentPolicy /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/physical" element={<ProtectedRoute><AgentPhysical /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/network" element={<ProtectedRoute><AgentNetwork /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/access" element={<ProtectedRoute><AgentAccess /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/data" element={<ProtectedRoute><AgentData /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/incident" element={<ProtectedRoute><AgentIncident /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/compliance" element={<ProtectedRoute><AgentCompliance /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/vulnerability" element={<ProtectedRoute><AgentVulnerability /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/training" element={<ProtectedRoute><AgentTraining /></ProtectedRoute>} />
+            <Route path="/assessment/:id/agents/continuity" element={<ProtectedRoute><AgentContinuity /></ProtectedRoute>} />
+            <Route path="/assessment/:id/lead-summary" element={<ProtectedRoute><LeadSummary /></ProtectedRoute>} />
+            <Route path="/assessment/:id/issm-review" element={<ProtectedRoute><ISSMReview /></ProtectedRoute>} />
+            <Route path="/assessment/:id/report" element={<ProtectedRoute><ReportBuilder /></ProtectedRoute>} />
+            <Route path="/assessment/:id/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

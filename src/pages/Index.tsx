@@ -1,40 +1,12 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Bot, CheckCircle, Users, ArrowRight, Mail, Lock } from "lucide-react";
+import { Shield, Bot, CheckCircle, Users, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast({
-        title: "Email Required",
-        description: "Please enter your email address",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    
-    // Mock authentication - replace with actual auth
-    setTimeout(() => {
-      toast({
-        title: "Welcome back!",
-        description: "You have been signed in successfully",
-      });
-      navigate("/dashboard");
-      setIsLoading(false);
-    }, 1500);
-  };
 
   const features = [
     {
@@ -63,12 +35,22 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
-        <div className="flex items-center space-x-3">
-          <Shield className="h-8 w-8 text-blue-400" />
-          <div>
-            <h1 className="text-xl font-bold text-white">SecureAssess</h1>
-            <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Shield className="h-8 w-8 text-blue-400" />
+            <div>
+              <h1 className="text-xl font-bold text-white">SecureAssess</h1>
+              <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
+            </div>
           </div>
+          
+          <Button 
+            onClick={() => navigate("/auth")}
+            variant="outline"
+            className="text-white border-white/30 hover:bg-white/10"
+          >
+            Sign In
+          </Button>
         </div>
       </header>
 
@@ -88,49 +70,26 @@ const Index = () => {
               ensure compliance, and generate detailed reports automatically.
             </p>
             
-            {/* Auth Card */}
-            <Card className="max-w-md mx-auto bg-white/10 backdrop-blur-lg border-white/20">
-              <CardHeader>
-                <CardTitle className="text-white text-center">
-                  Get Started with SecureAssess
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300"
-                    />
-                  </div>
-                  <Button 
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                    size="lg"
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                        <span>Signing in...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <Lock className="h-4 w-4" />
-                        <span>Sign In with Magic Link</span>
-                      </div>
-                    )}
-                  </Button>
-                </form>
-                <p className="text-center text-sm text-slate-300 mt-4">
-                  Secure, passwordless authentication
-                </p>
-              </CardContent>
-            </Card>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                onClick={() => navigate("/auth")}
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+              >
+                Get Started
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+              
+              <Button 
+                onClick={() => navigate("/dashboard")}
+                variant="outline"
+                size="lg"
+                className="border-white/30 text-white hover:bg-white/10 px-8 py-3 text-lg"
+              >
+                View Demo
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -169,11 +128,11 @@ const Index = () => {
                 Join organizations already using AI to streamline their compliance processes
               </p>
               <Button 
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/auth")}
                 size="lg"
                 className="bg-white text-slate-900 hover:bg-slate-100"
               >
-                View Demo Dashboard
+                Start Free Trial
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>
