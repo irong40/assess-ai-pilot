@@ -18,6 +18,10 @@ import AgentCompliance from "./pages/AgentCompliance";
 import AgentVulnerability from "./pages/AgentVulnerability";
 import AgentTraining from "./pages/AgentTraining";
 import AgentContinuity from "./pages/AgentContinuity";
+import LeadSummary from "./pages/LeadSummary";
+import ISSMReview from "./pages/ISSMReview";
+import ReportBuilder from "./pages/ReportBuilder";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +47,10 @@ const App = () => (
           <Route path="/assessment/:id/agents/vulnerability" element={<AgentVulnerability />} />
           <Route path="/assessment/:id/agents/training" element={<AgentTraining />} />
           <Route path="/assessment/:id/agents/continuity" element={<AgentContinuity />} />
+          <Route path="/assessment/:id/lead-summary" element={<LeadSummary />} />
+          <Route path="/assessment/:id/issm-review" element={<ISSMReview />} />
+          <Route path="/assessment/:id/report" element={<ReportBuilder />} />
+          <Route path="/assessment/:id/feedback" element={<Feedback />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
