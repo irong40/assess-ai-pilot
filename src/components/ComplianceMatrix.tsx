@@ -4,15 +4,15 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 
 interface ComplianceItem {
-  control: string;
-  status: 'implemented' | 'partial' | 'missing';
-  description: string;
+  readonly control: string;
+  readonly status: 'implemented' | 'partial' | 'missing';
+  readonly description: string;
 }
 
 interface ComplianceMatrixProps {
   framework: string;
   overallScore: number;
-  controls: ComplianceItem[];
+  controls: readonly ComplianceItem[];
 }
 
 const ComplianceMatrix = ({ framework, overallScore, controls }: ComplianceMatrixProps) => {
