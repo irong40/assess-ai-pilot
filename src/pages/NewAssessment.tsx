@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Shield, FileText } from "lucide-react";
 import Header from "@/components/Header";
 import FileUpload from "@/components/FileUpload";
+import DaapmPositionsSelect from "@/components/DaapmPositionsSelect";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAssessments } from "@/hooks/useAssessments";
@@ -22,6 +23,7 @@ const NewAssessment = () => {
     complianceScope: "",
     ownerName: "",
     ownerRole: "",
+    daapmPosition: "",
     description: "",
     criticalityLevel: ""
   });
@@ -221,6 +223,16 @@ const NewAssessment = () => {
                       placeholder="e.g., System Administrator"
                       value={formData.ownerRole}
                       onChange={(e) => handleInputChange("ownerRole", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="daapmPosition" className="text-sm font-medium">
+                      DAAPM Position
+                    </Label>
+                    <DaapmPositionsSelect
+                      value={formData.daapmPosition}
+                      onValueChange={(value) => handleInputChange("daapmPosition", value)}
                     />
                   </div>
                 </div>
