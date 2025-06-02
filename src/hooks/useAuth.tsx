@@ -32,14 +32,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth event:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Handle auth events with appropriate feedback
+        if (event === 'SIGNED_IN' && session?.user) {
+          toast({
+            title: "Welcome back!",
+            description: `Signed in as ${session.user.email}`,
+          });
+        } else if (event === 'SIGNED_OUT') {
+          toast({
+            title: "Signed out",
+            description: "You have been signed out successfully.",
+          });
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed successfully');
+        }
       }
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error.message);
+      }
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -51,62 +70,82 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          first_name: firstName,
-          last_name: lastName,
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+          }
         }
-      }
-    });
+      });
 
-    if (error) {
+      if (error) {
+        toast({
+          title: "Sign Up Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Check your email",
+          description: "We sent you a confirmation link to complete your registration.",
+        });
+      }
+
+      return { error };
+    } catch (err) {
+      const error = err as Error;
       toast({
         title: "Sign Up Error",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Check your email",
-        description: "We sent you a confirmation link to complete your registration.",
-      });
+      return { error };
     }
-
-    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      toast({
-        title: "Sign In Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: "Welcome back!",
-        description: "You have been signed in successfully.",
-      });
+      if (error) {
+        // Don't show toast here as the form component handles specific errors
+        console.error('Sign in error:', error.message);
+      }
+
+      return { error };
+    } catch (err) {
+      const error = err as Error;
+      console.error('Unexpected sign in error:', error.message);
+      return { error };
     }
-
-    return { error };
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Signed out",
-      description: "You have been signed out successfully.",
-    });
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast({
+          title: "Sign Out Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      }
+    } catch (err) {
+      console.error('Sign out error:', err);
+      toast({
+        title: "Sign Out Error",
+        description: "An unexpected error occurred while signing out.",
+        variant: "destructive"
+      });
+    }
   };
 
   const value = {
