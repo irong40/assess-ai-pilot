@@ -21,7 +21,7 @@ const Header = ({ user, onSignOut }: HeaderProps) => {
           <div className="flex items-center space-x-3">
             <Shield className="h-8 w-8 text-blue-400" />
             <div>
-              <h1 className="text-xl font-bold">SecureAssess</h1>
+              <h1 className="text-xl font-bold">Sentinal AI</h1>
               <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
             </div>
           </div>
