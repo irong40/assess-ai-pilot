@@ -21,30 +21,30 @@ const AgentThreatIntel = () => {
     setTimeout(() => {
       const mockAnalysis = `# ISSO-Threat Intelligence Assessment
 
-## Threat Intelligence Framework Analysis
-- **Intelligence Sources**: Multiple threat intelligence feeds and sources integrated
-- **Threat Correlation**: Automated correlation with enterprise security events
-- **Intelligence Sharing**: Participation in threat intelligence sharing communities
+## Threat Intelligence Program Analysis
+- **Intelligence Sources**: Multiple commercial and government threat feeds
+- **Analysis Capabilities**: Dedicated threat intelligence analysts and tools
+- **Integration**: Threat intelligence integrated with security operations
 
 ## Key Findings
 ### Strengths
-- Multiple commercial and open-source threat intelligence feeds
-- Automated IOC ingestion and blocking capabilities
-- Regular threat briefings and intelligence reports
-- Active participation in industry threat sharing groups
+- Comprehensive threat intelligence program with multiple feeds
+- Dedicated threat intelligence analysts and platforms
+- Regular threat briefings and intelligence sharing
+- Good integration with SIEM and security tools
 
 ### Areas for Improvement
-- Threat intelligence analysis capabilities need enhancement
-- Custom IOC generation and sharing processes require development
-- Threat hunting integration with intelligence feeds needs improvement
+- Threat intelligence automation needs enhancement
+- Industry-specific threat intelligence sources limited
+- Threat hunting capabilities require expansion
 
 ## Recommendations
-1. Enhance threat intelligence analysis and contextualization capabilities
-2. Develop custom IOC generation and sharing processes
-3. Integrate threat intelligence more deeply with threat hunting operations
-4. Implement automated threat landscape reporting and briefings
+1. Implement automated threat intelligence processing and enrichment
+2. Enhance industry-specific threat intelligence sources
+3. Expand proactive threat hunting capabilities
+4. Improve threat intelligence sharing with industry partners
 
-## Compliance Score: 83/100`;
+## Compliance Score: 87/100`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -95,7 +95,7 @@ const AgentThreatIntel = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Threat Intelligence Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    Intelligence feeds, IOC lists, threat reports, analysis procedures
+                    Threat feeds, intelligence reports, threat hunting procedures
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentThreatIntel = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your threat intelligence sources, analysis capabilities, IOC management, or any recent threat landscape observations..."
+                    placeholder="Describe your threat intelligence sources, analysis capabilities, threat hunting activities, or any recent threat intelligence findings..."
                     rows={4}
                   />
                 </div>

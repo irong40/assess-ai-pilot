@@ -21,30 +21,30 @@ const AgentMobile = () => {
     setTimeout(() => {
       const mockAnalysis = `# ISSO-Mobile/BYOD Assessment
 
-## Mobile Device & BYOD Security Analysis
-- **Mobile Device Management**: Comprehensive MDM/UEM solution deployed
-- **BYOD Policy**: Clear bring-your-own-device policies and controls
-- **App Security**: Mobile application security and app store management
+## Mobile and BYOD Security Analysis
+- **Mobile Device Management**: Comprehensive MDM/EMM solution deployment
+- **BYOD Policies**: Clear bring-your-own-device policies and procedures
+- **Mobile Application Security**: Mobile app security testing and controls
 
 ## Key Findings
 ### Strengths
-- Robust mobile device management platform with policy enforcement
-- Well-defined BYOD policies with appropriate security controls
-- Regular mobile device compliance monitoring and reporting
-- Secure mobile application deployment and management processes
+- Robust mobile device management platform implemented
+- Clear BYOD policies with user acceptance requirements
+- Mobile application security testing integrated into SDLC
+- Regular mobile device compliance monitoring
 
 ### Areas for Improvement
-- Mobile threat defense capabilities need enhancement
-- BYOD data loss prevention controls require strengthening
-- Mobile device encryption and remote wipe procedures need optimization
+- Personal vs corporate data separation needs enhancement
+- Mobile threat detection capabilities require expansion
+- BYOD user training and awareness programs limited
 
 ## Recommendations
-1. Implement advanced mobile threat defense and zero-day protection
-2. Enhance BYOD data loss prevention and containerization
-3. Optimize mobile device encryption and secure remote wipe capabilities
-4. Establish mobile security awareness training for end users
+1. Implement advanced mobile threat defense solutions
+2. Enhance personal/corporate data containerization
+3. Expand BYOD security training programs
+4. Improve mobile app risk assessment processes
 
-## Compliance Score: 76/100`;
+## Compliance Score: 79/100`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -95,7 +95,7 @@ const AgentMobile = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Mobile/BYOD Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    MDM policies, BYOD procedures, mobile security policies
+                    MDM policies, BYOD agreements, mobile app security reports
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentMobile = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your mobile device management, BYOD policies, mobile security controls, or any recent mobile security incidents..."
+                    placeholder="Describe your mobile device management, BYOD policies, mobile app security measures, or any recent mobile security incidents..."
                     rows={4}
                   />
                 </div>

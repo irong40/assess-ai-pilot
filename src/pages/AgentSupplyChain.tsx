@@ -22,29 +22,29 @@ const AgentSupplyChain = () => {
       const mockAnalysis = `# ISSO-Supply Chain Assessment
 
 ## Supply Chain Risk Management Analysis
-- **Vendor Assessment**: Comprehensive third-party risk assessment program
-- **Contract Security**: Security requirements embedded in vendor contracts
-- **Ongoing Monitoring**: Continuous monitoring of vendor security posture
+- **Vendor Risk Assessment**: Comprehensive third-party risk evaluation program
+- **Supply Chain Security**: Security requirements for vendors and suppliers
+- **Continuous Monitoring**: Ongoing monitoring of third-party security posture
 
 ## Key Findings
 ### Strengths
-- Robust vendor security assessment and onboarding processes
-- Regular security reviews and audits of critical suppliers
-- Well-defined vendor risk classification and management framework
-- Security requirements clearly documented in vendor contracts
+- Established vendor risk assessment program
+- Clear security requirements for third-party vendors
+- Regular vendor security assessments and audits
+- Supply chain incident response procedures documented
 
 ### Areas for Improvement
-- Supply chain dependency mapping needs enhancement
-- Software bill of materials (SBOM) tracking requires implementation
-- Vendor incident response coordination procedures need development
+- Automated vendor risk monitoring needs enhancement
+- Fourth-party (vendor's vendor) risk assessment limited
+- Supply chain threat intelligence integration required
 
 ## Recommendations
-1. Implement comprehensive supply chain dependency mapping
-2. Establish software bill of materials tracking and vulnerability management
-3. Develop vendor incident response coordination procedures
-4. Enhance fourth-party (sub-vendor) risk assessment capabilities
+1. Implement automated vendor risk monitoring tools
+2. Expand fourth-party risk assessment capabilities
+3. Integrate supply chain threat intelligence feeds
+4. Enhance vendor incident response coordination
 
-## Compliance Score: 79/100`;
+## Compliance Score: 82/100`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -95,7 +95,7 @@ const AgentSupplyChain = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Supply Chain Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    Vendor assessments, contracts, risk registers, supply chain policies
+                    Vendor assessments, third-party agreements, supply chain policies
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentSupplyChain = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your vendor management processes, supply chain dependencies, third-party risk assessments, or any recent vendor security incidents..."
+                    placeholder="Describe your vendor management processes, third-party risk assessments, supply chain security requirements, or any recent vendor incidents..."
                     rows={4}
                   />
                 </div>
@@ -132,7 +132,7 @@ const AgentSupplyChain = () => {
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <Bot className="h-12 w-12 text-purple-600 mx-auto mb-4 animate-pulse" />
-                      <p className="text-slate-600">Analyzing supply chain risks...</p>
+                      <p className="text-slate-600">Analyzing supply chain security...</p>
                     </div>
                   </div>
                 ) : analysis ? (

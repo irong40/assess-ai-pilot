@@ -16,10 +16,19 @@ import AgentPhysical from "./pages/AgentPhysical";
 import AgentNetwork from "./pages/AgentNetwork";
 import AgentAccess from "./pages/AgentAccess";
 import AgentData from "./pages/AgentData";
+import AgentConfiguration from "./pages/AgentConfiguration";
+import AgentRecovery from "./pages/AgentRecovery";
+import AgentPrivacy from "./pages/AgentPrivacy";
+import AgentBlueTeam from "./pages/AgentBlueTeam";
+import AgentVulnerability from "./pages/AgentVulnerability";
+import AgentThreatIntel from "./pages/AgentThreatIntel";
+import AgentSupplyChain from "./pages/AgentSupplyChain";
+import AgentGRC from "./pages/AgentGRC";
+import AgentTraining from "./pages/AgentTraining";
+import AgentMobile from "./pages/AgentMobile";
+import AgentLegal from "./pages/AgentLegal";
 import AgentIncident from "./pages/AgentIncident";
 import AgentCompliance from "./pages/AgentCompliance";
-import AgentVulnerability from "./pages/AgentVulnerability";
-import AgentTraining from "./pages/AgentTraining";
 import AgentContinuity from "./pages/AgentContinuity";
 import LeadSummary from "./pages/LeadSummary";
 import ISSMReview from "./pages/ISSMReview";
@@ -49,10 +58,19 @@ const App = () => (
                 <Route path="/assessment/:id/agents/network" element={<ProtectedRoute><AgentNetwork /></ProtectedRoute>} />
                 <Route path="/assessment/:id/agents/access" element={<ProtectedRoute><AgentAccess /></ProtectedRoute>} />
                 <Route path="/assessment/:id/agents/data" element={<ProtectedRoute><AgentData /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/configuration" element={<ProtectedRoute><AgentConfiguration /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/recovery" element={<ProtectedRoute><AgentRecovery /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/privacy" element={<ProtectedRoute><AgentPrivacy /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/blue-team" element={<ProtectedRoute><AgentBlueTeam /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/vulnerability" element={<ProtectedRoute><AgentVulnerability /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/threat-intel" element={<ProtectedRoute><AgentThreatIntel /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/supply-chain" element={<ProtectedRoute><AgentSupplyChain /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/grc" element={<ProtectedRoute><AgentGRC /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/training" element={<ProtectedRoute><AgentTraining /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/mobile" element={<ProtectedRoute><AgentMobile /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/legal" element={<ProtectedRoute><AgentLegal /></ProtectedRoute>} />
                 <Route path="/assessment/:id/agents/incident" element={<ProtectedRoute><AgentIncident /></ProtectedRoute>} />
                 <Route path="/assessment/:id/agents/compliance" element={<ProtectedRoute><AgentCompliance /></ProtectedRoute>} />
-                <Route path="/assessment/:id/agents/vulnerability" element={<ProtectedRoute><AgentVulnerability /></ProtectedRoute>} />
-                <Route path="/assessment/:id/agents/training" element={<ProtectedRoute><AgentTraining /></ProtectedRoute>} />
                 <Route path="/assessment/:id/agents/continuity" element={<ProtectedRoute><AgentContinuity /></ProtectedRoute>} />
                 <Route path="/assessment/:id/summary" element={<ProtectedRoute><LeadSummary /></ProtectedRoute>} />
                 <Route path="/assessment/:id/lead-summary" element={<ProtectedRoute><LeadSummary /></ProtectedRoute>} />

@@ -21,30 +21,30 @@ const AgentLegal = () => {
     setTimeout(() => {
       const mockAnalysis = `# ISSO-Legal Assessment
 
-## Legal & Regulatory Compliance Analysis
-- **Regulatory Landscape**: Comprehensive mapping of applicable legal requirements
-- **Contract Management**: Legal review and security requirements in agreements
-- **Liability & Risk**: Legal risk assessment and liability management
+## Legal and Regulatory Compliance Analysis
+- **Legal Framework**: Comprehensive legal compliance program
+- **Regulatory Requirements**: Multi-jurisdictional regulatory compliance
+- **Legal Risk Management**: Proactive legal risk identification and mitigation
 
 ## Key Findings
 ### Strengths
-- Strong legal and compliance team with cybersecurity expertise
-- Regular legal risk assessments and regulatory compliance monitoring
-- Well-defined contract security requirements and vendor agreements
-- Established legal incident response and breach notification procedures
+- Strong legal compliance framework with regular reviews
+- Clear understanding of applicable regulatory requirements
+- Good coordination between legal and cybersecurity teams
+- Regular legal risk assessments conducted
 
 ### Areas for Improvement
-- Emerging regulation monitoring and compliance preparation needs enhancement
-- International privacy law compliance requires additional attention
-- Legal hold and e-discovery procedures need cybersecurity integration
+- Cross-border data transfer legal requirements need clarification
+- Emerging regulation monitoring needs automation
+- Legal incident response procedures require enhancement
 
 ## Recommendations
-1. Enhance emerging regulation monitoring and impact assessment processes
-2. Strengthen international privacy law compliance capabilities
-3. Integrate cybersecurity considerations into legal hold and e-discovery
-4. Establish proactive legal risk mitigation and regulatory engagement
+1. Clarify cross-border data transfer legal frameworks
+2. Implement automated regulatory change monitoring
+3. Enhance legal aspects of incident response procedures
+4. Strengthen vendor contract security requirements
 
-## Compliance Score: 82/100`;
+## Compliance Score: 85/100`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -95,7 +95,7 @@ const AgentLegal = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Legal Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    Legal opinions, compliance assessments, contracts, regulatory correspondence
+                    Legal policies, regulatory mappings, compliance reports
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentLegal = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your legal and regulatory environment, compliance challenges, recent legal opinions, or any regulatory investigations..."
+                    placeholder="Describe your legal compliance framework, regulatory requirements, legal risk management processes, or any recent legal assessments..."
                     rows={4}
                   />
                 </div>

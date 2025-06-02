@@ -21,28 +21,28 @@ const AgentPrivacy = () => {
     setTimeout(() => {
       const mockAnalysis = `# ISSO-Privacy Assessment
 
-## Privacy Control Framework Analysis
-- **Data Privacy**: Comprehensive privacy controls and data protection measures
-- **Regulatory Compliance**: Alignment with GDPR, CCPA, and other privacy regulations
-- **Privacy by Design**: Privacy principles embedded in system design and operations
+## Privacy Controls Analysis
+- **Data Privacy Framework**: Comprehensive privacy program with clear governance
+- **Privacy Impact Assessments**: Regular PIAs for new systems and processes
+- **Data Subject Rights**: Mechanisms for handling privacy requests
 
 ## Key Findings
 ### Strengths
-- Strong data minimization and purpose limitation practices
-- Well-documented privacy policies and consent management
-- Privacy impact assessments conducted for new systems
-- Regular privacy training for staff handling personal data
+- Well-established privacy governance structure
+- Regular privacy impact assessments conducted
+- Clear data subject rights procedures implemented
+- Privacy training programs for all staff
 
 ### Areas for Improvement
-- Data subject rights management needs automation
-- Cross-border data transfer controls require enhancement
-- Privacy breach notification procedures need streamlining
+- Some legacy systems lack privacy controls
+- Cross-border data transfer procedures need enhancement
+- Privacy monitoring and reporting automation required
 
 ## Recommendations
-1. Implement automated data subject rights management system
-2. Enhance cross-border data transfer documentation and controls
-3. Streamline privacy breach notification and response procedures
-4. Establish continuous privacy monitoring and assessment programs
+1. Retrofit privacy controls for legacy systems
+2. Enhance cross-border data transfer safeguards
+3. Implement automated privacy monitoring tools
+4. Strengthen vendor privacy assessment processes
 
 ## Compliance Score: 88/100`;
 
@@ -95,7 +95,7 @@ const AgentPrivacy = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Privacy Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    Privacy policies, PIAs, consent management procedures
+                    Privacy policies, PIAs, data mapping documentation
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentPrivacy = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your privacy controls, data handling procedures, regulatory requirements, or any recent privacy assessments..."
+                    placeholder="Describe your privacy program, data handling procedures, privacy impact assessments, or any recent privacy initiatives..."
                     rows={4}
                   />
                 </div>

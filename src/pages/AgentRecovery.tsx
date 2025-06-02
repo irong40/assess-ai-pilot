@@ -21,30 +21,30 @@ const AgentRecovery = () => {
     setTimeout(() => {
       const mockAnalysis = `# ISSO-Recovery Assessment
 
-## Disaster Recovery Framework Analysis
+## Disaster Recovery Analysis
 - **Recovery Planning**: Comprehensive disaster recovery and business continuity plans
-- **Backup Strategy**: Regular backup procedures with tested restoration capabilities
-- **Recovery Testing**: Documented recovery testing and validation processes
+- **Backup Systems**: Automated backup and recovery procedures
+- **Recovery Testing**: Regular testing and validation of recovery capabilities
 
 ## Key Findings
 ### Strengths
-- Well-documented disaster recovery procedures and playbooks
-- Regular backup schedules with automated verification
-- Defined recovery time objectives (RTO) and recovery point objectives (RPO)
-- Established alternate processing sites and redundancy
+- Well-documented disaster recovery procedures
+- Automated backup systems with offsite storage
+- Regular recovery testing and validation exercises
+- Defined RTO/RPO objectives for critical systems
 
 ### Areas for Improvement
-- Recovery testing frequency needs to be increased
-- Cloud-based recovery capabilities require enhancement
-- Cross-site replication strategies need optimization
+- Recovery procedures need updates for cloud infrastructure
+- Some backup systems lack encryption in transit
+- Recovery testing frequency should be increased
 
 ## Recommendations
-1. Increase frequency of disaster recovery testing exercises
-2. Implement cloud-native backup and recovery solutions
-3. Optimize cross-site data replication and failover procedures
-4. Enhance automated recovery orchestration capabilities
+1. Update recovery procedures for cloud-native applications
+2. Implement encryption for all backup data in transit
+3. Increase frequency of disaster recovery testing
+4. Enhance automated failover capabilities
 
-## Compliance Score: 87/100`;
+## Compliance Score: 85/100`;
 
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
@@ -95,7 +95,7 @@ const AgentRecovery = () => {
                   <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
                   <h3 className="font-medium text-slate-900 mb-2">Upload Recovery Documentation</h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    DR plans, backup procedures, recovery test results
+                    DR plans, backup procedures, recovery testing results
                   </p>
                   <Button variant="outline" size="sm">
                     Select Files
@@ -107,7 +107,7 @@ const AgentRecovery = () => {
                     Additional Context (Optional)
                   </label>
                   <Textarea
-                    placeholder="Describe your disaster recovery procedures, backup strategies, RTO/RPO objectives, or any recent recovery testing..."
+                    placeholder="Describe your disaster recovery plans, backup strategies, recovery testing procedures, or any recent recovery incidents..."
                     rows={4}
                   />
                 </div>
