@@ -14,13 +14,18 @@ const SignInForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const [attemptCount, setAttemptCount] = useState(0);
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
     
     if (!email) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!validateEmail(email)) {
       newErrors.email = "Please enter a valid email address";
     }
     
@@ -38,6 +43,12 @@ const SignInForm = () => {
     e.preventDefault();
     setErrors({});
     
+    // Basic rate limiting - block after 5 failed attempts
+    if (attemptCount >= 5) {
+      setErrors({ general: "Too many failed attempts. Please wait 5 minutes before trying again." });
+      return;
+    }
+    
     if (!validateForm()) {
       return;
     }
@@ -45,21 +56,27 @@ const SignInForm = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await signIn(email, password);
+      const { error } = await signIn(email.toLowerCase().trim(), password);
       
       if (!error) {
         navigate("/dashboard");
+        setAttemptCount(0); // Reset on success
       } else {
+        setAttemptCount(prev => prev + 1);
+        
         // Handle specific auth errors
         if (error.message.includes("Invalid login credentials")) {
           setErrors({ general: "Invalid email or password. Please try again." });
         } else if (error.message.includes("Email not confirmed")) {
           setErrors({ general: "Please check your email and click the confirmation link." });
+        } else if (error.message.includes("rate limit")) {
+          setErrors({ general: "Too many login attempts. Please wait a few minutes and try again." });
         } else {
           setErrors({ general: error.message });
         }
       }
     } catch (err) {
+      setAttemptCount(prev => prev + 1);
       setErrors({ general: "An unexpected error occurred. Please try again." });
     } finally {
       setIsLoading(false);
@@ -71,6 +88,12 @@ const SignInForm = () => {
       {errors.general && (
         <div className="p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
           {errors.general}
+        </div>
+      )}
+      
+      {attemptCount >= 3 && attemptCount < 5 && (
+        <div className="p-3 rounded-md bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-sm">
+          Warning: {5 - attemptCount} attempts remaining before temporary lockout.
         </div>
       )}
       
@@ -88,6 +111,7 @@ const SignInForm = () => {
             className={`pl-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
               errors.email ? "border-red-500/50" : ""
             }`}
+            maxLength={100}
             required
           />
         </div>
@@ -108,6 +132,7 @@ const SignInForm = () => {
             className={`pl-10 pr-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
               errors.password ? "border-red-500/50" : ""
             }`}
+            maxLength={128}
             required
           />
           <button
@@ -123,7 +148,7 @@ const SignInForm = () => {
       
       <Button 
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading || attemptCount >= 5}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
         size="lg"
       >

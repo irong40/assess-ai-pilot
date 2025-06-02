@@ -71,14 +71,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/`;
     
     try {
+      // Enhanced security: validate input before sending
+      if (!email || !password || password.length < 8) {
+        const error = new Error('Invalid input: Email and password (min 8 chars) are required');
+        toast({
+          title: "Sign Up Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
       const { error } = await supabase.auth.signUp({
-        email,
+        email: email.toLowerCase().trim(),
         password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            first_name: firstName,
-            last_name: lastName,
+            first_name: firstName?.trim(),
+            last_name: lastName?.trim(),
           }
         }
       });
@@ -110,8 +121,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      // Enhanced security: validate input
+      if (!email || !password) {
+        const error = new Error('Email and password are required');
+        return { error };
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.toLowerCase().trim(),
         password,
       });
 

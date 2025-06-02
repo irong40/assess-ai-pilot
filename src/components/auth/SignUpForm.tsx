@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock, User, Eye, EyeOff, Check } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, Check, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const SignUpForm = () => {
@@ -23,23 +23,53 @@ const SignUpForm = () => {
     general?: string;
   }>({});
 
+  const sanitizeInput = (input: string) => {
+    return input.replace(/[<>'"&]/g, '');
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'edu', 'gov', 'mil', 'org', 'com', 'net'];
+    
+    if (!emailRegex.test(email)) return false;
+    
+    const domain = email.split('@')[1].toLowerCase();
+    return allowedDomains.some(allowed => domain.endsWith(allowed));
+  };
+
+  const validatePassword = (password: string) => {
+    const checks = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    return checks;
+  };
+
   const validateForm = () => {
     const newErrors: any = {};
     
-    if (!firstName.trim()) {
+    const sanitizedFirstName = sanitizeInput(firstName.trim());
+    if (!sanitizedFirstName) {
       newErrors.firstName = "First name is required";
+    } else if (sanitizedFirstName.length < 2) {
+      newErrors.firstName = "First name must be at least 2 characters";
     }
     
     if (!email) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Please enter a valid email address";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email from an approved domain";
     }
     
+    const passwordChecks = validatePassword(password);
     if (!password) {
       newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (!passwordChecks.length || !passwordChecks.uppercase || !passwordChecks.lowercase || !passwordChecks.number) {
+      newErrors.password = "Password must be at least 8 characters with uppercase, lowercase, and number";
     }
     
     if (password !== confirmPassword) {
@@ -51,13 +81,18 @@ const SignUpForm = () => {
   };
 
   const getPasswordStrength = () => {
-    if (password.length < 6) return { strength: 0, text: "Too short" };
-    if (password.length < 8) return { strength: 1, text: "Weak" };
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) return { strength: 2, text: "Fair" };
-    return { strength: 3, text: "Strong" };
+    const checks = validatePassword(password);
+    const score = Object.values(checks).filter(Boolean).length;
+    
+    if (score < 2) return { strength: 0, text: "Very Weak", color: "bg-red-500" };
+    if (score < 3) return { strength: 1, text: "Weak", color: "bg-orange-500" };
+    if (score < 4) return { strength: 2, text: "Fair", color: "bg-yellow-500" };
+    if (score < 5) return { strength: 3, text: "Good", color: "bg-blue-500" };
+    return { strength: 4, text: "Strong", color: "bg-green-500" };
   };
 
   const passwordStrength = getPasswordStrength();
+  const passwordChecks = validatePassword(password);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,11 +105,16 @@ const SignUpForm = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await signUp(email, password, firstName, lastName);
+      const sanitizedFirstName = sanitizeInput(firstName.trim());
+      const sanitizedLastName = sanitizeInput(lastName.trim());
+      
+      const { error } = await signUp(email.toLowerCase().trim(), password, sanitizedFirstName, sanitizedLastName);
       
       if (error) {
         if (error.message.includes("already registered")) {
           setErrors({ general: "An account with this email already exists. Try signing in instead." });
+        } else if (error.message.includes("rate limit")) {
+          setErrors({ general: "Too many signup attempts. Please wait a few minutes and try again." });
         } else {
           setErrors({ general: error.message });
         }
@@ -109,6 +149,7 @@ const SignUpForm = () => {
               className={`pl-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
                 errors.firstName ? "border-red-500/50" : ""
               }`}
+              maxLength={50}
               required
             />
           </div>
@@ -120,6 +161,7 @@ const SignUpForm = () => {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           className="bg-white/20 border-white/30 text-white placeholder:text-slate-300"
+          maxLength={50}
         />
       </div>
       
@@ -137,6 +179,7 @@ const SignUpForm = () => {
             className={`pl-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
               errors.email ? "border-red-500/50" : ""
             }`}
+            maxLength={100}
             required
           />
         </div>
@@ -157,6 +200,7 @@ const SignUpForm = () => {
             className={`pl-10 pr-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
               errors.password ? "border-red-500/50" : ""
             }`}
+            maxLength={128}
             required
           />
           <button
@@ -167,19 +211,42 @@ const SignUpForm = () => {
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
+        
         {password && (
-          <div className="flex items-center space-x-2">
-            <div className="flex-1 bg-white/10 rounded-full h-1">
-              <div
-                className={`h-1 rounded-full transition-all ${
-                  passwordStrength.strength === 0 ? "bg-red-500 w-1/4" :
-                  passwordStrength.strength === 1 ? "bg-orange-500 w-2/4" :
-                  passwordStrength.strength === 2 ? "bg-yellow-500 w-3/4" :
-                  "bg-green-500 w-full"
-                }`}
-              />
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="flex-1 bg-white/10 rounded-full h-1">
+                <div
+                  className={`h-1 rounded-full transition-all ${passwordStrength.color} ${
+                    passwordStrength.strength === 0 ? "w-1/5" :
+                    passwordStrength.strength === 1 ? "w-2/5" :
+                    passwordStrength.strength === 2 ? "w-3/5" :
+                    passwordStrength.strength === 3 ? "w-4/5" :
+                    "w-full"
+                  }`}
+                />
+              </div>
+              <span className="text-xs text-slate-300">{passwordStrength.text}</span>
             </div>
-            <span className="text-xs text-slate-300">{passwordStrength.text}</span>
+            
+            <div className="grid grid-cols-2 gap-1 text-xs">
+              <div className={`flex items-center space-x-1 ${passwordChecks.length ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.length ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>8+ characters</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.uppercase ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.uppercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>Uppercase</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.lowercase ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.lowercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>Lowercase</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.number ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.number ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>Number</span>
+              </div>
+            </div>
           </div>
         )}
         {errors.password && <p className="text-red-400 text-sm">{errors.password}</p>}
@@ -199,6 +266,7 @@ const SignUpForm = () => {
             className={`pl-10 pr-10 bg-white/20 border-white/30 text-white placeholder:text-slate-300 ${
               errors.confirmPassword ? "border-red-500/50" : ""
             }`}
+            maxLength={128}
             required
           />
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
