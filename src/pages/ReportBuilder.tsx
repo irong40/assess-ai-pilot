@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, FileText, Download, Bot, Upload } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, FileText, Download, Bot, Upload, Calendar, Clock, Settings, Template, Zap } from "lucide-react";
 import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -15,16 +18,53 @@ const ReportBuilder = () => {
   const { id } = useParams();
   const [isGenerating, setIsGenerating] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState("comprehensive");
+  const [automationEnabled, setAutomationEnabled] = useState(false);
   const [reportConfig, setReportConfig] = useState({
     includeExecutiveSummary: true,
     includeTechnicalDetails: true,
     includePOAM: true,
     includeCompliance: true,
     includeAppendices: false,
+    includeMetrics: true,
+    includeRiskMatrix: true,
     brandingColor: "#1e40af",
     organizationName: "Company Inc.",
-    reportTitle: "Cybersecurity Assessment Report"
+    reportTitle: "Cybersecurity Assessment Report",
+    automaticSchedule: "monthly",
+    notificationEmails: ["issm@company.com", "ciso@company.com"]
   });
+
+  const reportTemplates = [
+    {
+      id: "comprehensive",
+      name: "Comprehensive Report",
+      description: "Full assessment with all sections",
+      sections: 8,
+      pages: "25-40"
+    },
+    {
+      id: "executive",
+      name: "Executive Summary",
+      description: "High-level overview for leadership",
+      sections: 3,
+      pages: "5-10"
+    },
+    {
+      id: "technical",
+      name: "Technical Report",
+      description: "Detailed technical findings",
+      sections: 6,
+      pages: "15-25"
+    },
+    {
+      id: "compliance",
+      name: "Compliance Report",
+      description: "Focus on regulatory requirements",
+      sections: 4,
+      pages: "10-15"
+    }
+  ];
 
   const user = {
     email: "techwriter@company.com",
@@ -38,6 +78,36 @@ const ReportBuilder = () => {
     }));
   };
 
+  const handleTemplateSelect = (templateId: string) => {
+    setSelectedTemplate(templateId);
+    const template = reportTemplates.find(t => t.id === templateId);
+    
+    // Auto-configure based on template
+    if (templateId === "executive") {
+      setReportConfig(prev => ({
+        ...prev,
+        includeExecutiveSummary: true,
+        includeTechnicalDetails: false,
+        includePOAM: false,
+        includeCompliance: true,
+        includeAppendices: false,
+        includeMetrics: true,
+        includeRiskMatrix: false
+      }));
+    } else if (templateId === "technical") {
+      setReportConfig(prev => ({
+        ...prev,
+        includeExecutiveSummary: false,
+        includeTechnicalDetails: true,
+        includePOAM: true,
+        includeCompliance: false,
+        includeAppendices: true,
+        includeMetrics: true,
+        includeRiskMatrix: true
+      }));
+    }
+  };
+
   const handleGenerateReport = async () => {
     setIsGenerating(true);
     
@@ -47,7 +117,7 @@ const ReportBuilder = () => {
       
       toast({
         title: "Report Generated",
-        description: "Assessment report has been generated successfully",
+        description: `${reportTemplates.find(t => t.id === selectedTemplate)?.name} has been generated successfully`,
       });
     }, 5000);
   };
@@ -57,8 +127,15 @@ const ReportBuilder = () => {
       title: "Download Started",
       description: "Report download has begun",
     });
-    // In a real app, this would trigger a file download
     navigate(`/assessment/${id}/feedback`);
+  };
+
+  const handleScheduleReport = () => {
+    setAutomationEnabled(true);
+    toast({
+      title: "Automation Enabled",
+      description: `Reports will be generated ${reportConfig.automaticSchedule} and sent to specified recipients`,
+    });
   };
 
   return (
@@ -78,19 +155,60 @@ const ReportBuilder = () => {
             </Button>
           </div>
 
-          <div className="flex items-center space-x-3 mb-8">
-            <div className="p-3 bg-green-50 rounded-lg">
-              <FileText className="h-8 w-8 text-green-600" />
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-green-50 rounded-lg">
+                <FileText className="h-8 w-8 text-green-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900">Assessment Report Builder</h1>
+                <p className="text-slate-600">Generate professional cybersecurity assessment reports</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">Assessment Report Builder</h1>
-              <p className="text-slate-600">Generate professional cybersecurity assessment report</p>
-            </div>
+            {automationEnabled && (
+              <Badge className="bg-blue-100 text-blue-800">
+                <Zap className="h-3 w-3 mr-1" />
+                Automation Active
+              </Badge>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Report Configuration */}
             <div className="lg:col-span-2 space-y-6">
+              {/* Template Selection */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Template className="h-5 w-5" />
+                    <span>Report Template</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {reportTemplates.map((template) => (
+                      <div
+                        key={template.id}
+                        className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                          selectedTemplate === template.id
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                        onClick={() => handleTemplateSelect(template.id)}
+                      >
+                        <h4 className="font-semibold text-slate-900 mb-2">{template.name}</h4>
+                        <p className="text-sm text-slate-600 mb-3">{template.description}</p>
+                        <div className="flex justify-between text-xs text-slate-500">
+                          <span>{template.sections} sections</span>
+                          <span>{template.pages} pages</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Basic Configuration */}
               <Card>
                 <CardHeader>
                   <CardTitle>Report Configuration</CardTitle>
@@ -142,65 +260,131 @@ const ReportBuilder = () => {
                 </CardContent>
               </Card>
 
+              {/* Advanced Sections */}
               <Card>
                 <CardHeader>
                   <CardTitle>Report Sections</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-slate-900">Executive Summary</h4>
-                      <p className="text-sm text-slate-600">High-level overview for leadership</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">Executive Summary</h4>
+                        <p className="text-sm text-slate-600">High-level overview</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includeExecutiveSummary}
+                        onCheckedChange={(checked) => handleConfigChange('includeExecutiveSummary', checked)}
+                      />
                     </div>
-                    <Switch
-                      checked={reportConfig.includeExecutiveSummary}
-                      onCheckedChange={(checked) => handleConfigChange('includeExecutiveSummary', checked)}
-                    />
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">Technical Details</h4>
+                        <p className="text-sm text-slate-600">Detailed findings</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includeTechnicalDetails}
+                        onCheckedChange={(checked) => handleConfigChange('includeTechnicalDetails', checked)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">POAM</h4>
+                        <p className="text-sm text-slate-600">Remediation plan</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includePOAM}
+                        onCheckedChange={(checked) => handleConfigChange('includePOAM', checked)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">Compliance Mapping</h4>
+                        <p className="text-sm text-slate-600">Control alignment</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includeCompliance}
+                        onCheckedChange={(checked) => handleConfigChange('includeCompliance', checked)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">Metrics & Charts</h4>
+                        <p className="text-sm text-slate-600">Visual analytics</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includeMetrics}
+                        onCheckedChange={(checked) => handleConfigChange('includeMetrics', checked)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900">Risk Matrix</h4>
+                        <p className="text-sm text-slate-600">Risk visualization</p>
+                      </div>
+                      <Switch
+                        checked={reportConfig.includeRiskMatrix}
+                        onCheckedChange={(checked) => handleConfigChange('includeRiskMatrix', checked)}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Automation Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Settings className="h-5 w-5" />
+                    <span>Report Automation</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="schedule">Automatic Generation Schedule</Label>
+                    <Select
+                      value={reportConfig.automaticSchedule}
+                      onValueChange={(value) => handleConfigChange('automaticSchedule', value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="quarterly">Quarterly</SelectItem>
+                        <SelectItem value="annually">Annually</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-slate-900">Technical Details</h4>
-                      <p className="text-sm text-slate-600">Detailed technical findings and analysis</p>
+                  <div className="space-y-2">
+                    <Label>Notification Recipients</Label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {reportConfig.notificationEmails.map((email, index) => (
+                        <Badge key={index} variant="secondary">
+                          {email}
+                        </Badge>
+                      ))}
                     </div>
-                    <Switch
-                      checked={reportConfig.includeTechnicalDetails}
-                      onCheckedChange={(checked) => handleConfigChange('includeTechnicalDetails', checked)}
-                    />
+                    <Input placeholder="Add email address..." />
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-slate-900">POAM (Plan of Action)</h4>
-                      <p className="text-sm text-slate-600">Remediation timeline and milestones</p>
-                    </div>
-                    <Switch
-                      checked={reportConfig.includePOAM}
-                      onCheckedChange={(checked) => handleConfigChange('includePOAM', checked)}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-slate-900">Compliance Mapping</h4>
-                      <p className="text-sm text-slate-600">Control framework alignment</p>
-                    </div>
-                    <Switch
-                      checked={reportConfig.includeCompliance}
-                      onCheckedChange={(checked) => handleConfigChange('includeCompliance', checked)}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-slate-900">Appendices</h4>
-                      <p className="text-sm text-slate-600">Supporting documentation and evidence</p>
-                    </div>
-                    <Switch
-                      checked={reportConfig.includeAppendices}
-                      onCheckedChange={(checked) => handleConfigChange('includeAppendices', checked)}
-                    />
-                  </div>
+                  {!automationEnabled && (
+                    <Button 
+                      onClick={handleScheduleReport}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Enable Automated Reports
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -215,7 +399,7 @@ const ReportBuilder = () => {
                   {!reportGenerated ? (
                     <>
                       <div className="text-sm text-slate-600 mb-4">
-                        AI will compile all assessment data into a professional report with your branding.
+                        AI will compile assessment data using the selected template and configuration.
                       </div>
                       
                       <Button 
@@ -236,6 +420,10 @@ const ReportBuilder = () => {
                           </>
                         )}
                       </Button>
+
+                      <div className="text-xs text-slate-500 mt-2">
+                        Estimated time: 30-60 seconds
+                      </div>
                     </>
                   ) : (
                     <>
@@ -243,7 +431,7 @@ const ReportBuilder = () => {
                         <FileText className="h-12 w-12 text-green-600 mx-auto mb-3" />
                         <h4 className="font-medium text-green-900 mb-2">Report Ready</h4>
                         <p className="text-sm text-green-700 mb-4">
-                          Your assessment report has been generated successfully.
+                          Your {reportTemplates.find(t => t.id === selectedTemplate)?.name} has been generated.
                         </p>
                       </div>
                       
@@ -266,9 +454,15 @@ const ReportBuilder = () => {
                     <div className="text-center">
                       <Bot className="h-8 w-8 text-blue-600 mx-auto mb-3 animate-pulse" />
                       <h4 className="font-medium text-blue-900 mb-2">AI Report Generation</h4>
-                      <p className="text-sm text-blue-700">
+                      <p className="text-sm text-blue-700 mb-3">
                         Compiling findings, formatting content, and applying branding...
                       </p>
+                      <div className="space-y-2 text-xs text-blue-600">
+                        <div>✓ Analyzing assessment data</div>
+                        <div>⏳ Applying template structure</div>
+                        <div>⏳ Generating visualizations</div>
+                        <div>⏳ Formatting document</div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -276,9 +470,13 @@ const ReportBuilder = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm">Report Summary</CardTitle>
+                  <CardTitle className="text-sm">Report Preview</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Template:</span>
+                    <span className="font-medium">{reportTemplates.find(t => t.id === selectedTemplate)?.name}</span>
+                  </div>
                   <div className="flex justify-between">
                     <span className="text-slate-600">Total Findings:</span>
                     <span className="font-medium">37</span>
@@ -292,9 +490,22 @@ const ReportBuilder = () => {
                     <span className="font-medium">83%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Risk Level:</span>
-                    <span className="font-medium text-yellow-600">Medium</span>
+                    <span className="text-slate-600">Est. Pages:</span>
+                    <span className="font-medium">{reportTemplates.find(t => t.id === selectedTemplate)?.pages}</span>
                   </div>
+                  {automationEnabled && (
+                    <div className="border-t pt-3 mt-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Next Report:</span>
+                        <span className="font-medium text-blue-600">
+                          <Clock className="h-3 w-3 inline mr-1" />
+                          {reportConfig.automaticSchedule === 'weekly' ? '7 days' :
+                           reportConfig.automaticSchedule === 'monthly' ? '30 days' :
+                           reportConfig.automaticSchedule === 'quarterly' ? '90 days' : '365 days'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
