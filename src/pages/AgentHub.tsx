@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,10 +6,19 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Bot, CheckCircle, Clock, Play, Users, Shield } from "lucide-react";
 import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAgentAssessments } from "@/hooks/useAgentAssessments";
+import Loading from "@/components/Loading";
 
 const AgentHub = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  
+  if (!id) {
+    navigate("/dashboard");
+    return null;
+  }
+
+  const { agentAssessments, isLoading, getAgentStatus } = useAgentAssessments(id);
   
   // Mock assessment data
   const assessment = {
@@ -19,133 +28,104 @@ const AgentHub = () => {
     scope: "NIST 800-53"
   };
 
-  const user = {
-    email: "admin@company.com",
-    role: "admin"
-  };
-
   const agents = [
     // Core Analysis Agents
     {
       id: "policy",
       name: "ISSO-Policy",
       description: "Reviews security policies for completeness, compliance, and alignment",
-      category: "core",
-      status: "completed" as const,
-      progress: 100
+      category: "core"
     },
     {
       id: "physical",
       name: "ISSO-Physical",
       description: "Evaluates physical safeguards and access controls",
-      category: "core",
-      status: "in-progress" as const,
-      progress: 60
+      category: "core"
     },
     {
       id: "network",
       name: "ISSO-Network",
       description: "Analyzes network architecture and security controls",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     {
       id: "access",
       name: "ISSO-Access",
       description: "Evaluates access controls and authentication mechanisms",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     {
       id: "data",
       name: "ISSO-Data",
       description: "Reviews data protection and encryption controls",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     {
       id: "configuration",
       name: "ISSO-Configuration",
       description: "Reviews baseline configurations and hardening standards",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     {
       id: "recovery",
       name: "ISSO-Recovery",
       description: "Assesses disaster recovery and continuity planning",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     {
       id: "privacy",
       name: "ISSO-Privacy",
       description: "Ensures data privacy controls and compliance",
-      category: "core",
-      status: "not-started" as const,
-      progress: 0
+      category: "core"
     },
     // Specialized Security Agents
     {
       id: "blue-team",
       name: "ISSO-Blue Team",
       description: "Validates logging, SIEM/EDR configurations, and detection capabilities",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
+    },
+    {
+      id: "vulnerability",
+      name: "ISSO-Vulnerability",
+      description: "Reviews vulnerability management and patch processes",
+      category: "specialized"
     },
     {
       id: "threat-intel",
       name: "ISSO-Threat Intelligence",
       description: "Monitors threat intelligence and correlates with enterprise findings",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     },
     {
       id: "supply-chain",
       name: "ISSO-Supply Chain",
       description: "Audits vendor and third-party risk management",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     },
     {
       id: "grc",
       name: "ISSO-GRC",
       description: "Manages governance, risk, and compliance documentation",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     },
     {
       id: "training",
       name: "ISSO-Training",
       description: "Reviews security training and awareness programs",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     },
     {
       id: "mobile",
       name: "ISSO-Mobile/BYOD",
       description: "Audits mobile and BYOD security risks",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     },
     {
       id: "legal",
       name: "ISSO-Legal",
       description: "Identifies legal and regulatory compliance risks",
-      category: "specialized",
-      status: "not-started" as const,
-      progress: 0
+      category: "specialized"
     }
   ];
 
@@ -180,7 +160,18 @@ const AgentHub = () => {
     navigate(`/assessment/${id}/agents/${agentId}`);
   };
 
-  const completedAgents = agents.filter(agent => agent.status === 'completed').length;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <Loading fullScreen text="Loading agent assessments..." />
+      </div>
+    );
+  }
+
+  const completedAgents = agents.filter(agent => 
+    getAgentStatus(agent.id).status === 'completed'
+  ).length;
   const overallProgress = (completedAgents / agents.length) * 100;
 
   const coreAgents = agents.filter(agent => agent.category === 'core');
@@ -279,59 +270,62 @@ const AgentHub = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {coreAgents.map((agent) => (
-                <Card 
-                  key={agent.id}
-                  className="hover:shadow-lg transition-all duration-200 cursor-pointer border-slate-200 hover:border-blue-300"
-                  onClick={() => handleAgentClick(agent.id)}
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-50 rounded-lg">
-                          <Bot className="h-5 w-5 text-blue-600" />
+              {coreAgents.map((agent) => {
+                const agentData = getAgentStatus(agent.id);
+                return (
+                  <Card 
+                    key={agent.id}
+                    className="hover:shadow-lg transition-all duration-200 cursor-pointer border-slate-200 hover:border-blue-300"
+                    onClick={() => handleAgentClick(agent.id)}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-50 rounded-lg">
+                            <Bot className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg font-semibold">{agent.name}</CardTitle>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-lg font-semibold">{agent.name}</CardTitle>
-                        </div>
+                        {getStatusIcon(agentData.status)}
                       </div>
-                      {getStatusIcon(agent.status)}
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {agent.description}
-                    </p>
+                    </CardHeader>
                     
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <Badge className={`${getStatusColor(agent.status)} border-0`}>
-                          {getStatusText(agent.status)}
-                        </Badge>
-                        <span className="text-sm font-medium text-slate-600">
-                          {agent.progress}%
-                        </span>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-slate-600 leading-relaxed">
+                        {agent.description}
+                      </p>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <Badge className={`${getStatusColor(agentData.status)} border-0`}>
+                            {getStatusText(agentData.status)}
+                          </Badge>
+                          <span className="text-sm font-medium text-slate-600">
+                            {agentData.progress}%
+                          </span>
+                        </div>
+                        
+                        <Progress value={agentData.progress} className="h-1.5" />
+                        
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAgentClick(agent.id);
+                          }}
+                        >
+                          {agentData.status === 'not-started' ? 'Start' : 
+                           agentData.status === 'in-progress' ? 'Continue' : 'Review'}
+                        </Button>
                       </div>
-                      
-                      <Progress value={agent.progress} className="h-1.5" />
-                      
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAgentClick(agent.id);
-                        }}
-                      >
-                        {agent.status === 'not-started' ? 'Start' : 
-                         agent.status === 'in-progress' ? 'Continue' : 'Review'}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
 
@@ -343,59 +337,62 @@ const AgentHub = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {specializedAgents.map((agent) => (
-                <Card 
-                  key={agent.id}
-                  className="hover:shadow-lg transition-all duration-200 cursor-pointer border-slate-200 hover:border-purple-300"
-                  onClick={() => handleAgentClick(agent.id)}
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-purple-50 rounded-lg">
-                          <Shield className="h-5 w-5 text-purple-600" />
+              {specializedAgents.map((agent) => {
+                const agentData = getAgentStatus(agent.id);
+                return (
+                  <Card 
+                    key={agent.id}
+                    className="hover:shadow-lg transition-all duration-200 cursor-pointer border-slate-200 hover:border-purple-300"
+                    onClick={() => handleAgentClick(agent.id)}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-purple-50 rounded-lg">
+                            <Shield className="h-5 w-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg font-semibold">{agent.name}</CardTitle>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-lg font-semibold">{agent.name}</CardTitle>
-                        </div>
+                        {getStatusIcon(agentData.status)}
                       </div>
-                      {getStatusIcon(agent.status)}
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {agent.description}
-                    </p>
+                    </CardHeader>
                     
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <Badge className={`${getStatusColor(agent.status)} border-0`}>
-                          {getStatusText(agent.status)}
-                        </Badge>
-                        <span className="text-sm font-medium text-slate-600">
-                          {agent.progress}%
-                        </span>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-slate-600 leading-relaxed">
+                        {agent.description}
+                      </p>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <Badge className={`${getStatusColor(agentData.status)} border-0`}>
+                            {getStatusText(agentData.status)}
+                          </Badge>
+                          <span className="text-sm font-medium text-slate-600">
+                            {agentData.progress}%
+                          </span>
+                        </div>
+                        
+                        <Progress value={agentData.progress} className="h-1.5" />
+                        
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAgentClick(agent.id);
+                          }}
+                        >
+                          {agentData.status === 'not-started' ? 'Start' : 
+                           agentData.status === 'in-progress' ? 'Continue' : 'Review'}
+                        </Button>
                       </div>
-                      
-                      <Progress value={agent.progress} className="h-1.5" />
-                      
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAgentClick(agent.id);
-                        }}
-                      >
-                        {agent.status === 'not-started' ? 'Start' : 
-                         agent.status === 'in-progress' ? 'Continue' : 'Review'}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
 
