@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FileText, Download, Bot, Upload, Calendar, Clock, Settings, Template, Zap } from "lucide-react";
+import { ArrowLeft, FileText, Download, Bot, Upload, Calendar, Clock, Settings, Layout, Zap } from "lucide-react";
 import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -180,7 +179,7 @@ const ReportBuilder = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Template className="h-5 w-5" />
+                    <Layout className="h-5 w-5" />
                     <span>Report Template</span>
                   </CardTitle>
                 </CardHeader>
