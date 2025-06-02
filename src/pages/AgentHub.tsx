@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +7,7 @@ import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import Loading from "@/components/Loading";
+import QuickAssessmentButton from "@/components/QuickAssessmentButton";
 
 const AgentHub = () => {
   const navigate = useNavigate();
@@ -160,6 +160,10 @@ const AgentHub = () => {
     navigate(`/assessment/${id}/agents/${agentId}`);
   };
 
+  const handleQuickAssessmentComplete = () => {
+    navigate(`/assessment/${id}/lead-summary`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -173,6 +177,7 @@ const AgentHub = () => {
     getAgentStatus(agent.id).status === 'completed'
   ).length;
   const overallProgress = (completedAgents / agents.length) * 100;
+  const allAgentIds = agents.map(agent => agent.id);
 
   const coreAgents = agents.filter(agent => agent.category === 'core');
   const specializedAgents = agents.filter(agent => agent.category === 'specialized');
@@ -218,6 +223,17 @@ const AgentHub = () => {
               <Progress value={overallProgress} className="h-2" />
             </div>
           </div>
+
+          {/* Quick Assessment Section */}
+          {completedAgents === 0 && (
+            <div className="mb-8">
+              <QuickAssessmentButton
+                assessmentId={id}
+                agentIds={allAgentIds}
+                onComplete={handleQuickAssessmentComplete}
+              />
+            </div>
+          )}
 
           {/* Workflow Management Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
