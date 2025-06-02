@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Bot, CheckCircle, Users, ArrowRight, Sparkles, Zap, Target } from "lucide-react";
+import { Shield, Bot, CheckCircle, Users, ArrowRight, Sparkles, Zap, Target, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -66,11 +66,13 @@ const Index = () => {
           </div>
           
           <Button 
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate("/dashboard")}
             variant="outline"
+            size="sm"
             className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
           >
-            Early Access
+            <Eye className="h-4 w-4 mr-2" />
+            View Demo
           </Button>
         </div>
       </header>
@@ -82,7 +84,7 @@ const Index = () => {
             <div className="flex items-center justify-center mb-6">
               <Sparkles className="h-6 w-6 text-yellow-400 mr-2 animate-pulse" />
               <span className="text-sm font-semibold text-yellow-300 uppercase tracking-wider">
-                Early Development
+                Currently in Early Development
               </span>
             </div>
             
@@ -94,10 +96,17 @@ const Index = () => {
               <span className="text-5xl md:text-6xl">Assessments</span>
             </h2>
             
-            <p className="text-xl text-slate-300 mb-10 leading-relaxed max-w-3xl mx-auto">
-              We're building a platform with 15 specialized AI agents designed to revolutionize 
-              cybersecurity assessments and compliance reporting. Join us early to help shape the future.
+            <p className="text-xl text-slate-300 mb-6 leading-relaxed max-w-3xl mx-auto">
+              We're building the future of cybersecurity compliance with 15 specialized AI agents. 
+              Get early access and help shape this revolutionary platform.
             </p>
+
+            <div className="bg-blue-500/10 border border-blue-400/30 rounded-lg p-4 mb-10 max-w-2xl mx-auto">
+              <p className="text-blue-200 text-sm">
+                <strong>What you get today:</strong> Access to our development environment, 
+                early features, and the ability to provide feedback that shapes the product.
+              </p>
+            </div>
             
             {/* Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 max-w-4xl mx-auto">
@@ -112,29 +121,32 @@ const Index = () => {
               ))}
             </div>
             
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            {/* Primary CTA */}
+            <div className="mb-6">
               <Button 
                 onClick={() => navigate("/auth")}
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                Request Early Access
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-              
-              <Button 
-                onClick={() => navigate("/dashboard")}
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg transition-all duration-300"
-              >
-                View Development
+                Get Early Access Now
+                <ArrowRight className="h-6 w-6 ml-3" />
               </Button>
             </div>
 
-            <p className="text-sm text-slate-400 mt-4">
-              Early development stage • Help us build the future of cybersecurity
+            {/* Secondary Action */}
+            <div className="flex items-center justify-center space-x-4 text-sm text-slate-300">
+              <span>Want to see what we're building?</span>
+              <Button 
+                onClick={() => navigate("/dashboard")}
+                variant="link"
+                className="text-blue-400 hover:text-blue-300 p-0 h-auto font-normal"
+              >
+                View Demo →
+              </Button>
+            </div>
+
+            <p className="text-sm text-slate-400 mt-6">
+              Free early access • Shape the future • No commitment required
             </p>
           </div>
         </div>
@@ -178,48 +190,31 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Social Proof / Demo CTA */}
+        {/* Final CTA Section */}
         <div className="text-center max-w-4xl mx-auto">
           <Card className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20 backdrop-blur-lg border-white/20">
             <CardContent className="p-8 md:p-12">
-              <div className="flex items-center justify-center mb-6">
-                <div className="flex items-center space-x-2">
-                  <Bot className="h-8 w-8 text-blue-400" />
-                  <span className="text-white font-semibold">Join the Early Development Journey</span>
-                </div>
-              </div>
-              
               <h3 className="text-3xl font-bold text-white mb-4">
-                Ready to Help Shape the Future?
+                Ready to Shape the Future of Cybersecurity?
               </h3>
               <p className="text-slate-300 mb-8 text-lg">
-                We're actively developing this platform and looking for early users to provide feedback 
-                and help us build something truly revolutionary for cybersecurity professionals.
+                Join our early development community. Get access to the latest features, 
+                provide feedback, and help us build the ultimate AI-powered compliance platform.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  onClick={() => navigate("/auth")}
-                  size="lg"
-                  className="bg-white text-slate-900 hover:bg-slate-100 font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-300"
-                >
-                  Get Early Access
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-                
-                <Button 
-                  onClick={() => navigate("/dashboard")}
-                  variant="outline"
-                  size="lg"
-                  className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-3"
-                >
-                  View Progress
-                </Button>
-              </div>
+              <Button 
+                onClick={() => navigate("/auth")}
+                size="lg"
+                className="bg-white text-slate-900 hover:bg-slate-100 font-semibold px-8 py-3 transform hover:scale-105 transition-all duration-300 mb-6"
+              >
+                Start Your Early Access
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
               
-              <div className="flex items-center justify-center mt-6 space-x-6 text-sm text-slate-400">
-                <span>✓ Early development</span>
-                <span>✓ Active feedback</span>
+              <div className="flex items-center justify-center space-x-6 text-sm text-slate-400">
+                <span>✓ Free access</span>
+                <span>✓ Early features</span>
+                <span>✓ Direct feedback channel</span>
                 <span>✓ Shape the product</span>
               </div>
             </CardContent>
