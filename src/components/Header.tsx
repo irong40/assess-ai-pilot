@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Shield, Menu, User } from "lucide-react";
+import { Shield, Menu, User, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -29,6 +29,10 @@ const Header = () => {
 
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
+            <Link to="/help" className="hover:text-blue-400 transition-colors flex items-center space-x-1">
+              <HelpCircle className="h-4 w-4" />
+              <span>Help</span>
+            </Link>
             {profile?.roles?.includes('admin') && (
               <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
             )}
@@ -71,6 +75,10 @@ const Header = () => {
           <nav className="md:hidden mt-4 pb-4 border-t border-slate-700 pt-4">
             <div className="flex flex-col space-y-2">
               <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
+              <Link to="/help" className="hover:text-blue-400 transition-colors flex items-center space-x-1">
+                <HelpCircle className="h-4 w-4" />
+                <span>Help</span>
+              </Link>
               {profile?.roles?.includes('admin') && (
                 <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
               )}

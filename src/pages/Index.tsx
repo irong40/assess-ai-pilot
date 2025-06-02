@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Shield, Eye } from "lucide-react";
+import { Shield, Eye, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import HeroSection from "@/components/landing/HeroSection";
 import StatsBar from "@/components/landing/StatsBar";
@@ -33,15 +33,26 @@ const Index = () => {
             </div>
           </div>
           
-          <Button 
-            onClick={() => navigate("/dashboard")}
-            variant="outline"
-            size="sm"
-            className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
-          >
-            <Eye className="h-4 w-4 mr-2" />
-            Try Demo
-          </Button>
+          <div className="flex items-center space-x-3">
+            <Button 
+              onClick={() => navigate("/help")}
+              variant="ghost"
+              size="sm"
+              className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            >
+              <HelpCircle className="h-4 w-4 mr-2" />
+              Help
+            </Button>
+            <Button 
+              onClick={() => navigate("/dashboard")}
+              variant="outline"
+              size="sm"
+              className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Try Demo
+            </Button>
+          </div>
         </div>
       </header>
 
