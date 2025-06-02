@@ -1,0 +1,97 @@
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, User, Shield, ChevronRight } from "lucide-react";
+
+interface AssessmentCardProps {
+  id: string;
+  systemName: string;
+  environment: string;
+  scope: string;
+  status: 'not-started' | 'in-progress' | 'completed';
+  owner: string;
+  lastUpdated: string;
+  onView: (id: string) => void;
+}
+
+const AssessmentCard = ({ 
+  id, 
+  systemName, 
+  environment, 
+  scope, 
+  status, 
+  owner, 
+  lastUpdated, 
+  onView 
+}: AssessmentCardProps) => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-100 text-green-800 hover:bg-green-200';
+      case 'in-progress': return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+      default: return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed': return 'Completed';
+      case 'in-progress': return 'In Progress';
+      default: return 'Not Started';
+    }
+  };
+
+  return (
+    <Card className="hover:shadow-lg transition-all duration-200 border-slate-200 hover:border-blue-300">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="text-lg font-semibold text-slate-900 mb-1">
+              {systemName}
+            </CardTitle>
+            <div className="flex items-center space-x-4 text-sm text-slate-600">
+              <div className="flex items-center space-x-1">
+                <Shield className="h-3 w-3" />
+                <span>{environment}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <User className="h-3 w-3" />
+                <span>{owner}</span>
+              </div>
+            </div>
+          </div>
+          <Badge className={`${getStatusColor(status)} border-0`}>
+            {getStatusText(status)}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-slate-600">Compliance Scope:</span>
+            <span className="font-medium text-slate-900">{scope}</span>
+          </div>
+          
+          <div className="flex items-center space-x-1 text-xs text-slate-500">
+            <Calendar className="h-3 w-3" />
+            <span>Last updated {lastUpdated}</span>
+          </div>
+          
+          <div className="pt-2">
+            <Button 
+              onClick={() => onView(id)}
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white"
+              size="sm"
+            >
+              View Assessment
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default AssessmentCard;
