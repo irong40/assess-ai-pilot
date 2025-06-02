@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload, X, FileText, CheckCircle } from "lucide-react";
+import { Upload, X, FileText, CheckCircle, File, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
@@ -125,6 +125,13 @@ const FileUpload = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const getFileIcon = (type: string) => {
+    if (type.startsWith('image/')) {
+      return <Image className="h-5 w-5 text-blue-600" />;
+    }
+    return <FileText className="h-5 w-5 text-blue-600" />;
+  };
+
   return (
     <div className={className}>
       <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
@@ -153,28 +160,47 @@ const FileUpload = ({
       </div>
 
       {uploadedFiles.length > 0 && (
-        <div className="mt-4 space-y-2">
-          <h4 className="font-medium text-slate-900">Uploaded Files:</h4>
-          {uploadedFiles.map((file, index) => (
-            <div key={index} className="flex items-center justify-between bg-slate-50 p-3 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <FileText className="h-4 w-4 text-blue-600" />
-                <div>
-                  <p className="text-sm font-medium text-slate-900">{file.name}</p>
-                  <p className="text-xs text-slate-500">{formatFileSize(file.size)}</p>
-                </div>
-                <CheckCircle className="h-4 w-4 text-green-600" />
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => removeFile(index)}
-                className="text-red-600 hover:text-red-700"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+        <div className="mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-semibold text-slate-900 text-lg">
+              Uploaded Documents ({uploadedFiles.length})
+            </h4>
+            <div className="flex items-center text-sm text-green-600">
+              <CheckCircle className="h-4 w-4 mr-1" />
+              Ready for analysis
             </div>
-          ))}
+          </div>
+          
+          <div className="space-y-3">
+            {uploadedFiles.map((file, index) => (
+              <div key={index} className="flex items-center justify-between bg-white border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center space-x-4 flex-1">
+                  {getFileIcon(file.type)}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-slate-900 truncate">{file.name}</p>
+                    <div className="flex items-center space-x-4 mt-1">
+                      <p className="text-xs text-slate-500">{formatFileSize(file.size)}</p>
+                      <p className="text-xs text-slate-500 capitalize">
+                        {file.type.split('/')[0]} file
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span className="text-xs text-green-600 font-medium">Uploaded</span>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeFile(index)}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 ml-4"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
