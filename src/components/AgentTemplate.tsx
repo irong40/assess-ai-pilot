@@ -10,7 +10,25 @@ import { toast } from "@/hooks/use-toast";
 import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import { analyzeAgent } from "@/services/agentAnalysis";
 
-const AgentNetwork = () => {
+interface AgentTemplateProps {
+  agentId: string;
+  agentName: string;
+  description: string;
+  iconColor: string;
+  uploadPrompt: string;
+  contextPlaceholder: string;
+  buttonColor: string;
+}
+
+const AgentTemplate = ({
+  agentId,
+  agentName,
+  description,
+  iconColor,
+  uploadPrompt,
+  contextPlaceholder,
+  buttonColor
+}: AgentTemplateProps) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [analysis, setAnalysis] = useState("");
@@ -19,7 +37,7 @@ const AgentNetwork = () => {
   const [context, setContext] = useState("");
   
   const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
-  const agentStatus = getAgentStatus('network');
+  const agentStatus = getAgentStatus(agentId);
   const isComplete = agentStatus.status === 'completed';
 
   useState(() => {
@@ -35,15 +53,15 @@ const AgentNetwork = () => {
     
     try {
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
+        agentId,
         status: 'in-progress',
         progress: 50,
       });
 
-      const analysisResult = await analyzeAgent('network', uploadedFiles, context);
+      const analysisResult = await analyzeAgent(agentId, uploadedFiles, context);
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
+        agentId,
         status: 'completed',
         progress: 100,
         analysisResult: analysisResult,
@@ -53,7 +71,7 @@ const AgentNetwork = () => {
       
       toast({
         title: "Analysis Complete",
-        description: "ISSO-Network assessment has been completed successfully",
+        description: `${agentName} assessment has been completed successfully`,
       });
     } catch (error) {
       console.error('Analysis failed:', error);
@@ -64,7 +82,7 @@ const AgentNetwork = () => {
       });
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
+        agentId,
         status: 'not-started',
         progress: 0,
       });
@@ -95,12 +113,12 @@ const AgentNetwork = () => {
           </div>
 
           <div className="flex items-center space-x-3 mb-8">
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <Bot className="h-8 w-8 text-blue-600" />
+            <div className={`p-3 bg-${iconColor}-50 rounded-lg`}>
+              <Bot className={`h-8 w-8 text-${iconColor}-600`} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">ISSO-Network Agent</h1>
-              <p className="text-slate-600">Analyzes network architecture, segmentation, and security controls</p>
+              <h1 className="text-3xl font-bold text-slate-900">{agentName}</h1>
+              <p className="text-slate-600">{description}</p>
             </div>
             {isComplete && <CheckCircle className="h-8 w-8 text-green-600" />}
           </div>
@@ -111,7 +129,7 @@ const AgentNetwork = () => {
                 <CardTitle>Assessment Input</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                <div className={`border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-${iconColor}-400 transition-colors`}>
                   <input
                     type="file"
                     multiple
@@ -122,9 +140,9 @@ const AgentNetwork = () => {
                   />
                   <label htmlFor="file-upload" className="cursor-pointer">
                     <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-                    <h3 className="font-medium text-slate-900 mb-2">Upload Network Documentation</h3>
+                    <h3 className="font-medium text-slate-900 mb-2">{uploadPrompt}</h3>
                     <p className="text-sm text-slate-600 mb-4">
-                      Network diagrams, firewall rules, security configurations
+                      Upload relevant documentation for analysis
                     </p>
                     <Button variant="outline" size="sm" type="button">
                       Select Files
@@ -145,7 +163,7 @@ const AgentNetwork = () => {
                   <Textarea
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
-                    placeholder="Describe your network architecture, security zones, firewall configurations, or any recent network changes..."
+                    placeholder={contextPlaceholder}
                     rows={4}
                   />
                 </div>
@@ -153,10 +171,10 @@ const AgentNetwork = () => {
                 <Button 
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || updateAgentAssessment.isPending}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className={`w-full bg-${buttonColor}-600 hover:bg-${buttonColor}-700 text-white`}
                   size="lg"
                 >
-                  {isAnalyzing ? "Analyzing..." : "Start Network Analysis"}
+                  {isAnalyzing ? "Analyzing..." : `Start ${agentName} Analysis`}
                 </Button>
               </CardContent>
             </Card>
@@ -169,8 +187,8 @@ const AgentNetwork = () => {
                 {isAnalyzing ? (
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
-                      <Bot className="h-12 w-12 text-blue-600 mx-auto mb-4 animate-pulse" />
-                      <p className="text-slate-600">Analyzing network security...</p>
+                      <Bot className={`h-12 w-12 text-${iconColor}-600 mx-auto mb-4 animate-pulse`} />
+                      <p className="text-slate-600">Analyzing...</p>
                     </div>
                   </div>
                 ) : analysis ? (
@@ -192,10 +210,10 @@ const AgentNetwork = () => {
                 <CardContent className="pt-6">
                   <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-green-900 mb-2">
-                    Network Security Assessment Complete!
+                    {agentName} Assessment Complete!
                   </h3>
                   <p className="text-green-700 mb-4">
-                    The ISSO-Network agent has completed its analysis. You can now proceed to other agents or review the summary.
+                    The {agentName} has completed its analysis. You can now proceed to other agents or review the summary.
                   </p>
                   <Button 
                     onClick={() => navigate(`/assessment/${id}/agents`)}
@@ -219,4 +237,4 @@ const AgentNetwork = () => {
   );
 };
 
-export default AgentNetwork;
+export default AgentTemplate;

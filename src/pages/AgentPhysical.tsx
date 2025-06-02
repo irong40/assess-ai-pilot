@@ -8,58 +8,75 @@ import Header from "@/components/Header";
 import FileUpload from "@/components/FileUpload";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useAgentAssessments } from "@/hooks/useAgentAssessments";
+import { analyzeAgent } from "@/services/agentAnalysis";
 
 const AgentPhysical = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [analysis, setAnalysis] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [context, setContext] = useState("");
+  
+  const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
+  const agentStatus = getAgentStatus('physical');
+  const isComplete = agentStatus.status === 'completed';
+
+  // Load existing analysis if available
+  useState(() => {
+    if (agentStatus.analysisResult) {
+      setAnalysis(agentStatus.analysisResult);
+    }
+  });
 
   const handleAnalyze = async () => {
+    if (!id) return;
+    
     setIsAnalyzing(true);
     
-    setTimeout(() => {
-      const mockAnalysis = `# ISSO-Physical Security Assessment
+    try {
+      // Update status to in-progress
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'physical',
+        status: 'in-progress',
+        progress: 50,
+      });
 
-## Physical Security Controls Analysis
-- **Facility Protection**: Multi-layered physical security with controlled access points
-- **Access Controls**: Badge-based entry system with logging and monitoring
-- **Environmental Controls**: Climate control, fire suppression, and power redundancy
+      // Perform analysis
+      const analysisResult = await analyzeAgent('physical', uploadedFiles, context);
+      
+      // Update with completed status and results
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'physical',
+        status: 'completed',
+        progress: 100,
+        analysisResult: analysisResult,
+      });
 
-## Key Findings
-### Strengths
-- 24/7 security personnel on-site
-- CCTV surveillance with 90-day retention
-- Biometric access controls for sensitive areas
-- Proper cable management and equipment securing
-
-### Areas for Improvement
-- Visitor escort procedures need enforcement
-- Emergency response plans require annual testing
-- Some legacy access cards need deactivation
-
-## Recommendations
-1. Implement mandatory visitor escort policy
-2. Conduct quarterly emergency response drills
-3. Audit and deactivate unused access credentials
-4. Install additional surveillance in server areas
-
-## Compliance Score: 78/100
-
-## Uploaded Documents Analysis
-${uploadedFiles.length > 0 ? `Analyzed ${uploadedFiles.length} document(s) including facility layouts and security procedures.` : 'No additional documents provided for analysis.'}`;
-
-      setAnalysis(mockAnalysis);
-      setIsAnalyzing(false);
-      setIsComplete(true);
+      setAnalysis(analysisResult);
       
       toast({
         title: "Analysis Complete",
         description: "ISSO-Physical assessment has been completed successfully",
       });
-    }, 3000);
+    } catch (error) {
+      console.error('Analysis failed:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error performing the analysis. Please try again.",
+        variant: "destructive",
+      });
+      
+      // Reset status on error
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'physical',
+        status: 'not-started',
+        progress: 0,
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (
@@ -107,6 +124,8 @@ ${uploadedFiles.length > 0 ? `Analyzed ${uploadedFiles.length} document(s) inclu
                     Additional Context (Optional)
                   </label>
                   <Textarea
+                    value={context}
+                    onChange={(e) => setContext(e.target.value)}
                     placeholder="Describe your facility layout, security measures, access control systems, or any recent security incidents..."
                     rows={4}
                   />
@@ -114,7 +133,7 @@ ${uploadedFiles.length > 0 ? `Analyzed ${uploadedFiles.length} document(s) inclu
 
                 <Button 
                   onClick={handleAnalyze}
-                  disabled={isAnalyzing}
+                  disabled={isAnalyzing || updateAgentAssessment.isPending}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                   size="lg"
                 >

@@ -30,7 +30,10 @@ export const useAgentAssessments = (assessmentId: string) => {
         .eq('assessment_id', assessmentId)
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching agent assessments:', error);
+        return [];
+      }
       return data as AgentAssessment[];
     },
     enabled: !!user && !!assessmentId,
@@ -58,7 +61,10 @@ export const useAgentAssessments = (assessmentId: string) => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating agent assessment:', error);
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
