@@ -230,7 +230,7 @@ const App = () => (
               path="/assessment/:id/summary"
               element={
                 <ProtectedRoute>
-                  <RoleBasedRoute requiredRoles={['admin', 'isso-lead']}>
+                  <RoleBasedRoute requiredRoles={['admin', 'isso']}>
                     <LeadSummary />
                   </RoleBasedRoute>
                 </ProtectedRoute>
