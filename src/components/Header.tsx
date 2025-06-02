@@ -4,6 +4,7 @@ import { Shield, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,10 +28,9 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</a>
-            <a href="/assessments" className="hover:text-blue-400 transition-colors">Assessments</a>
+            <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
             {profile?.roles?.includes('admin') && (
-              <a href="/admin" className="hover:text-blue-400 transition-colors">Admin</a>
+              <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
             )}
           </nav>
 
@@ -52,7 +52,7 @@ const Header = () => {
               </div>
             ) : (
               <Button variant="outline" size="sm">
-                <a href="/auth">Sign In</a>
+                <Link to="/auth">Sign In</Link>
               </Button>
             )}
             
@@ -70,10 +70,9 @@ const Header = () => {
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-slate-700 pt-4">
             <div className="flex flex-col space-y-2">
-              <a href="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</a>
-              <a href="/assessments" className="hover:text-blue-400 transition-colors">Assessments</a>
+              <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
               {profile?.roles?.includes('admin') && (
-                <a href="/admin" className="hover:text-blue-400 transition-colors">Admin</a>
+                <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
               )}
             </div>
           </nav>
