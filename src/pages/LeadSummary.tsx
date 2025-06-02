@@ -1,12 +1,15 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Shield, Bot, CheckCircle, AlertTriangle, Users } from "lucide-react";
+import { ArrowLeft, Shield, Bot, CheckCircle, FileText, Download } from "lucide-react";
 import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useAgentAssessments } from "@/hooks/useAgentAssessments";
+import AgentSummaryCard from "@/components/AgentSummaryCard";
+import ExecutiveSummaryCard from "@/components/ExecutiveSummaryCard";
+import ComplianceMatrix from "@/components/ComplianceMatrix";
 
 const LeadSummary = () => {
   const navigate = useNavigate();
@@ -15,16 +18,13 @@ const LeadSummary = () => {
   const [isCompiling, setIsCompiling] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const user = {
-    email: "lead@company.com",
-    role: "ISSO-Lead"
-  };
+  const { getAgentStatus } = useAgentAssessments(id || '');
 
-  // Mock findings data from all agents
+  // Agent findings data based on actual agent status
   const agentFindings = [
     {
       agent: "ISSO-Policy",
-      status: "Complete",
+      agentId: "policy",
       riskLevel: "Medium",
       findings: 8,
       criticalIssues: 2,
@@ -32,7 +32,7 @@ const LeadSummary = () => {
     },
     {
       agent: "ISSO-Physical", 
-      status: "Complete",
+      agentId: "physical",
       riskLevel: "High",
       findings: 12,
       criticalIssues: 4,
@@ -40,7 +40,7 @@ const LeadSummary = () => {
     },
     {
       agent: "ISSO-Network",
-      status: "Complete", 
+      agentId: "network",
       riskLevel: "Medium",
       findings: 6,
       criticalIssues: 1,
@@ -48,7 +48,7 @@ const LeadSummary = () => {
     },
     {
       agent: "ISSO-Access",
-      status: "Complete",
+      agentId: "access",
       riskLevel: "Low",
       findings: 4,
       criticalIssues: 0,
@@ -56,22 +56,33 @@ const LeadSummary = () => {
     },
     {
       agent: "ISSO-Data",
-      status: "Complete",
+      agentId: "data",
       riskLevel: "Medium",
       findings: 7,
       criticalIssues: 2,
       summary: "Data encryption is strong but backup procedures need standardization"
     }
-  ];
+  ] as const;
 
-  const getRiskColor = (level: string) => {
-    switch (level) {
-      case 'High': return 'bg-red-100 text-red-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'Low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  // Calculate metrics
+  const completedAgents = agentFindings.filter(agent => 
+    getAgentStatus(agent.agentId).status === 'completed'
+  ).length;
+
+  const totalFindings = agentFindings.reduce((sum, agent) => sum + agent.findings, 0);
+  const totalCritical = agentFindings.reduce((sum, agent) => sum + agent.criticalIssues, 0);
+  const overallRiskLevel = totalCritical > 5 ? "High" : totalCritical > 2 ? "Medium" : "Low";
+  const complianceScore = Math.max(85 - (totalCritical * 3), 65);
+
+  // Mock compliance data
+  const complianceControls = [
+    { control: "AC-2: Account Management", status: "implemented", description: "User account management procedures are in place" },
+    { control: "AC-3: Access Enforcement", status: "implemented", description: "Access control policies are enforced" },
+    { control: "PE-2: Physical Access", status: "partial", description: "Physical access controls need enhancement" },
+    { control: "SC-7: Boundary Protection", status: "implemented", description: "Network boundary protection is configured" },
+    { control: "CP-2: Contingency Plan", status: "partial", description: "Disaster recovery plan requires updates" },
+    { control: "SI-4: Information Monitoring", status: "missing", description: "Comprehensive monitoring not implemented" }
+  ] as const;
 
   const handleCompileSummary = async () => {
     setIsCompiling(true);
@@ -80,13 +91,13 @@ const LeadSummary = () => {
       const mockSummary = `# ISSO-Lead Comprehensive Assessment Summary
 
 ## Executive Overview
-This cybersecurity assessment has identified several areas requiring immediate attention and ongoing monitoring. The overall security posture shows a **Medium** risk profile with specific high-priority items requiring remediation.
+This cybersecurity assessment has identified ${totalFindings} findings across ${completedAgents} security domains. The overall security posture shows a **${overallRiskLevel}** risk profile with ${totalCritical} critical issues requiring immediate attention.
 
-## Critical Findings Summary
-- **Total Findings**: 37 issues across all domains
-- **Critical Issues**: 9 requiring immediate attention
-- **High-Risk Areas**: Physical security, data backup procedures
-- **Overall Risk Rating**: Medium
+## Assessment Metrics
+- **Total Findings**: ${totalFindings} issues identified
+- **Critical Issues**: ${totalCritical} requiring immediate remediation
+- **Compliance Score**: ${complianceScore}% (NIST 800-53)
+- **Agents Completed**: ${completedAgents} of ${agentFindings.length}
 
 ## Priority Remediation Items
 
@@ -99,16 +110,19 @@ This cybersecurity assessment has identified several areas requiring immediate a
 1. **Network Monitoring**: Deploy additional SIEM rules for lateral movement detection
 2. **Access Management**: Implement privileged access management (PAM) solution
 
-## Compliance Status
-- **NIST 800-53**: 83% compliant (needs improvement in Physical and Personnel domains)
-- **Risk Assessment**: Complete with documented mitigation strategies
-- **Control Implementation**: 156 of 188 controls properly implemented
+## Risk Assessment Summary
+The highest risk areas identified are:
+- Physical security infrastructure gaps
+- Inconsistent backup and recovery procedures
+- Limited security monitoring capabilities
 
-## Agent Analysis Summary
-Each specialized agent has completed their domain analysis with varying risk levels identified. The highest concerns are in physical security infrastructure and backup standardization.
+## Compliance Status
+- **NIST 800-53**: ${complianceScore}% compliant
+- **Implemented Controls**: ${complianceControls.filter(c => c.status === 'implemented').length} of ${complianceControls.length}
+- **Controls Needing Work**: ${complianceControls.filter(c => c.status !== 'implemented').length}
 
 ## Recommendations for ISSM Review
-This assessment is ready for final ISSM review and approval. All critical findings have been validated and mitigation strategies proposed.`;
+This assessment is ready for final ISSM review and approval. All critical findings have been validated and mitigation strategies proposed. The organization demonstrates a strong security foundation with targeted areas for improvement.`;
 
       setSummary(mockSummary);
       setIsCompiling(false);
@@ -116,7 +130,7 @@ This assessment is ready for final ISSM review and approval. All critical findin
       
       toast({
         title: "Summary Compiled",
-        description: "ISSO-Lead summary has been generated and is ready for ISSM review",
+        description: "ISSO-Lead comprehensive summary has been generated successfully",
       });
     }, 4000);
   };
@@ -124,20 +138,25 @@ This assessment is ready for final ISSM review and approval. All critical findin
   const handleSubmitToISSM = () => {
     toast({
       title: "Submitted to ISSM",
-      description: "Assessment summary has been forwarded for final review",
+      description: "Assessment summary has been forwarded for final review and approval",
     });
     navigate(`/assessment/${id}/issm-review`);
   };
 
-  const totalFindings = agentFindings.reduce((sum, agent) => sum + agent.findings, 0);
-  const totalCritical = agentFindings.reduce((sum, agent) => sum + agent.criticalIssues, 0);
+  const handleExportReport = () => {
+    toast({
+      title: "Report Generated",
+      description: "Assessment report has been generated and is ready for download",
+    });
+    navigate(`/assessment/${id}/report`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-4 mb-8">
             <Button 
               variant="ghost" 
@@ -154,88 +173,64 @@ This assessment is ready for final ISSM review and approval. All critical findin
               <Shield className="h-8 w-8 text-purple-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">ISSO-Lead Summary Compilation</h1>
-              <p className="text-slate-600">Compile and analyze findings from all assessment agents</p>
+              <h1 className="text-3xl font-bold text-slate-900">Assessment Summary & Analysis</h1>
+              <p className="text-slate-600">Comprehensive security assessment results and recommendations</p>
             </div>
             {isComplete && <CheckCircle className="h-8 w-8 text-green-600" />}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Agent Findings Overview */}
-            <div className="lg:col-span-2 space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>Agent Findings Overview</span>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <span className="text-slate-600">Total: <strong>{totalFindings} findings</strong></span>
-                      <span className="text-red-600">Critical: <strong>{totalCritical}</strong></span>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {agentFindings.map((agent) => (
-                      <div key={agent.agent} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold text-slate-900">{agent.agent}</h3>
-                          <div className="flex items-center space-x-2">
-                            <Badge className={getRiskColor(agent.riskLevel)}>
-                              {agent.riskLevel} Risk
-                            </Badge>
-                            <span className="text-sm text-slate-600">
-                              {agent.findings} findings ({agent.criticalIssues} critical)
-                            </span>
-                          </div>
-                        </div>
-                        <p className="text-sm text-slate-600">{agent.summary}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+          {/* Executive Summary */}
+          <div className="mb-8">
+            <ExecutiveSummaryCard
+              totalFindings={totalFindings}
+              criticalIssues={totalCritical}
+              overallRiskLevel={overallRiskLevel as "High" | "Medium" | "Low"}
+              complianceScore={complianceScore}
+              completedAgents={completedAgents}
+              totalAgents={agentFindings.length}
+            />
+          </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Risk Analysis & Correlation</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-red-50 rounded-lg">
-                      <div className="text-2xl font-bold text-red-600">3</div>
-                      <div className="text-sm text-red-700">High Risk</div>
-                    </div>
-                    <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                      <div className="text-2xl font-bold text-yellow-600">2</div>
-                      <div className="text-sm text-yellow-700">Medium Risk</div>
-                    </div>
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
-                      <div className="text-2xl font-bold text-green-600">1</div>
-                      <div className="text-sm text-green-700">Low Risk</div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <h4 className="font-medium text-slate-900 mb-2">Cross-Agent Correlations</h4>
-                    <ul className="text-sm text-slate-600 space-y-1">
-                      <li>• Physical and Network security gaps may allow unauthorized access</li>
-                      <li>• Policy and Data findings indicate need for backup procedure standardization</li>
-                      <li>• Access controls are strong but need integration with physical security</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Agent Results */}
+            <div className="lg:col-span-2 space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-6">Agent Analysis Results</h2>
+                <div className="space-y-4">
+                  {agentFindings.map((agent) => {
+                    const agentStatus = getAgentStatus(agent.agentId);
+                    return (
+                      <AgentSummaryCard
+                        key={agent.agent}
+                        agentName={agent.agent}
+                        status={agentStatus.status}
+                        findings={agent.findings}
+                        criticalIssues={agent.criticalIssues}
+                        riskLevel={agent.riskLevel as "High" | "Medium" | "Low"}
+                        summary={agent.summary}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Compliance Matrix */}
+              <ComplianceMatrix
+                framework="NIST 800-53"
+                overallScore={complianceScore}
+                controls={complianceControls}
+              />
             </div>
 
-            {/* Summary Generation */}
+            {/* Actions Panel */}
             <div className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Generate Lead Summary</CardTitle>
+                  <CardTitle>Generate Final Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-sm text-slate-600 mb-4">
-                    Compile findings from all agents into a comprehensive summary for ISSM review.
+                    Compile comprehensive analysis from all completed agents for ISSM review.
                   </div>
                   
                   <Button 
@@ -263,15 +258,24 @@ This assessment is ready for final ISSM review and approval. All critical findin
                   </Button>
 
                   {isComplete && (
-                    <div className="mt-6 pt-6 border-t">
-                      <h4 className="font-medium text-slate-900 mb-3">Ready for ISSM Review</h4>
+                    <div className="space-y-3 pt-4 border-t">
                       <Button 
                         onClick={handleSubmitToISSM}
                         className="w-full bg-red-600 hover:bg-red-700 text-white"
                         size="lg"
                       >
-                        <Users className="h-4 w-4 mr-2" />
+                        <Shield className="h-4 w-4 mr-2" />
                         Submit to ISSM
+                      </Button>
+                      
+                      <Button 
+                        onClick={handleExportReport}
+                        variant="outline"
+                        className="w-full"
+                        size="lg"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Export Report
                       </Button>
                     </div>
                   )}
@@ -298,11 +302,21 @@ This assessment is ready for final ISSM review and approval. All critical findin
           {summary && (
             <Card className="mt-8">
               <CardHeader>
-                <CardTitle>Compiled Assessment Summary</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Comprehensive Assessment Summary</CardTitle>
+                  <Button
+                    onClick={handleExportReport}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export PDF
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap text-sm bg-slate-50 p-4 rounded-lg">{summary}</pre>
+                  <pre className="whitespace-pre-wrap text-sm bg-slate-50 p-4 rounded-lg border">{summary}</pre>
                 </div>
               </CardContent>
             </Card>
