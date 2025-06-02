@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +25,7 @@ import ISSMReview from "./pages/ISSMReview";
 import ReportBuilder from "./pages/ReportBuilder";
 import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import React from 'react';
 
 const queryClient = new QueryClient();
@@ -35,32 +35,34 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
-          <div className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/assessment/new" element={<ProtectedRoute><NewAssessment /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents" element={<ProtectedRoute><AgentHub /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/policy" element={<ProtectedRoute><AgentPolicy /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/physical" element={<ProtectedRoute><AgentPhysical /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/network" element={<ProtectedRoute><AgentNetwork /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/access" element={<ProtectedRoute><AgentAccess /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/data" element={<ProtectedRoute><AgentData /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/incident" element={<ProtectedRoute><AgentIncident /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/compliance" element={<ProtectedRoute><AgentCompliance /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/vulnerability" element={<ProtectedRoute><AgentVulnerability /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/training" element={<ProtectedRoute><AgentTraining /></ProtectedRoute>} />
-              <Route path="/assessment/:id/agents/continuity" element={<ProtectedRoute><AgentContinuity /></ProtectedRoute>} />
-              <Route path="/assessment/:id/lead-summary" element={<ProtectedRoute><LeadSummary /></ProtectedRoute>} />
-              <Route path="/assessment/:id/issm-review" element={<ProtectedRoute><ISSMReview /></ProtectedRoute>} />
-              <Route path="/assessment/:id/report" element={<ProtectedRoute><ReportBuilder /></ProtectedRoute>} />
-              <Route path="/assessment/:id/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-            <Sonner />
-          </div>
+          <ErrorBoundary>
+            <div className="min-h-screen">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/assessment/new" element={<ProtectedRoute><NewAssessment /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents" element={<ProtectedRoute><AgentHub /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/policy" element={<ProtectedRoute><AgentPolicy /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/physical" element={<ProtectedRoute><AgentPhysical /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/network" element={<ProtectedRoute><AgentNetwork /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/access" element={<ProtectedRoute><AgentAccess /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/data" element={<ProtectedRoute><AgentData /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/incident" element={<ProtectedRoute><AgentIncident /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/compliance" element={<ProtectedRoute><AgentCompliance /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/vulnerability" element={<ProtectedRoute><AgentVulnerability /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/training" element={<ProtectedRoute><AgentTraining /></ProtectedRoute>} />
+                <Route path="/assessment/:id/agents/continuity" element={<ProtectedRoute><AgentContinuity /></ProtectedRoute>} />
+                <Route path="/assessment/:id/lead-summary" element={<ProtectedRoute><LeadSummary /></ProtectedRoute>} />
+                <Route path="/assessment/:id/issm-review" element={<ProtectedRoute><ISSMReview /></ProtectedRoute>} />
+                <Route path="/assessment/:id/report" element={<ProtectedRoute><ReportBuilder /></ProtectedRoute>} />
+                <Route path="/assessment/:id/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <Toaster />
+              <Sonner />
+            </div>
+          </ErrorBoundary>
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
