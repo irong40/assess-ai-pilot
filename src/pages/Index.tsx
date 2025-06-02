@@ -12,7 +12,7 @@ const Index = () => {
     {
       icon: <Bot className="h-8 w-8 text-blue-600" />,
       title: "AI-Powered Agents",
-      description: "10 specialized AI agents analyze every aspect of your cybersecurity posture"
+      description: "15 specialized AI agents analyze every aspect of your cybersecurity posture"
     },
     {
       icon: <Shield className="h-8 w-8 text-green-600" />,
