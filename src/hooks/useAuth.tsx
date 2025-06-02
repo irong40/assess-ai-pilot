@@ -67,13 +67,98 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // DoD Password Validation Helper
+  const validateDoDPassword = (password: string, email: string, firstName?: string, lastName?: string) => {
+    const checks = {
+      length: password.length >= 12,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>~`\-_=+\[\]\\;'/]/.test(password),
+      noSequential: !/(.)\1{2,}/.test(password),
+      noCommonPatterns: !/(123|abc|qwe|password|admin|welcome)/i.test(password)
+    };
+
+    // Check for personal information
+    const lowerPassword = password.toLowerCase();
+    const emailName = email.split('@')[0].toLowerCase();
+    let hasPersonalInfo = false;
+    
+    if (firstName && firstName.length > 2 && lowerPassword.includes(firstName.toLowerCase())) {
+      hasPersonalInfo = true;
+    }
+    if (lastName && lastName.length > 2 && lowerPassword.includes(lastName.toLowerCase())) {
+      hasPersonalInfo = true;
+    }
+    if (emailName.length > 2 && lowerPassword.includes(emailName)) {
+      hasPersonalInfo = true;
+    }
+
+    checks.noPersonalInfo = !hasPersonalInfo;
+
+    return checks;
+  };
+
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
     try {
+      // DoD Password Validation
+      const passwordChecks = validateDoDPassword(password, email, firstName, lastName);
+      
+      if (!passwordChecks.length) {
+        const error = new Error('Password must be at least 12 characters (DoD standard)');
+        toast({
+          title: "Password Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      if (!passwordChecks.uppercase || !passwordChecks.lowercase || !passwordChecks.number || !passwordChecks.special) {
+        const error = new Error('Password must include uppercase, lowercase, number, and special character (DoD standard)');
+        toast({
+          title: "Password Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      if (!passwordChecks.noSequential) {
+        const error = new Error('Password cannot contain repeated characters (DoD standard)');
+        toast({
+          title: "Password Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      if (!passwordChecks.noCommonPatterns) {
+        const error = new Error('Password cannot contain common patterns or dictionary words (DoD standard)');
+        toast({
+          title: "Password Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      if (!passwordChecks.noPersonalInfo) {
+        const error = new Error('Password cannot contain personal information (DoD standard)');
+        toast({
+          title: "Password Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
       // Enhanced security: validate input before sending
-      if (!email || !password || password.length < 8) {
-        const error = new Error('Invalid input: Email and password (min 8 chars) are required');
+      if (!email || !password || password.length < 12) {
+        const error = new Error('Invalid input: Email and password (min 12 chars) are required');
         toast({
           title: "Sign Up Error",
           description: error.message,

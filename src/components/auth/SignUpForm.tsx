@@ -37,16 +37,34 @@ const SignUpForm = () => {
     return allowedDomains.some(allowed => domain.endsWith(allowed));
   };
 
+  // DoD Password Standards Implementation
   const validatePassword = (password: string) => {
     const checks = {
-      length: password.length >= 8,
+      length: password.length >= 12, // DoD minimum for non-CAC users
+      lengthPreferred: password.length >= 15, // DoD preferred length
       uppercase: /[A-Z]/.test(password),
       lowercase: /[a-z]/.test(password),
       number: /\d/.test(password),
-      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      special: /[!@#$%^&*(),.?":{}|<>~`\-_=+\[\]\\;'/]/.test(password),
+      noSequential: !/(.)\1{2,}/.test(password), // No 3+ repeated characters
+      noCommonPatterns: !/(123|abc|qwe|password|admin)/i.test(password),
+      noPersonalInfo: !containsPersonalInfo(password)
     };
     
     return checks;
+  };
+
+  const containsPersonalInfo = (password: string) => {
+    const lowerPassword = password.toLowerCase();
+    const lowerFirstName = firstName.toLowerCase();
+    const lowerLastName = lastName.toLowerCase();
+    const emailName = email.split('@')[0].toLowerCase();
+    
+    if (lowerFirstName.length > 2 && lowerPassword.includes(lowerFirstName)) return true;
+    if (lowerLastName.length > 2 && lowerPassword.includes(lowerLastName)) return true;
+    if (emailName.length > 2 && lowerPassword.includes(emailName)) return true;
+    
+    return false;
   };
 
   const validateForm = () => {
@@ -68,8 +86,16 @@ const SignUpForm = () => {
     const passwordChecks = validatePassword(password);
     if (!password) {
       newErrors.password = "Password is required";
-    } else if (!passwordChecks.length || !passwordChecks.uppercase || !passwordChecks.lowercase || !passwordChecks.number) {
-      newErrors.password = "Password must be at least 8 characters with uppercase, lowercase, and number";
+    } else if (!passwordChecks.length) {
+      newErrors.password = "Password must be at least 12 characters (DoD standard)";
+    } else if (!passwordChecks.uppercase || !passwordChecks.lowercase || !passwordChecks.number || !passwordChecks.special) {
+      newErrors.password = "Password must include uppercase, lowercase, number, and special character (DoD standard)";
+    } else if (!passwordChecks.noSequential) {
+      newErrors.password = "Password cannot contain repeated characters (DoD standard)";
+    } else if (!passwordChecks.noCommonPatterns) {
+      newErrors.password = "Password cannot contain common patterns or dictionary words (DoD standard)";
+    } else if (!passwordChecks.noPersonalInfo) {
+      newErrors.password = "Password cannot contain personal information (DoD standard)";
     }
     
     if (password !== confirmPassword) {
@@ -82,13 +108,19 @@ const SignUpForm = () => {
 
   const getPasswordStrength = () => {
     const checks = validatePassword(password);
-    const score = Object.values(checks).filter(Boolean).length;
+    const criticalChecks = [checks.length, checks.uppercase, checks.lowercase, checks.number, checks.special];
+    const advancedChecks = [checks.lengthPreferred, checks.noSequential, checks.noCommonPatterns, checks.noPersonalInfo];
     
-    if (score < 2) return { strength: 0, text: "Very Weak", color: "bg-red-500" };
-    if (score < 3) return { strength: 1, text: "Weak", color: "bg-orange-500" };
-    if (score < 4) return { strength: 2, text: "Fair", color: "bg-yellow-500" };
-    if (score < 5) return { strength: 3, text: "Good", color: "bg-blue-500" };
-    return { strength: 4, text: "Strong", color: "bg-green-500" };
+    const criticalScore = criticalChecks.filter(Boolean).length;
+    const advancedScore = advancedChecks.filter(Boolean).length;
+    const totalScore = criticalScore + (advancedScore * 0.5);
+    
+    if (totalScore < 2) return { strength: 0, text: "Very Weak", color: "bg-red-500" };
+    if (totalScore < 3.5) return { strength: 1, text: "Weak", color: "bg-orange-500" };
+    if (totalScore < 5) return { strength: 2, text: "Fair", color: "bg-yellow-500" };
+    if (criticalScore === 5 && advancedScore >= 2) return { strength: 4, text: "DoD Compliant", color: "bg-green-500" };
+    if (criticalScore === 5) return { strength: 3, text: "Good", color: "bg-blue-500" };
+    return { strength: 2, text: "Fair", color: "bg-yellow-500" };
   };
 
   const passwordStrength = getPasswordStrength();
@@ -191,7 +223,7 @@ const SignUpForm = () => {
           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
           <Input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Password (DoD Standard)"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
@@ -229,22 +261,46 @@ const SignUpForm = () => {
               <span className="text-xs text-slate-300">{passwordStrength.text}</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-1 text-xs">
+            <div className="text-xs text-slate-300 mb-2">
+              <strong>DoD Password Requirements:</strong>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-1 text-xs">
               <div className={`flex items-center space-x-1 ${passwordChecks.length ? 'text-green-400' : 'text-slate-400'}`}>
                 {passwordChecks.length ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                <span>8+ characters</span>
+                <span>12+ characters (minimum)</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.lengthPreferred ? 'text-green-400' : 'text-yellow-400'}`}>
+                {passwordChecks.lengthPreferred ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>15+ characters (preferred)</span>
               </div>
               <div className={`flex items-center space-x-1 ${passwordChecks.uppercase ? 'text-green-400' : 'text-slate-400'}`}>
                 {passwordChecks.uppercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                <span>Uppercase</span>
+                <span>Uppercase letter</span>
               </div>
               <div className={`flex items-center space-x-1 ${passwordChecks.lowercase ? 'text-green-400' : 'text-slate-400'}`}>
                 {passwordChecks.lowercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
-                <span>Lowercase</span>
+                <span>Lowercase letter</span>
               </div>
               <div className={`flex items-center space-x-1 ${passwordChecks.number ? 'text-green-400' : 'text-slate-400'}`}>
                 {passwordChecks.number ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
                 <span>Number</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.special ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.special ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>Special character</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.noSequential ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.noSequential ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>No repeated characters</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.noCommonPatterns ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.noCommonPatterns ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>No common patterns</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${passwordChecks.noPersonalInfo ? 'text-green-400' : 'text-slate-400'}`}>
+                {passwordChecks.noPersonalInfo ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                <span>No personal information</span>
               </div>
             </div>
           </div>
