@@ -1,10 +1,9 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SupabaseAuthProvider } from "./integrations/supabase/auth";
+import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NewAssessment from "./pages/NewAssessment";
@@ -42,7 +41,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <SupabaseAuthProvider>
+    <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -231,7 +230,7 @@ const App = () => (
               path="/assessment/:id/summary"
               element={
                 <ProtectedRoute>
-                  <RoleBasedRoute allowedRoles={['admin', 'isso-lead']}>
+                  <RoleBasedRoute requiredRoles={['admin', 'isso-lead']}>
                     <LeadSummary />
                   </RoleBasedRoute>
                 </ProtectedRoute>
@@ -241,7 +240,7 @@ const App = () => (
               path="/assessment/:id/issm-review"
               element={
                 <ProtectedRoute>
-                  <RoleBasedRoute allowedRoles={['admin', 'issm']}>
+                  <RoleBasedRoute requiredRoles={['admin', 'issm']}>
                     <ISSMReview />
                   </RoleBasedRoute>
                 </ProtectedRoute>
@@ -267,7 +266,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </SupabaseAuthProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
