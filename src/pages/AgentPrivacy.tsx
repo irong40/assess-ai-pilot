@@ -3,58 +3,83 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Upload, Bot, CheckCircle } from "lucide-react";
+import { ArrowLeft, Bot, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
+import FileUpload from "@/components/FileUpload";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useAgentAssessments } from "@/hooks/useAgentAssessments";
+import { analyzeAgent } from "@/services/agentAnalysis";
+
+interface UploadedFile {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
 
 const AgentPrivacy = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [analysis, setAnalysis] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [context, setContext] = useState("");
+  
+  const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
+  const agentStatus = getAgentStatus('privacy');
+  const isComplete = agentStatus.status === 'completed';
+
+  useState(() => {
+    if (agentStatus.analysisResult) {
+      setAnalysis(agentStatus.analysisResult);
+    }
+  });
 
   const handleAnalyze = async () => {
+    if (!id) return;
+    
     setIsAnalyzing(true);
     
-    setTimeout(() => {
-      const mockAnalysis = `# ISSO-Privacy Assessment
+    try {
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'privacy',
+        status: 'in-progress',
+        progress: 50,
+      });
 
-## Privacy Controls Analysis
-- **Data Privacy Framework**: Comprehensive privacy program with clear governance
-- **Privacy Impact Assessments**: Regular PIAs for new systems and processes
-- **Data Subject Rights**: Mechanisms for handling privacy requests
+      const filesForAnalysis = uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }));
+      const analysisResult = await analyzeAgent('privacy', filesForAnalysis, context);
+      
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'privacy',
+        status: 'completed',
+        progress: 100,
+        analysisResult: analysisResult,
+      });
 
-## Key Findings
-### Strengths
-- Well-established privacy governance structure
-- Regular privacy impact assessments conducted
-- Clear data subject rights procedures implemented
-- Privacy training programs for all staff
-
-### Areas for Improvement
-- Some legacy systems lack privacy controls
-- Cross-border data transfer procedures need enhancement
-- Privacy monitoring and reporting automation required
-
-## Recommendations
-1. Retrofit privacy controls for legacy systems
-2. Enhance cross-border data transfer safeguards
-3. Implement automated privacy monitoring tools
-4. Strengthen vendor privacy assessment processes
-
-## Compliance Score: 88/100`;
-
-      setAnalysis(mockAnalysis);
-      setIsAnalyzing(false);
-      setIsComplete(true);
+      setAnalysis(analysisResult);
       
       toast({
         title: "Analysis Complete",
         description: "ISSO-Privacy assessment has been completed successfully",
       });
-    }, 3000);
+    } catch (error) {
+      console.error('Analysis failed:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error performing the analysis. Please try again.",
+        variant: "destructive",
+      });
+      
+      await updateAgentAssessment.mutateAsync({
+        agentId: 'privacy',
+        status: 'not-started',
+        progress: 0,
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (
@@ -91,22 +116,19 @@ const AgentPrivacy = () => {
                 <CardTitle>Assessment Input</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                  <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-                  <h3 className="font-medium text-slate-900 mb-2">Upload Privacy Documentation</h3>
-                  <p className="text-sm text-slate-600 mb-4">
-                    Privacy policies, PIAs, data mapping documentation
-                  </p>
-                  <Button variant="outline" size="sm">
-                    Select Files
-                  </Button>
-                </div>
+                <FileUpload
+                  onUploadComplete={setUploadedFiles}
+                  acceptedTypes=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+                  maxFiles={5}
+                />
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">
                     Additional Context (Optional)
                   </label>
                   <Textarea
+                    value={context}
+                    onChange={(e) => setContext(e.target.value)}
                     placeholder="Describe your privacy program, data handling procedures, privacy impact assessments, or any recent privacy initiatives..."
                     rows={4}
                   />
@@ -114,7 +136,7 @@ const AgentPrivacy = () => {
 
                 <Button 
                   onClick={handleAnalyze}
-                  disabled={isAnalyzing}
+                  disabled={isAnalyzing || updateAgentAssessment.isPending}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                   size="lg"
                 >

@@ -3,19 +3,27 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Upload, Bot, CheckCircle } from "lucide-react";
+import { ArrowLeft, Bot, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
+import FileUpload from "@/components/FileUpload";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import { analyzeAgent } from "@/services/agentAnalysis";
+
+interface UploadedFile {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
 
 const AgentNetwork = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [analysis, setAnalysis] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [context, setContext] = useState("");
   
   const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
@@ -40,7 +48,9 @@ const AgentNetwork = () => {
         progress: 50,
       });
 
-      const analysisResult = await analyzeAgent('network', uploadedFiles, context);
+      // Convert UploadedFile[] to format expected by analyzeAgent
+      const filesForAnalysis = uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }));
+      const analysisResult = await analyzeAgent('network', filesForAnalysis, context);
       
       await updateAgentAssessment.mutateAsync({
         agentId: 'network',
@@ -71,10 +81,6 @@ const AgentNetwork = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
-
-  const handleFileUpload = (files: File[]) => {
-    setUploadedFiles(files);
   };
 
   return (
@@ -111,32 +117,11 @@ const AgentNetwork = () => {
                 <CardTitle>Assessment Input</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                  <input
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
-                    onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <Upload className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-                    <h3 className="font-medium text-slate-900 mb-2">Upload Network Documentation</h3>
-                    <p className="text-sm text-slate-600 mb-4">
-                      Network diagrams, firewall rules, security configurations
-                    </p>
-                    <Button variant="outline" size="sm" type="button">
-                      Select Files
-                    </Button>
-                  </label>
-                </div>
-
-                {uploadedFiles.length > 0 && (
-                  <div className="text-sm text-slate-600">
-                    Uploaded: {uploadedFiles.map(f => f.name).join(', ')}
-                  </div>
-                )}
+                <FileUpload
+                  onUploadComplete={setUploadedFiles}
+                  acceptedTypes=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+                  maxFiles={5}
+                />
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">

@@ -11,12 +11,19 @@ import { toast } from "@/hooks/use-toast";
 import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import { analyzeAgent } from "@/services/agentAnalysis";
 
+interface UploadedFile {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
+
 const AgentPhysical = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [analysis, setAnalysis] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [context, setContext] = useState("");
   
   const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
@@ -43,8 +50,9 @@ const AgentPhysical = () => {
         progress: 50,
       });
 
-      // Perform analysis
-      const analysisResult = await analyzeAgent('physical', uploadedFiles, context);
+      // Perform analysis - convert UploadedFile[] to File[] format expected by analyzeAgent
+      const filesForAnalysis = uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }));
+      const analysisResult = await analyzeAgent('physical', filesForAnalysis, context);
       
       // Update with completed status and results
       await updateAgentAssessment.mutateAsync({
