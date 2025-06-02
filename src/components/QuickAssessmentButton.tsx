@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -138,55 +137,81 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
 
     const analysisResults: string[] = [];
 
-    // Phase 1: Run actual agent analyses
-    for (let i = 0; i < agentIds.length; i++) {
-      const agentId = agentIds[i];
-      const agentName = agentNames[agentId as keyof typeof agentNames] || agentId;
+    try {
+      // Phase 1: Run actual agent analyses
+      for (let i = 0; i < agentIds.length; i++) {
+        const agentId = agentIds[i];
+        const agentName = agentNames[agentId as keyof typeof agentNames] || agentId;
+        
+        setCurrentAgent(agentName);
+        setProgress((i / agentIds.length) * 80); // 0-80% for analysis phase
+
+        console.log(`Starting analysis for agent: ${agentName} (${agentId})`);
+
+        // First update status to in-progress
+        await updateAgentAssessment.mutateAsync({
+          agentId,
+          status: 'in-progress',
+          progress: 50,
+        });
+
+        // Simulate realistic analysis time
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        // Run actual analysis
+        const analysisResult = await analyzeAgent(agentId, [], `Complete assessment for ${agentName}`);
+        analysisResults.push(analysisResult);
+
+        console.log(`Completed analysis for ${agentName}, updating to completed status`);
+
+        // Update agent status to completed with analysis result
+        await updateAgentAssessment.mutateAsync({
+          agentId,
+          status: 'completed',
+          progress: 100,
+          analysisResult
+        });
+
+        console.log(`Agent ${agentName} status updated to completed`);
+      }
+
+      // Phase 2: Run accuracy validation
+      const validationPassed = await runAccuracyChecks(analysisResults);
+
+      setProgress(100);
+      setCurrentPhase('complete');
       
-      setCurrentAgent(agentName);
-      setProgress((i / agentIds.length) * 80); // 0-80% for analysis phase
+      if (validationPassed) {
+        setCurrentAgent("Assessment Complete - High Accuracy ✓");
+        toast({
+          title: "High-Quality Assessment Complete",
+          description: "All accuracy checks passed. Analysis is ready for ISSO-Lead review.",
+        });
+      } else {
+        setCurrentAgent("Assessment Complete - Review Recommended");
+        toast({
+          title: "Assessment Complete with Warnings",
+          description: "Some accuracy checks failed. Manual review recommended.",
+          variant: "destructive"
+        });
+      }
 
-      // Simulate realistic analysis time
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      console.log("All agents completed successfully. Assessment ready for review.");
 
-      // Run actual analysis with mock data
-      const analysisResult = await analyzeAgent(agentId, [], `Complete assessment for ${agentName}`);
-      analysisResults.push(analysisResult);
+      setTimeout(() => {
+        setIsRunning(false);
+        onComplete();
+      }, 2000);
 
-      // Update agent status with real analysis
-      await updateAgentAssessment.mutateAsync({
-        agentId,
-        status: 'completed',
-        progress: 100,
-        analysisResult
-      });
-    }
-
-    // Phase 2: Run accuracy validation
-    const validationPassed = await runAccuracyChecks(analysisResults);
-
-    setProgress(100);
-    setCurrentPhase('complete');
-    
-    if (validationPassed) {
-      setCurrentAgent("Assessment Complete - High Accuracy ✓");
+    } catch (error) {
+      console.error("Error during assessment:", error);
       toast({
-        title: "High-Quality Assessment Complete",
-        description: "All accuracy checks passed. Analysis is ready for ISSO-Lead review.",
-      });
-    } else {
-      setCurrentAgent("Assessment Complete - Review Recommended");
-      toast({
-        title: "Assessment Complete with Warnings",
-        description: "Some accuracy checks failed. Manual review recommended.",
+        title: "Assessment Error",
+        description: "An error occurred during the assessment. Please try again.",
         variant: "destructive"
       });
-    }
-
-    setTimeout(() => {
       setIsRunning(false);
-      onComplete();
-    }, 2000);
+    }
   };
 
   if (isRunning) {
