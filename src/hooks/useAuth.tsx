@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -69,16 +68,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // DoD Password Validation Helper
   const validateDoDPassword = (password: string, email: string, firstName?: string, lastName?: string) => {
-    const checks = {
-      length: password.length >= 12,
-      uppercase: /[A-Z]/.test(password),
-      lowercase: /[a-z]/.test(password),
-      number: /\d/.test(password),
-      special: /[!@#$%^&*(),.?":{}|<>~`\-_=+\[\]\\;'/]/.test(password),
-      noSequential: !/(.)\1{2,}/.test(password),
-      noCommonPatterns: !/(123|abc|qwe|password|admin|welcome)/i.test(password)
-    };
-
     // Check for personal information
     const lowerPassword = password.toLowerCase();
     const emailName = email.split('@')[0].toLowerCase();
@@ -94,7 +83,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       hasPersonalInfo = true;
     }
 
-    checks.noPersonalInfo = !hasPersonalInfo;
+    const checks = {
+      length: password.length >= 12,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /\d/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>~`\-_=+\[\]\\;'/]/.test(password),
+      noSequential: !/(.)\1{2,}/.test(password),
+      noCommonPatterns: !/(123|abc|qwe|password|admin|welcome)/i.test(password),
+      noPersonalInfo: !hasPersonalInfo
+    };
 
     return checks;
   };
