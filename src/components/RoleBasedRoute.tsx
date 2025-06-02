@@ -7,10 +7,13 @@ import Loading from "@/components/Loading";
 import { AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Database } from "@/integrations/supabase/types";
+
+type AppRole = Database["public"]["Enums"]["app_role"];
 
 interface RoleBasedRouteProps {
   children: React.ReactNode;
-  requiredRoles?: string[];
+  requiredRoles?: AppRole[];
   fallbackPath?: string;
 }
 
@@ -35,7 +38,7 @@ const RoleBasedRoute = ({
 
     if (!profileLoading && user && requiredRoles.length > 0) {
       const userRoles = profile?.roles || [];
-      const hasRequiredRole = requiredRoles.some(role => 
+      const hasRequiredRole = requiredRoles.some((role: AppRole) => 
         userRoles.includes(role)
       );
 
@@ -63,7 +66,7 @@ const RoleBasedRoute = ({
   // Check role access
   if (requiredRoles.length > 0) {
     const userRoles = profile?.roles || [];
-    const hasRequiredRole = requiredRoles.some(role => 
+    const hasRequiredRole = requiredRoles.some((role: AppRole) => 
       userRoles.includes(role)
     );
 
