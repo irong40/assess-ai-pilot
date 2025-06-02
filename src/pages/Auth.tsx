@@ -61,7 +61,7 @@ const Auth = () => {
           <div className="flex items-center space-x-3">
             <Shield className="h-8 w-8 text-blue-400" />
             <div>
-              <h1 className="text-xl font-bold text-white">SecureAssess</h1>
+              <h1 className="text-xl font-bold text-white">Sentinel AI</h1>
               <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
             </div>
           </div>
@@ -82,7 +82,7 @@ const Auth = () => {
           <Card className="bg-white/10 backdrop-blur-lg border-white/20">
             <CardHeader>
               <CardTitle className="text-white text-center text-2xl">
-                Welcome to SecureAssess
+                Welcome to Sentinel AI
               </CardTitle>
             </CardHeader>
             <CardContent>

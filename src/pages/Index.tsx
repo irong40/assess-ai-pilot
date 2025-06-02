@@ -39,7 +39,7 @@ const Index = () => {
           <div className="flex items-center space-x-3">
             <Shield className="h-8 w-8 text-blue-400" />
             <div>
-              <h1 className="text-xl font-bold text-white">SecureAssess</h1>
+              <h1 className="text-xl font-bold text-white">Sentinel AI</h1>
               <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
             </div>
           </div>
@@ -96,7 +96,7 @@ const Index = () => {
         {/* Features Grid */}
         <div className="max-w-6xl mx-auto mb-16">
           <h3 className="text-3xl font-bold text-white text-center mb-12">
-            Why Choose SecureAssess?
+            Why Choose Sentinel AI?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
@@ -143,7 +143,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="container mx-auto px-4 py-8 mt-16 border-t border-white/10">
         <div className="text-center text-slate-400 text-sm">
-          <p>&copy; 2024 SecureAssess. Transforming cybersecurity compliance with AI.</p>
+          <p>&copy; 2024 Sentinel AI. Transforming cybersecurity compliance with AI.</p>
         </div>
       </footer>
     </div>
