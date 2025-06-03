@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -34,8 +35,10 @@ import ISSMReview from "./pages/ISSMReview";
 import Feedback from "./pages/Feedback";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
+import NDA from "./pages/NDA";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
+import NDAGate from "./components/NDAGate";
 import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
