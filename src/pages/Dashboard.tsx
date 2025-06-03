@@ -50,7 +50,7 @@ const Dashboard = () => {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <DashboardHeader onNewAssessment={handleNewAssessment} />
+        <DashboardHeader />
 
         <AnalyticsCards
           totalAssessments={transformedAssessments.length}
