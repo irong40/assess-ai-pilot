@@ -14,7 +14,9 @@ import {
   Bot,
   CheckCircle,
   AlertTriangle,
-  Play
+  Play,
+  UserCheck,
+  Crown
 } from "lucide-react";
 import Header from "@/components/Header";
 
@@ -75,29 +77,29 @@ const Help = () => {
                         <div className="flex items-start space-x-3">
                           <Badge variant="outline">1</Badge>
                           <div>
-                            <p className="font-medium">Sign In</p>
-                            <p className="text-sm text-slate-600">Access the platform with your credentials</p>
+                            <p className="font-medium">Sign Up & Access</p>
+                            <p className="text-sm text-slate-600">Create account or get access through administrator</p>
                           </div>
                         </div>
                         <div className="flex items-start space-x-3">
                           <Badge variant="outline">2</Badge>
                           <div>
-                            <p className="font-medium">Create Assessment</p>
-                            <p className="text-sm text-slate-600">Click "New Assessment" and fill in organization details</p>
+                            <p className="font-medium">Navigate Dashboard</p>
+                            <p className="text-sm text-slate-600">View analytics and existing assessments</p>
                           </div>
                         </div>
                         <div className="flex items-start space-x-3">
                           <Badge variant="outline">3</Badge>
                           <div>
-                            <p className="font-medium">Run One-Click Assessment</p>
-                            <p className="text-sm text-slate-600">Use the "Complete Assessment" button for automated analysis</p>
+                            <p className="font-medium">Create Assessment</p>
+                            <p className="text-sm text-slate-600">Click "New Assessment" and fill organization details</p>
                           </div>
                         </div>
                         <div className="flex items-start space-x-3">
                           <Badge variant="outline">4</Badge>
                           <div>
-                            <p className="font-medium">Review Results</p>
-                            <p className="text-sm text-slate-600">Check agent summaries and generate reports</p>
+                            <p className="font-medium">Run Analysis</p>
+                            <p className="text-sm text-slate-600">Use AI agents for automated compliance analysis</p>
                           </div>
                         </div>
                       </CardContent>
@@ -123,7 +125,7 @@ const Help = () => {
                         </ul>
                         <div className="bg-yellow-100 border border-yellow-300 rounded p-3">
                           <p className="text-sm text-yellow-800">
-                            <strong>Tip:</strong> The one-click assessment provides a comprehensive baseline analysis across all security domains.
+                            <strong>Tip:</strong> The one-click assessment provides comprehensive baseline analysis across all security domains.
                           </p>
                         </div>
                       </CardContent>
@@ -145,6 +147,62 @@ const Help = () => {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     
+                    {/* User Roles */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+                        <UserCheck className="h-5 w-5" />
+                        <span>User Roles & Permissions</span>
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Card className="bg-red-50 border-red-200">
+                          <CardHeader>
+                            <div className="flex items-center space-x-2">
+                              <Crown className="h-5 w-5 text-red-600" />
+                              <Badge variant="destructive">Admin</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-2 text-sm">
+                            <p>• Full system access</p>
+                            <p>• User management</p>
+                            <p>• Role assignment</p>
+                            <p>• System configuration</p>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card className="bg-blue-50 border-blue-200">
+                          <CardHeader>
+                            <div className="flex items-center space-x-2">
+                              <Shield className="h-5 w-5 text-blue-600" />
+                              <Badge variant="secondary">ISSO-Lead</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-2 text-sm">
+                            <p>• Review assessments</p>
+                            <p>• Approve reports</p>
+                            <p>• Manage workflows</p>
+                            <p>• Oversight functions</p>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card className="bg-green-50 border-green-200">
+                          <CardHeader>
+                            <div className="flex items-center space-x-2">
+                              <Users className="h-5 w-5 text-green-600" />
+                              <Badge variant="outline">Analyst</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-2 text-sm">
+                            <p>• Create assessments</p>
+                            <p>• Run AI agents</p>
+                            <p>• Generate reports</p>
+                            <p>• Document analysis</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </div>
+
+                    <Separator />
+
                     {/* Navigation */}
                     <div>
                       <h3 className="text-lg font-semibold mb-3">Navigation & Interface</h3>
@@ -156,6 +214,14 @@ const Help = () => {
                         <div className="space-y-2">
                           <h4 className="font-medium">Assessment Hub</h4>
                           <p className="text-sm text-slate-600">Access individual AI agents and their specialized analyses</p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Admin Panel</h4>
+                          <p className="text-sm text-slate-600">User management and role assignment (Admin only)</p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Help Center</h4>
+                          <p className="text-sm text-slate-600">Documentation and troubleshooting guides</p>
                         </div>
                       </div>
                     </div>
@@ -262,14 +328,24 @@ const Help = () => {
                     </h3>
                     <div className="space-y-4">
                       <div className="bg-slate-50 p-4 rounded-lg">
-                        <h4 className="font-medium mb-2">User Roles</h4>
+                        <h4 className="font-medium mb-2">Accessing User Management</h4>
+                        <ul className="space-y-1 text-sm text-slate-600">
+                          <li>• Navigate to Dashboard and click the "Admin" button</li>
+                          <li>• Only users with 'admin' role can access this feature</li>
+                          <li>• View all registered users and their current roles</li>
+                          <li>• Assign or remove roles from any user account</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-slate-50 p-4 rounded-lg">
+                        <h4 className="font-medium mb-2">Role Management Features</h4>
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
-                            <Badge variant="secondary">Admin</Badge>
+                            <Badge variant="destructive">Admin</Badge>
                             <span className="text-sm">Full system access, user management, system configuration</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Badge variant="outline">ISSO-Lead</Badge>
+                            <Badge variant="secondary">ISSO-Lead</Badge>
                             <span className="text-sm">Review assessments, approve reports, manage workflows</span>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -279,13 +355,13 @@ const Help = () => {
                         </div>
                       </div>
                       
-                      <div className="bg-slate-50 p-4 rounded-lg">
-                        <h4 className="font-medium mb-2">User Account Management</h4>
-                        <ul className="space-y-1 text-sm text-slate-600">
-                          <li>• Create new user accounts through admin panel</li>
-                          <li>• Assign appropriate roles based on responsibilities</li>
-                          <li>• Monitor user activity and assessment usage</li>
-                          <li>• Deactivate accounts when users leave organization</li>
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 className="font-medium text-blue-800 mb-2">Best Practices</h4>
+                        <ul className="space-y-1 text-sm text-blue-700">
+                          <li>• Assign roles based on job responsibilities and need-to-know</li>
+                          <li>• Regularly review user access and remove unnecessary permissions</li>
+                          <li>• Monitor user activity through the admin dashboard</li>
+                          <li>• Document role assignments for audit purposes</li>
                         </ul>
                       </div>
                     </div>
@@ -293,31 +369,31 @@ const Help = () => {
 
                   <Separator />
 
-                  {/* System Configuration */}
+                  {/* System Oversight */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">System Configuration</h3>
+                    <h3 className="text-lg font-semibold mb-3">System Oversight</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Card className="bg-blue-50 border-blue-200">
                         <CardHeader>
-                          <CardTitle className="text-lg">Assessment Settings</CardTitle>
+                          <CardTitle className="text-lg">Assessment Monitoring</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2 text-sm">
-                          <p>• Configure default compliance frameworks</p>
-                          <p>• Set organization-wide assessment templates</p>
-                          <p>• Manage agent analysis parameters</p>
-                          <p>• Configure accuracy validation thresholds</p>
+                          <p>• Monitor assessment completion rates</p>
+                          <p>• Review agent analysis quality</p>
+                          <p>• Track user engagement patterns</p>
+                          <p>• Identify system performance issues</p>
                         </CardContent>
                       </Card>
                       
                       <Card className="bg-green-50 border-green-200">
                         <CardHeader>
-                          <CardTitle className="text-lg">Security Settings</CardTitle>
+                          <CardTitle className="text-lg">Security & Compliance</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2 text-sm">
-                          <p>• Configure authentication requirements</p>
-                          <p>• Set data retention policies</p>
-                          <p>• Manage API access and integrations</p>
-                          <p>• Configure audit logging</p>
+                          <p>• Ensure proper access controls</p>
+                          <p>• Monitor data protection compliance</p>
+                          <p>• Maintain audit trails</p>
+                          <p>• Review security configurations</p>
                         </CardContent>
                       </Card>
                     </div>
@@ -325,16 +401,17 @@ const Help = () => {
 
                   <Separator />
 
-                  {/* Monitoring & Reporting */}
+                  {/* Administrative Functions */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Monitoring & Reporting</h3>
+                    <h3 className="text-lg font-semibold mb-3">Administrative Functions</h3>
                     <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                      <h4 className="font-medium text-yellow-800 mb-2">System Health Monitoring</h4>
+                      <h4 className="font-medium text-yellow-800 mb-2">Key Responsibilities</h4>
                       <ul className="space-y-1 text-sm text-yellow-700">
-                        <li>• Monitor assessment completion rates and accuracy</li>
-                        <li>• Track agent performance and analysis quality</li>
-                        <li>• Review user activity and system usage patterns</li>
-                        <li>• Generate administrative reports and dashboards</li>
+                        <li>• <strong>User Onboarding:</strong> Create accounts and assign initial roles</li>
+                        <li>• <strong>Access Management:</strong> Modify permissions based on changing roles</li>
+                        <li>• <strong>System Maintenance:</strong> Monitor performance and user feedback</li>
+                        <li>• <strong>Quality Assurance:</strong> Review assessment outputs for accuracy</li>
+                        <li>• <strong>Training Support:</strong> Help users understand platform capabilities</li>
                       </ul>
                     </div>
                   </div>
