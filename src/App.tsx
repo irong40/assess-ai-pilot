@@ -22,9 +22,9 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/nda" element={<NDA />} />
-            <AuthRoutes />
-            <ProtectedRoutes />
-            <AgentRoutes />
+            {AuthRoutes()}
+            {ProtectedRoutes()}
+            {AgentRoutes()}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
