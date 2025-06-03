@@ -1,28 +1,57 @@
 
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { LogOut, Settings, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 
-interface DashboardHeaderProps {
-  onNewAssessment: () => void;
-}
+const DashboardHeader = () => {
+  const { signOut, user } = useAuth();
+  const { data: profile } = useUserProfile();
 
-const DashboardHeader = ({ onNewAssessment }: DashboardHeaderProps) => {
+  const userRoles = profile?.roles || [];
+  const isAdmin = userRoles.includes('admin');
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
-    <div className="flex items-center justify-between mb-8">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Assessment Dashboard</h1>
-        <p className="text-slate-600">Manage and track your cybersecurity assessments</p>
+    <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-600">
+            Welcome back, {user?.email}
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                <Shield className="h-4 w-4" />
+                <span>Admin</span>
+              </Button>
+            </Link>
+          )}
+          <Link to="/feedback">
+            <Button variant="outline" size="sm" className="flex items-center space-x-2">
+              <Settings className="h-4 w-4" />
+              <span>Feedback</span>
+            </Button>
+          </Link>
+          <Button 
+            onClick={handleSignOut}
+            variant="outline" 
+            size="sm"
+            className="flex items-center space-x-2"
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Sign Out</span>
+          </Button>
+        </div>
       </div>
-      
-      <Button 
-        onClick={onNewAssessment}
-        className="bg-blue-600 hover:bg-blue-700 text-white"
-        size="lg"
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        Start New Assessment
-      </Button>
-    </div>
+    </header>
   );
 };
 

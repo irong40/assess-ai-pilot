@@ -36,6 +36,7 @@ import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,16 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/help" element={<Help />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRoles={['admin']}>
+                    <Admin />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={
