@@ -1,90 +1,84 @@
 
 import { Button } from "@/components/ui/button";
-import { Shield, Menu, User, HelpCircle } from "lucide-react";
-import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { LogOut, User, Shield, TestTube } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/useUserProfile";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
-  const { data: profile } = useUserProfile();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut();
+    navigate("/");
   };
 
   return (
-    <header className="bg-slate-900 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-blue-400" />
-            <div>
-              <h1 className="text-xl font-bold">SecureAssess</h1>
-              <p className="text-xs text-slate-300">AI-Powered Compliance Platform</p>
-            </div>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
-            <Link to="/help" className="hover:text-blue-400 transition-colors flex items-center space-x-1">
-              <HelpCircle className="h-4 w-4" />
-              <span>Help</span>
-            </Link>
-            {profile?.roles?.includes('admin') && (
-              <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
-            )}
-          </nav>
-
+    <header className="bg-white border-b border-slate-200 shadow-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
-            {user ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">{user.email}</span>
-                  {profile?.roles && profile.roles.length > 0 && (
-                    <span className="text-xs bg-blue-600 px-2 py-1 rounded">
-                      {profile.roles[0].toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <Button variant="outline" size="sm" onClick={handleSignOut}>
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <Button variant="outline" size="sm">
-                <Link to="/auth">Sign In</Link>
-              </Button>
-            )}
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-slate-700 pt-4">
-            <div className="flex flex-col space-y-2">
-              <Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link>
-              <Link to="/help" className="hover:text-blue-400 transition-colors flex items-center space-x-1">
-                <HelpCircle className="h-4 w-4" />
-                <span>Help</span>
-              </Link>
-              {profile?.roles?.includes('admin') && (
-                <span className="hover:text-blue-400 transition-colors cursor-not-allowed opacity-50">Admin</span>
-              )}
+            <div className="flex items-center space-x-2">
+              <Shield className="h-8 w-8 text-blue-600" />
+              <h1 className="text-xl font-bold text-slate-900">CyberAssess</h1>
             </div>
-          </nav>
-        )}
+            
+            <nav className="hidden md:flex items-center space-x-6 ml-8">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/dashboard")}
+                className="text-slate-600 hover:text-slate-900"
+              >
+                Dashboard
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/new-assessment")}
+                className="text-slate-600 hover:text-slate-900"
+              >
+                New Assessment
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/feedback")}
+                className="text-slate-600 hover:text-slate-900"
+              >
+                Feedback
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/test")}
+                className="text-slate-600 hover:text-slate-900"
+              >
+                <TestTube className="h-4 w-4 mr-2" />
+                Test Suite
+              </Button>
+            </nav>
+          </div>
+
+          {user && (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-slate-600" />
+                <span className="text-sm font-medium text-slate-700">{user.email}</span>
+                <Badge variant="secondary" className="text-xs">
+                  ISSO
+                </Badge>
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSignOut}
+                className="text-slate-600 hover:text-slate-900"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
