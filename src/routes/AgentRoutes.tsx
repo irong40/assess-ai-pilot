@@ -25,7 +25,7 @@ import AgentLegal from "@/pages/AgentLegal";
 const AgentRoutes = () => (
   <>
     <Route
-      path="/assessment/:id/agent/policy"
+      path="/assessment/:id/agents/policy"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -35,7 +35,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/access"
+      path="/assessment/:id/agents/access"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -45,7 +45,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/network"
+      path="/assessment/:id/agents/network"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -55,7 +55,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/data"
+      path="/assessment/:id/agents/data"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -65,7 +65,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/privacy"
+      path="/assessment/:id/agents/privacy"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -75,7 +75,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/recovery"
+      path="/assessment/:id/agents/recovery"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -85,7 +85,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/mobile"
+      path="/assessment/:id/agents/mobile"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -95,7 +95,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/training"
+      path="/assessment/:id/agents/training"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -105,7 +105,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/supply-chain"
+      path="/assessment/:id/agents/supply-chain"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -115,7 +115,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/threat-intel"
+      path="/assessment/:id/agents/threat-intel"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -125,7 +125,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/physical"
+      path="/assessment/:id/agents/physical"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -135,7 +135,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/incident"
+      path="/assessment/:id/agents/incident"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -145,7 +145,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/vulnerability"
+      path="/assessment/:id/agents/vulnerability"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -155,7 +155,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/compliance"
+      path="/assessment/:id/agents/compliance"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -165,7 +165,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/blue-team"
+      path="/assessment/:id/agents/blue-team"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -175,7 +175,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/configuration"
+      path="/assessment/:id/agents/configuration"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -185,7 +185,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/continuity"
+      path="/assessment/:id/agents/continuity"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -195,7 +195,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/grc"
+      path="/assessment/:id/agents/grc"
       element={
         <ProtectedRoute>
           <NDAGate>
@@ -205,7 +205,7 @@ const AgentRoutes = () => (
       }
     />
     <Route
-      path="/assessment/:id/agent/legal"
+      path="/assessment/:id/agents/legal"
       element={
         <ProtectedRoute>
           <NDAGate>

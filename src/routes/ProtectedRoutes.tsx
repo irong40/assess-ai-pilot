@@ -1,3 +1,4 @@
+
 import { Route } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import RoleBasedRoute from "@/components/RoleBasedRoute";
@@ -89,7 +90,7 @@ const ProtectedRoutes = () => (
       }
     />
     <Route
-      path="/report-builder/:id"
+      path="/assessment/:id/report"
       element={
         <ProtectedRoute>
           <NDAGate>
