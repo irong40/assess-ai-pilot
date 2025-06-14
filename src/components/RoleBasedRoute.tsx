@@ -38,7 +38,7 @@ const RoleBasedRoute = ({
 
     if (!profileLoading && user && requiredRoles.length > 0) {
       const userRoles = profile?.roles || [];
-      const hasRequiredRole = requiredRoles.some((role: AppRole) => 
+      const hasRequiredRole = requiredRoles.some((role) => 
         userRoles.includes(role)
       );
 
@@ -66,7 +66,7 @@ const RoleBasedRoute = ({
   // Check role access
   if (requiredRoles.length > 0) {
     const userRoles = profile?.roles || [];
-    const hasRequiredRole = requiredRoles.some((role: AppRole) => 
+    const hasRequiredRole = requiredRoles.some((role) => 
       userRoles.includes(role)
     );
 

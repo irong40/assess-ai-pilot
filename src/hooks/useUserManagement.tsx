@@ -45,7 +45,7 @@ export const useUserManagement = () => {
         ...profile,
         roles: userRoles
           .filter(role => role.user_id === profile.id)
-          .map(role => role.role)
+          .map(role => role.role as AppRole)
       }));
 
       return usersWithRoles;
@@ -57,7 +57,11 @@ export const useUserManagement = () => {
     mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
       const { error } = await supabase
         .from('user_roles')
-        .insert({ user_id: userId, role });
+        .insert({ 
+          user_id: userId, 
+          role,
+          company_id: user?.user_metadata?.company_id || '00000000-0000-0000-0000-000000000000'
+        });
 
       if (error) throw error;
     },
