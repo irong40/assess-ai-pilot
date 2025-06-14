@@ -21,7 +21,7 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Shield className="h-8 w-8 text-blue-600" />
-              <h1 className="text-xl font-bold text-slate-900">CyberAssess</h1>
+              <h1 className="text-xl font-bold text-slate-900">Sentinel AI</h1>
             </div>
             
             <nav className="hidden md:flex items-center space-x-6 ml-8">
