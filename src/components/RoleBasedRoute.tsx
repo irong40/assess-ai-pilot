@@ -37,10 +37,12 @@ const RoleBasedRoute = ({
     }
 
     if (!profileLoading && user && requiredRoles.length > 0) {
+      // For now, we'll check if user is admin in the company roles and map it to app roles
       const userRoles = profile?.roles || [];
-      const hasRequiredRole = requiredRoles.some((role) => 
-        userRoles.includes(role)
-      );
+      const isCompanyAdmin = userRoles.includes('admin');
+      
+      // Simple mapping: if user is company admin, they have all app roles
+      const hasRequiredRole = isCompanyAdmin || requiredRoles.length === 0;
 
       if (!hasRequiredRole) {
         setRedirecting(true);
@@ -66,9 +68,10 @@ const RoleBasedRoute = ({
   // Check role access
   if (requiredRoles.length > 0) {
     const userRoles = profile?.roles || [];
-    const hasRequiredRole = requiredRoles.some((role) => 
-      userRoles.includes(role)
-    );
+    const isCompanyAdmin = userRoles.includes('admin');
+    
+    // Simple mapping: if user is company admin, they have all app roles
+    const hasRequiredRole = isCompanyAdmin || requiredRoles.length === 0;
 
     if (!hasRequiredRole && redirecting) {
       return (

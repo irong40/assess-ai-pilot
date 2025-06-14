@@ -10,33 +10,37 @@ import { Database } from "@/integrations/supabase/types";
 import { Users, Shield, UserPlus, UserMinus } from "lucide-react";
 import Loading from "@/components/Loading";
 
-type AppRole = Database["public"]["Enums"]["app_role"];
+type UserRole = Database["public"]["Enums"]["user_role"];
 
 const UserManagement = () => {
   const { users, usersLoading, assignRole, removeRole, isAssigningRole, isRemovingRole } = useUserManagement();
-  const [selectedRole, setSelectedRole] = useState<AppRole>("isso");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("viewer");
 
   const roleColors = {
     admin: "bg-red-500",
-    issm: "bg-blue-500", 
-    isso: "bg-green-500"
+    proposal_writer: "bg-blue-500", 
+    reviewer: "bg-green-500",
+    contract_manager: "bg-purple-500",
+    viewer: "bg-gray-500"
   };
 
   const roleLabels = {
     admin: "Administrator",
-    issm: "ISSM",
-    isso: "ISSO"
+    proposal_writer: "Proposal Writer",
+    reviewer: "Reviewer",
+    contract_manager: "Contract Manager",
+    viewer: "Viewer"
   };
 
   if (usersLoading) {
     return <Loading text="Loading users..." />;
   }
 
-  const handleAssignRole = (userId: string, role: AppRole) => {
+  const handleAssignRole = (userId: string, role: UserRole) => {
     assignRole({ userId, role });
   };
 
-  const handleRemoveRole = (userId: string, role: AppRole) => {
+  const handleRemoveRole = (userId: string, role: UserRole) => {
     removeRole({ userId, role });
   };
 
@@ -93,14 +97,16 @@ const UserManagement = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <Select value={selectedRole} onValueChange={(value: AppRole) => setSelectedRole(value)}>
-                        <SelectTrigger className="w-24">
+                      <Select value={selectedRole} onValueChange={(value: UserRole) => setSelectedRole(value)}>
+                        <SelectTrigger className="w-32">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="issm">ISSM</SelectItem>
-                          <SelectItem value="isso">ISSO</SelectItem>
+                          <SelectItem value="proposal_writer">Proposal Writer</SelectItem>
+                          <SelectItem value="reviewer">Reviewer</SelectItem>
+                          <SelectItem value="contract_manager">Contract Manager</SelectItem>
+                          <SelectItem value="viewer">Viewer</SelectItem>
                         </SelectContent>
                       </Select>
                       

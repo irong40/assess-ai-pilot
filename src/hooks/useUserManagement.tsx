@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { Database } from "@/integrations/supabase/types";
 
-type AppRole = Database["public"]["Enums"]["app_role"];
+type UserRole = Database["public"]["Enums"]["user_role"];
 
 interface UserWithRoles {
   id: string;
@@ -13,7 +13,7 @@ interface UserWithRoles {
   first_name: string | null;
   last_name: string | null;
   created_at: string;
-  roles: AppRole[];
+  roles: UserRole[];
 }
 
 export const useUserManagement = () => {
@@ -45,7 +45,7 @@ export const useUserManagement = () => {
         ...profile,
         roles: userRoles
           .filter(role => role.user_id === profile.id)
-          .map(role => role.role as AppRole)
+          .map(role => role.role as UserRole)
       }));
 
       return usersWithRoles;
@@ -54,7 +54,7 @@ export const useUserManagement = () => {
   });
 
   const assignRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
+    mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
         .from('user_roles')
         .insert({ 
@@ -82,7 +82,7 @@ export const useUserManagement = () => {
   });
 
   const removeRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
+    mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
         .from('user_roles')
         .delete()
