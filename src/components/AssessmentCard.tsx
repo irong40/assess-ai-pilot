@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, Shield, ChevronRight } from "lucide-react";
+import { Calendar, User, Shield, ChevronRight, Clock, CheckCircle, Play } from "lucide-react";
 
 interface AssessmentCardProps {
   id: string;
@@ -25,21 +25,30 @@ const AssessmentCard = ({
   lastUpdated, 
   onView 
 }: AssessmentCardProps) => {
-  const getStatusColor = (status: string) => {
+  const getStatusConfig = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'in-progress': return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-      default: return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+      case 'completed': 
+        return {
+          color: 'bg-green-100 text-green-800 hover:bg-green-200',
+          text: 'Completed',
+          icon: <CheckCircle className="h-3 w-3" />
+        };
+      case 'in-progress': 
+        return {
+          color: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
+          text: 'In Progress',
+          icon: <Clock className="h-3 w-3" />
+        };
+      default: 
+        return {
+          color: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
+          text: 'Not Started',
+          icon: <Play className="h-3 w-3" />
+        };
     }
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return 'Completed';
-      case 'in-progress': return 'In Progress';
-      default: return 'Not Started';
-    }
-  };
+  const statusConfig = getStatusConfig(status);
 
   return (
     <Card className="hover:shadow-lg transition-all duration-200 border-slate-200 hover:border-blue-300">
@@ -60,8 +69,9 @@ const AssessmentCard = ({
               </div>
             </div>
           </div>
-          <Badge className={`${getStatusColor(status)} border-0`}>
-            {getStatusText(status)}
+          <Badge className={`${statusConfig.color} border-0 flex items-center space-x-1`}>
+            {statusConfig.icon}
+            <span>{statusConfig.text}</span>
           </Badge>
         </div>
       </CardHeader>
@@ -84,7 +94,8 @@ const AssessmentCard = ({
               className="w-full bg-slate-900 hover:bg-slate-800 text-white"
               size="sm"
             >
-              View Assessment
+              {status === 'not-started' ? 'Start Assessment' : 
+               status === 'in-progress' ? 'Continue Assessment' : 'View Results'}
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           </div>

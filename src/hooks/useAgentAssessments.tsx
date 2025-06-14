@@ -30,16 +30,13 @@ export const useAgentAssessments = (assessmentId: string) => {
         .eq('assessment_id', assessmentId)
         .eq('user_id', user.id);
 
-      if (error) {
-        console.error('Error fetching agent assessments:', error);
-        return [];
-      }
+      if (error) throw error;
       return data as AgentAssessment[];
     },
     enabled: !!user && !!assessmentId,
   });
 
-  const updateAgentAssessment = useMutation({
+  const upsertAgentAssessment = useMutation({
     mutationFn: async (params: {
       agentId: string;
       status: 'not-started' | 'in-progress' | 'completed';
@@ -48,6 +45,7 @@ export const useAgentAssessments = (assessmentId: string) => {
     }) => {
       if (!user) throw new Error('User not authenticated');
 
+      // Use upsert to handle duplicate key constraint
       const { data, error } = await supabase
         .from('agent_assessments')
         .upsert({
@@ -57,37 +55,37 @@ export const useAgentAssessments = (assessmentId: string) => {
           status: params.status,
           progress: params.progress,
           analysis_result: params.analysisResult,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'assessment_id,agent_id,user_id'
         })
         .select()
         .single();
 
-      if (error) {
-        console.error('Error updating agent assessment:', error);
-        throw error;
-      }
+      if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ 
-        queryKey: ['agent-assessments', assessmentId, user?.id] 
-      });
+      queryClient.invalidateQueries({ queryKey: ['agent-assessments', assessmentId, user?.id] });
     },
   });
 
   const getAgentStatus = (agentId: string) => {
-    const assessment = agentAssessments.find(a => a.agent_id === agentId);
+    const agentData = agentAssessments.find(
+      assessment => assessment.agent_id === agentId
+    );
+    
     return {
-      status: assessment?.status || 'not-started' as const,
-      progress: assessment?.progress || 0,
-      analysisResult: assessment?.analysis_result || '',
-      id: assessment?.id
+      status: agentData?.status || 'not-started',
+      progress: agentData?.progress || 0,
+      analysisResult: agentData?.analysis_result
     };
   };
 
   return {
     agentAssessments,
     isLoading,
-    updateAgentAssessment,
+    upsertAgentAssessment,
     getAgentStatus,
   };
 };
