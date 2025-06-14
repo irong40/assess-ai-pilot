@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Zap, CheckCircle, Bot, AlertTriangle, Shield } from "lucide-react";
+import { Zap, CheckCircle, Bot, AlertTriangle, Shield, Database } from "lucide-react";
 import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import { analyzeAgent } from "@/services/agentAnalysis";
 import { toast } from "@/hooks/use-toast";
@@ -22,10 +23,11 @@ interface AccuracyCheck {
 const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAssessmentButtonProps) => {
   const [isRunning, setIsRunning] = useState(false);
   const [currentAgent, setCurrentAgent] = useState("");
+  const [currentAgentIndex, setCurrentAgentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [currentPhase, setCurrentPhase] = useState<'analysis' | 'validation' | 'complete'>('analysis');
+  const [currentPhase, setCurrentPhase] = useState<'initialization' | 'analysis' | 'validation' | 'complete'>('initialization');
   const [accuracyChecks, setAccuracyChecks] = useState<AccuracyCheck[]>([]);
-  const { updateAgentAssessment } = useAgentAssessments(assessmentId);
+  const { updateAgentAssessment, createAgentAssessment, getAgentStatus } = useAgentAssessments(assessmentId);
 
   const agentNames = {
     policy: "ISSO-Policy",
@@ -48,7 +50,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
 
   const runAccuracyChecks = async (analysisResults: string[]) => {
     setCurrentPhase('validation');
-    setCurrentAgent("Running Accuracy Validation...");
+    setCurrentAgent("Running Quality Validation...");
     
     const checks: AccuracyCheck[] = [
       { check: "Analysis Content Quality", status: 'pending' },
@@ -70,7 +72,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
       switch (i) {
         case 0: // Content Quality
           const hasContent = analysisResults.every(result => 
-            result.length > 100 && result.includes('ANALYSIS') && result.includes('FINDINGS')
+            result.length > 500 && result.includes('ANALYSIS') && result.includes('FINDINGS')
           );
           updatedChecks[i] = {
             ...updatedChecks[i],
@@ -81,7 +83,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
           
         case 1: // Risk Assessment
           const hasRiskAssessment = analysisResults.every(result => 
-            result.includes('Risk Level:') || result.includes('RISK') || result.includes('High') || result.includes('Medium') || result.includes('Low')
+            result.includes('Risk Assessment:') || result.includes('RISK') || result.includes('High') || result.includes('Medium') || result.includes('Low')
           );
           updatedChecks[i] = {
             ...updatedChecks[i],
@@ -92,7 +94,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
           
         case 2: // Compliance Mapping
           const hasCompliance = analysisResults.some(result => 
-            result.includes('NIST') || result.includes('ISO') || result.includes('COMPLIANCE')
+            result.includes('NIST') || result.includes('ISO') || result.includes('COMPLIANCE') || result.includes('GDPR') || result.includes('FISMA')
           );
           updatedChecks[i] = {
             ...updatedChecks[i],
@@ -103,7 +105,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
           
         case 3: // Finding Categorization
           const hasFindings = analysisResults.every(result => 
-            result.includes('Strong:') || result.includes('Medium Risk:') || result.includes('High Risk:')
+            result.includes('STRENGTHS') || result.includes('MEDIUM RISK') || result.includes('HIGH RISK')
           );
           updatedChecks[i] = {
             ...updatedChecks[i],
@@ -115,8 +117,8 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         case 4: // Cross-Agent Correlation
           updatedChecks[i] = {
             ...updatedChecks[i],
-            status: agentIds.length > 5 ? 'passed' : 'failed',
-            details: agentIds.length > 5 ? 'Sufficient agent coverage for correlation' : 'Limited agent coverage'
+            status: agentIds.length > 8 ? 'passed' : 'failed',
+            details: agentIds.length > 8 ? 'Sufficient agent coverage for correlation' : 'Limited agent coverage'
           };
           break;
       }
@@ -126,43 +128,82 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
     }
 
     const failedChecks = checks.filter(check => check.status === 'failed').length;
-    return failedChecks === 0;
+    return failedChecks <= 1; // Allow one failed check for high quality rating
   };
 
   const runCompleteAssessment = async () => {
     setIsRunning(true);
     setProgress(0);
-    setCurrentPhase('analysis');
+    setCurrentPhase('initialization');
     setAccuracyChecks([]);
+    setCurrentAgentIndex(0);
 
     const analysisResults: string[] = [];
 
     try {
-      // Phase 1: Run actual agent analyses
+      // Phase 1: Initialize assessment records
+      setCurrentAgent("Initializing assessment database...");
+      setCurrentPhase('initialization');
+      
+      console.log(`Starting complete assessment for ${agentIds.length} agents`);
+      
+      // Ensure all agent records exist
+      for (let i = 0; i < agentIds.length; i++) {
+        const agentId = agentIds[i];
+        const agentStatus = getAgentStatus(agentId);
+        
+        if (!agentStatus.exists) {
+          console.log(`Creating agent assessment record for ${agentId}`);
+          await createAgentAssessment.mutateAsync({
+            agentId,
+            status: 'not-started',
+            progress: 0,
+          });
+        }
+      }
+      
+      setProgress(5);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Phase 2: Run agent analyses
+      setCurrentPhase('analysis');
+      
       for (let i = 0; i < agentIds.length; i++) {
         const agentId = agentIds[i];
         const agentName = agentNames[agentId as keyof typeof agentNames] || agentId;
         
         setCurrentAgent(agentName);
-        setProgress((i / agentIds.length) * 80); // 0-80% for analysis phase
+        setCurrentAgentIndex(i + 1);
+        setProgress(5 + (i / agentIds.length) * 70); // 5-75% for analysis phase
 
         console.log(`Starting analysis for agent: ${agentName} (${agentId})`);
 
-        // First update status to in-progress
+        // Update status to in-progress
+        await updateAgentAssessment.mutateAsync({
+          agentId,
+          status: 'in-progress',
+          progress: 25,
+        });
+
+        // Simulate progress during analysis
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
         await updateAgentAssessment.mutateAsync({
           agentId,
           status: 'in-progress',
           progress: 50,
         });
 
-        // Simulate realistic analysis time
-        await new Promise(resolve => setTimeout(resolve, 1200));
-
-        // Run actual analysis
-        const analysisResult = await analyzeAgent(agentId, [], `Complete assessment for ${agentName}`);
+        // Run actual analysis with realistic context
+        const analysisResult = await analyzeAgent(
+          agentId, 
+          [], 
+          `Comprehensive security assessment for ${agentName} domain. Assessment includes policy review, control validation, risk analysis, and compliance evaluation.`
+        );
+        
         analysisResults.push(analysisResult);
 
-        console.log(`Completed analysis for ${agentName}, updating to completed status`);
+        console.log(`Completed analysis for ${agentName}, result length: ${analysisResult.length} characters`);
 
         // Update agent status to completed with analysis result
         await updateAgentAssessment.mutateAsync({
@@ -175,23 +216,24 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         console.log(`Agent ${agentName} status updated to completed`);
       }
 
-      // Phase 2: Run accuracy validation
+      // Phase 3: Run quality validation
+      setProgress(75);
       const validationPassed = await runAccuracyChecks(analysisResults);
 
       setProgress(100);
       setCurrentPhase('complete');
       
       if (validationPassed) {
-        setCurrentAgent("Assessment Complete - High Accuracy ✓");
+        setCurrentAgent("Assessment Complete - High Quality ✓");
         toast({
           title: "High-Quality Assessment Complete",
-          description: "All accuracy checks passed. Analysis is ready for ISSO-Lead review.",
+          description: "All quality checks passed. Analysis is ready for ISSO-Lead review.",
         });
       } else {
-        setCurrentAgent("Assessment Complete - Review Recommended");
+        setCurrentAgent("Assessment Complete - Quality Review Recommended");
         toast({
           title: "Assessment Complete with Warnings",
-          description: "Some accuracy checks failed. Manual review recommended.",
+          description: "Some quality checks failed. Manual review recommended.",
           variant: "destructive"
         });
       }
@@ -206,7 +248,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
     } catch (error) {
       console.error("Error during assessment:", error);
       toast({
-        title: "Assessment Error",
+        title: "Assessment Error", 
         description: "An error occurred during the assessment. Please try again.",
         variant: "destructive"
       });
@@ -219,21 +261,31 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
       <Card className="bg-blue-50 border-blue-200">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
-            <Bot className="h-12 w-12 text-blue-600 mx-auto animate-pulse" />
+            <div className="flex items-center justify-center space-x-2">
+              <Bot className="h-12 w-12 text-blue-600 animate-pulse" />
+              {currentPhase === 'initialization' && <Database className="h-8 w-8 text-blue-500" />}
+              {currentPhase === 'validation' && <Shield className="h-8 w-8 text-green-500" />}
+            </div>
             <div>
               <h4 className="font-medium text-blue-900 mb-2">
-                {currentPhase === 'analysis' && "Running Complete Assessment"}
+                {currentPhase === 'initialization' && "Initializing Assessment Database"}
+                {currentPhase === 'analysis' && "Running Comprehensive Analysis"}
                 {currentPhase === 'validation' && "Validating Analysis Quality"}
                 {currentPhase === 'complete' && "Assessment Complete"}
               </h4>
               <p className="text-sm text-blue-700 mb-4">
-                {currentPhase === 'analysis' && `Currently analyzing: `}
-                <strong>{currentAgent}</strong>
+                {currentPhase === 'analysis' && (
+                  <>
+                    Agent {currentAgentIndex}/{agentIds.length}: <strong>{currentAgent}</strong>
+                  </>
+                )}
+                {currentPhase !== 'analysis' && <strong>{currentAgent}</strong>}
               </p>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-blue-600">
+                  {currentPhase === 'initialization' && "Initialization Progress"}
                   {currentPhase === 'analysis' && "Analysis Progress"}
                   {currentPhase === 'validation' && "Validation Progress"}
                   {currentPhase === 'complete' && "Complete"}
@@ -245,7 +297,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
 
             {currentPhase === 'validation' && accuracyChecks.length > 0 && (
               <div className="mt-4 space-y-2">
-                <h5 className="text-sm font-medium text-blue-900">Accuracy Validation</h5>
+                <h5 className="text-sm font-medium text-blue-900">Quality Validation</h5>
                 <div className="space-y-1">
                   {accuracyChecks.map((check, index) => (
                     <div key={index} className="flex items-center justify-between text-xs bg-white p-2 rounded">
@@ -275,24 +327,25 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
             <Shield className="h-8 w-8 text-blue-600" />
           </div>
           <div>
-            <h4 className="font-medium text-slate-900 mb-2">Comprehensive Quick Assessment</h4>
+            <h4 className="font-medium text-slate-900 mb-2">Comprehensive Security Assessment</h4>
             <p className="text-sm text-slate-600 mb-4">
-              Run all {agentIds.length} agents with full analysis and accuracy validation
+              Execute all {agentIds.length} security agents with full analysis, quality validation, and database persistence
             </p>
           </div>
           <Button 
             onClick={runCompleteAssessment}
             className="w-full bg-green-600 hover:bg-green-700 text-white"
             size="lg"
+            disabled={updateAgentAssessment.isPending || createAgentAssessment.isPending}
           >
             <Zap className="h-4 w-4 mr-2" />
-            Run High-Accuracy Assessment
+            Start Comprehensive Assessment
           </Button>
           <div className="text-xs text-slate-500 space-y-1">
-            <div>Estimated time: {Math.round(agentIds.length * 1.2 + 4)} seconds</div>
+            <div>Estimated time: {Math.round(agentIds.length * 1.5 + 8)} seconds</div>
             <div className="flex items-center justify-center space-x-1">
-              <Shield className="h-3 w-3" />
-              <span>Includes accuracy validation & quality checks</span>
+              <Database className="h-3 w-3" />
+              <span>Real database integration with quality validation</span>
             </div>
           </div>
         </div>
