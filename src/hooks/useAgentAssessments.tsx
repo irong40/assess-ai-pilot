@@ -86,6 +86,7 @@ export const useAgentAssessments = (assessmentId: string) => {
     agentAssessments,
     isLoading,
     upsertAgentAssessment,
+    updateAgentAssessment: upsertAgentAssessment, // Backward compatibility
     getAgentStatus,
   };
 };
