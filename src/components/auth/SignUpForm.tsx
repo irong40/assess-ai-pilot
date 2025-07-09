@@ -67,8 +67,12 @@ const SignUpForm = () => {
     return false;
   };
 
+interface ValidationErrors {
+  [key: string]: string;
+}
+
   const validateForm = () => {
-    const newErrors: any = {};
+    const newErrors: ValidationErrors = {};
     
     const sanitizedFirstName = sanitizeInput(firstName.trim());
     if (!sanitizedFirstName) {

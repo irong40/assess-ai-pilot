@@ -108,7 +108,6 @@ const TestAssessmentFlow = () => {
 
   const updateStep = (step: string) => {
     setCurrentStep(step);
-    console.log(`Test Step: ${step}`);
   };
 
   const completeStep = (step: string) => {

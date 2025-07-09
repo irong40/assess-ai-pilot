@@ -15,7 +15,7 @@ interface AutomationConfig {
 interface AutomationSettingsProps {
   config: AutomationConfig;
   automationEnabled: boolean;
-  onConfigChange: (key: string, value: any) => void;
+  onConfigChange: (key: string, value: string | number | boolean) => void;
   onScheduleReport: () => void;
 }
 

@@ -55,7 +55,7 @@ export const useAssessmentStatus = () => {
         description: `Assessment status changed to ${variables.newStatus}`,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Status Update Failed",
         description: error.message,

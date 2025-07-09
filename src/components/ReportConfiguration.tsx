@@ -12,11 +12,11 @@ interface ReportConfig {
 
 interface ReportConfigurationProps {
   config: ReportConfig;
-  onConfigChange: (key: string, value: any) => void;
+  onConfigChange: (key: string, value: string | UploadedFile[]) => void;
 }
 
 const ReportConfiguration = ({ config, onConfigChange }: ReportConfigurationProps) => {
-  const handleLogoUpload = (files: any[]) => {
+  const handleLogoUpload = (files: UploadedFile[]) => {
     if (files.length > 0) {
       onConfigChange('organizationLogo', files[0].url);
     }

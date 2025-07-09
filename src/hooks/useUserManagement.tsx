@@ -72,7 +72,7 @@ export const useUserManagement = () => {
         description: "User role has been successfully assigned.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
         description: error.message || "Failed to assign role.",
@@ -98,7 +98,7 @@ export const useUserManagement = () => {
         description: "User role has been successfully removed.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
         description: error.message || "Failed to remove role.",

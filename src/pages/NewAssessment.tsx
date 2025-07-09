@@ -27,7 +27,7 @@ const NewAssessment = () => {
     description: "",
     criticalityLevel: ""
   });
-  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
@@ -67,10 +67,10 @@ const NewAssessment = () => {
 
       // Navigate to agent hub with the real assessment ID
       navigate(`/assessment/${assessment.id}/agents`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error Creating Assessment",
-        description: error.message || "Failed to create assessment",
+        description: error instanceof Error ? error.message : "Failed to create assessment",
         variant: "destructive"
       });
     } finally {

@@ -25,8 +25,6 @@ export const useAgentAssessments = (assessmentId: string) => {
     queryFn: async () => {
       if (!user) return [];
       
-      console.log(`Fetching agent assessments for assessment ${assessmentId} and user ${user.id}`);
-      
       const { data, error } = await supabase
         .from('agent_assessments')
         .select('*')
@@ -39,7 +37,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         throw error;
       }
       
-      console.log(`Found ${data?.length || 0} agent assessments`);
       return data as AgentAssessment[];
     },
     enabled: !!user && !!assessmentId,
@@ -53,8 +50,6 @@ export const useAgentAssessments = (assessmentId: string) => {
       analysisResult?: string;
     }) => {
       if (!user) throw new Error('User not authenticated');
-
-      console.log(`Creating agent assessment for agent ${params.agentId}`);
 
       const { data, error } = await supabase
         .from('agent_assessments')
@@ -74,7 +69,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         throw error;
       }
       
-      console.log('Agent assessment created successfully:', data);
       return data;
     },
     onSuccess: () => {
@@ -90,8 +84,6 @@ export const useAgentAssessments = (assessmentId: string) => {
       analysisResult?: string;
     }) => {
       if (!user) throw new Error('User not authenticated');
-
-      console.log(`Updating agent assessment for agent ${params.agentId} to status ${params.status}`);
 
       // First try to update existing record
       const { data: updateData, error: updateError } = await supabase
@@ -111,7 +103,6 @@ export const useAgentAssessments = (assessmentId: string) => {
       if (updateError) {
         // If update fails (record doesn't exist), create new record
         if (updateError.code === 'PGRST116') {
-          console.log('Record not found, creating new agent assessment');
           const { data: insertData, error: insertError } = await supabase
             .from('agent_assessments')
             .insert({
@@ -136,7 +127,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         }
       }
 
-      console.log('Agent assessment updated successfully:', updateData);
       return updateData;
     },
     onSuccess: () => {
@@ -156,8 +146,6 @@ export const useAgentAssessments = (assessmentId: string) => {
     mutationFn: async (agentId: string) => {
       if (!user) throw new Error('User not authenticated');
 
-      console.log(`Deleting agent assessment for agent ${agentId}`);
-
       const { error } = await supabase
         .from('agent_assessments')
         .delete()
@@ -169,8 +157,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         console.error('Error deleting agent assessment:', error);
         throw error;
       }
-      
-      console.log('Agent assessment deleted successfully');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['agent-assessments', assessmentId, user?.id] });

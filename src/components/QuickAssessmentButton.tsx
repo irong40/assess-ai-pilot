@@ -145,15 +145,12 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
       setCurrentAgent("Initializing assessment database...");
       setCurrentPhase('initialization');
       
-      console.log(`Starting complete assessment for ${agentIds.length} agents`);
-      
       // Ensure all agent records exist
       for (let i = 0; i < agentIds.length; i++) {
         const agentId = agentIds[i];
         const agentStatus = getAgentStatus(agentId);
         
         if (!agentStatus.exists) {
-          console.log(`Creating agent assessment record for ${agentId}`);
           await createAgentAssessment.mutateAsync({
             agentId,
             status: 'not-started',
@@ -175,8 +172,6 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         setCurrentAgent(agentName);
         setCurrentAgentIndex(i + 1);
         setProgress(5 + (i / agentIds.length) * 70); // 5-75% for analysis phase
-
-        console.log(`Starting analysis for agent: ${agentName} (${agentId})`);
 
         // Update status to in-progress
         await updateAgentAssessment.mutateAsync({
@@ -203,8 +198,6 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         
         analysisResults.push(analysisResult);
 
-        console.log(`Completed analysis for ${agentName}, result length: ${analysisResult.length} characters`);
-
         // Update agent status to completed with analysis result
         await updateAgentAssessment.mutateAsync({
           agentId,
@@ -212,8 +205,6 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
           progress: 100,
           analysisResult
         });
-
-        console.log(`Agent ${agentName} status updated to completed`);
       }
 
       // Phase 3: Run quality validation
@@ -237,8 +228,6 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
           variant: "destructive"
         });
       }
-
-      console.log("All agents completed successfully. Assessment ready for review.");
 
       setTimeout(() => {
         setIsRunning(false);

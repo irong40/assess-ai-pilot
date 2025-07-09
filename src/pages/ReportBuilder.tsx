@@ -67,7 +67,7 @@ const ReportBuilder = () => {
     }
   ];
 
-  const handleConfigChange = (key: string, value: any) => {
+  const handleConfigChange = (key: string, value: string | number | boolean | File[]) => {
     setReportConfig(prev => ({
       ...prev,
       [key]: value

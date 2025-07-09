@@ -77,10 +77,10 @@ const FileUpload = ({
         title: "Upload successful",
         description: `${newUploadedFiles.length} file(s) uploaded successfully`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Upload failed",
-        description: error.message || "Failed to upload files",
+        description: error instanceof Error ? error.message : "Failed to upload files",
         variant: "destructive"
       });
     } finally {
@@ -108,10 +108,10 @@ const FileUpload = ({
         title: "File removed",
         description: "File deleted successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Delete failed",
-        description: error.message || "Failed to delete file",
+        description: error instanceof Error ? error.message : "Failed to delete file",
         variant: "destructive"
       });
     }

@@ -5,7 +5,7 @@ interface LogEntry {
   timestamp: string;
   level: 'DEBUG' | 'INFO' | 'ERROR' | 'INPUT' | 'OUTPUT';
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
   context?: string;
 }
 
@@ -69,7 +69,7 @@ class DevelopmentLogger {
     fs.appendFileSync(logFile, logLine, 'utf8');
   }
 
-  debug(message: string, data?: any, context?: string) {
+  debug(message: string, data?: Record<string, unknown>, context?: string) {
     this.writeLog({
       timestamp: new Date().toISOString(),
       level: 'DEBUG',
@@ -79,7 +79,7 @@ class DevelopmentLogger {
     });
   }
 
-  info(message: string, data?: any, context?: string) {
+  info(message: string, data?: Record<string, unknown>, context?: string) {
     this.writeLog({
       timestamp: new Date().toISOString(),
       level: 'INFO',
@@ -89,7 +89,7 @@ class DevelopmentLogger {
     });
   }
 
-  error(message: string, data?: any, context?: string) {
+  error(message: string, data?: Record<string, unknown>, context?: string) {
     this.writeLog({
       timestamp: new Date().toISOString(),
       level: 'ERROR',
@@ -99,7 +99,7 @@ class DevelopmentLogger {
     });
   }
 
-  logInput(description: string, input: any, context?: string) {
+  logInput(description: string, input: Record<string, unknown>, context?: string) {
     this.writeLog({
       timestamp: new Date().toISOString(),
       level: 'INPUT',
@@ -109,7 +109,7 @@ class DevelopmentLogger {
     });
   }
 
-  logOutput(description: string, output: any, context?: string) {
+  logOutput(description: string, output: Record<string, unknown>, context?: string) {
     this.writeLog({
       timestamp: new Date().toISOString(),
       level: 'OUTPUT',
@@ -119,7 +119,7 @@ class DevelopmentLogger {
     });
   }
 
-  logErrorTrace(errorDescription: string, errorData: any, context?: string) {
+  logErrorTrace(errorDescription: string, errorData: Error | Record<string, unknown>, context?: string) {
     this.error(`Error Trace: ${errorDescription}`, {
       error: errorData,
       stack: errorData?.stack,
@@ -127,7 +127,7 @@ class DevelopmentLogger {
     }, context);
   }
 
-  logFixAttempt(attemptNumber: number, description: string, changes: any, context?: string) {
+  logFixAttempt(attemptNumber: number, description: string, changes: Record<string, unknown>, context?: string) {
     this.info(`Fix Attempt #${attemptNumber}: ${description}`, {
       changes,
       timestamp: new Date().toISOString()
@@ -176,25 +176,25 @@ class DevelopmentLogger {
 export const devLogger = new DevelopmentLogger();
 
 // Helper functions for common debugging scenarios
-export const logApiCall = (url: string, method: string, payload?: any, response?: any) => {
+export const logApiCall = (url: string, method: string, payload?: Record<string, unknown>, response?: Record<string, unknown>) => {
   devLogger.logInput(`API Call: ${method} ${url}`, { method, url, payload }, 'API');
   if (response) {
     devLogger.logOutput(`API Response: ${method} ${url}`, response, 'API');
   }
 };
 
-export const logComponentRender = (componentName: string, props: any) => {
+export const logComponentRender = (componentName: string, props: Record<string, unknown>) => {
   devLogger.debug(`Rendering component: ${componentName}`, props, 'RENDER');
 };
 
-export const logStateChange = (stateName: string, oldValue: any, newValue: any, component?: string) => {
+export const logStateChange = (stateName: string, oldValue: unknown, newValue: unknown, component?: string) => {
   devLogger.debug(`State change: ${stateName}`, { 
     old: oldValue, 
     new: newValue 
   }, component || 'STATE');
 };
 
-export const logUserAction = (action: string, data?: any) => {
+export const logUserAction = (action: string, data?: Record<string, unknown>) => {
   devLogger.info(`User action: ${action}`, data, 'USER');
 };
 

@@ -30,10 +30,6 @@ export const analyzeAgent = async (
   files: FileInfo[], 
   context: string
 ): Promise<string> => {
-  console.log(`Starting analysis for agent: ${agentId}`);
-  console.log(`Files provided: ${files.length}`);
-  console.log(`Context: ${context.substring(0, 100)}...`);
-
   // Simulate realistic analysis time based on complexity
   const analysisTime = Math.random() * 2000 + 1000; // 1-3 seconds
   await new Promise(resolve => setTimeout(resolve, analysisTime));
@@ -63,7 +59,6 @@ export const analyzeAgent = async (
   const result = agentAnalysis[agentId as keyof typeof agentAnalysis] || 
     generateGenericAnalysis(agentId, filesList, context, timestamp);
 
-  console.log(`Analysis complete for ${agentId}. Result length: ${result.length} characters`);
   return result;
 };
 

@@ -6,8 +6,8 @@ import { toast } from '@/hooks/use-toast';
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   loading: boolean;
 }
@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log('Auth event:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -47,8 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             title: "Signed out",
             description: "You have been signed out successfully.",
           });
-        } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Token refreshed successfully');
         }
       }
     );
