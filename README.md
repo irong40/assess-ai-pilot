@@ -60,6 +60,17 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Development Logging
+
+This project includes a persistent rotating development logger for debugging and error tracking:
+
+- **Location**: `src/dev-utils/logger.ts`
+- **Log Directory**: `dev-logs/` (add to .gitignore)
+- **Features**: Automatic rotation, log cleanup, input/output tracking
+- **Usage**: Import `devLogger` for debugging sessions and error tracking
+
+**Important**: Add `dev-logs/` to your `.gitignore` file to exclude logs from Git commits.
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/78917c52-6e11-42d3-ba28-dfd4feff6aa7) and click on Share -> Publish.
