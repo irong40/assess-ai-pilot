@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Shield, FileText } from "lucide-react";
 import Header from "@/components/Header";
-import FileUpload from "@/components/FileUpload";
+import FileUpload, { UploadedFile } from "@/components/FileUpload";
 import DaapmPositionsSelect from "@/components/DaapmPositionsSelect";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";

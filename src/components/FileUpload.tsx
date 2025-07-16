@@ -13,7 +13,7 @@ interface FileUploadProps {
   className?: string;
 }
 
-interface UploadedFile {
+export interface UploadedFile {
   name: string;
   url: string;
   size: number;

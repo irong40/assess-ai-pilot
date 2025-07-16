@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import FileUpload from "@/components/FileUpload";
+import FileUpload, { UploadedFile } from "@/components/FileUpload";
 
 interface ReportConfig {
   reportTitle: string;
@@ -12,7 +12,7 @@ interface ReportConfig {
 
 interface ReportConfigurationProps {
   config: ReportConfig;
-  onConfigChange: (key: string, value: string | UploadedFile[]) => void;
+  onConfigChange: (key: string, value: string) => void;
 }
 
 const ReportConfiguration = ({ config, onConfigChange }: ReportConfigurationProps) => {
