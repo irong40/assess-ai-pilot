@@ -5,6 +5,10 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import AnalyticsCards from "@/components/dashboard/AnalyticsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 import AssessmentsList from "@/components/dashboard/AssessmentsList";
+import { AIInsightsDashboard } from "@/components/analytics/AIInsightsDashboard";
+import { ResponsiveContainer } from "@/components/responsive/ResponsiveContainer";
+import { AdaptiveCard } from "@/components/responsive/AdaptiveCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAssessments } from "@/hooks/useAssessments";
 
 const Dashboard = () => {
@@ -46,27 +50,52 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <DashboardHeader />
+      <ResponsiveContainer>
+        <div className="space-y-6">
+          <DashboardHeader />
 
-        <AnalyticsCards
-          totalAssessments={transformedAssessments.length}
-          completedAssessments={completedAssessments}
-          inProgressAssessments={inProgressAssessments}
-          averageComplianceScore={averageComplianceScore}
-        />
+          <Tabs defaultValue="overview" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
+            </TabsList>
 
-        <DashboardCharts />
+            <TabsContent value="overview" className="space-y-6">
+              <AnalyticsCards
+                totalAssessments={transformedAssessments.length}
+                completedAssessments={completedAssessments}
+                inProgressAssessments={inProgressAssessments}
+                averageComplianceScore={averageComplianceScore}
+              />
 
-        <AssessmentsList
-          assessments={transformedAssessments}
-          onViewAssessment={handleViewAssessment}
-          onNewAssessment={handleNewAssessment}
-        />
-      </main>
+              <DashboardCharts />
+
+              <AssessmentsList
+                assessments={transformedAssessments}
+                onViewAssessment={handleViewAssessment}
+                onNewAssessment={handleNewAssessment}
+              />
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-6">
+              <AdaptiveCard
+                title="Traditional Analytics"
+                subtitle="Standard charts and metrics"
+              >
+                <DashboardCharts />
+              </AdaptiveCard>
+            </TabsContent>
+
+            <TabsContent value="ai-insights">
+              <AIInsightsDashboard />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </ResponsiveContainer>
     </div>
   );
 };
