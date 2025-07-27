@@ -25,12 +25,6 @@ scrape_configs:
     scrape_interval: 30s
     scrape_timeout: 10s
 
-  - job_name: 'n8n'
-    static_configs:
-      - targets: ['n8n:5678']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    scrape_timeout: 10s
 
   - job_name: 'redis'
     static_configs:
