@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
-        console.error('Error getting session:', error.message);
+        // Error is handled by form validation
       }
       setSession(session);
       setUser(session?.user ?? null);
@@ -213,14 +213,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
-        // Don't show toast here as the form component handles specific errors
-        console.error('Sign in error:', error.message);
+        // Error is handled by form component
       }
 
       return { error };
     } catch (err) {
       const error = err as Error;
-      console.error('Unexpected sign in error:', error.message);
       return { error };
     }
   };
@@ -236,7 +234,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       }
     } catch (err) {
-      console.error('Sign out error:', err);
       toast({
         title: "Sign Out Error",
         description: "An unexpected error occurred while signing out.",

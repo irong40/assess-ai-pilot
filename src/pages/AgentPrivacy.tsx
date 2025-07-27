@@ -65,7 +65,6 @@ const AgentPrivacy = () => {
         description: "ISSO-Privacy assessment has been completed successfully",
       });
     } catch (error) {
-      console.error('Analysis failed:', error);
       toast({
         title: "Analysis Failed",
         description: "There was an error performing the analysis. Please try again.",

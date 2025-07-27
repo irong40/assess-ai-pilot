@@ -6,8 +6,7 @@ import AnalyticsCards from "@/components/dashboard/AnalyticsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 import AssessmentsList from "@/components/dashboard/AssessmentsList";
 import { AIInsightsDashboard } from "@/components/analytics/AIInsightsDashboard";
-import { ResponsiveContainer } from "@/components/responsive/ResponsiveContainer";
-import { AdaptiveCard } from "@/components/responsive/AdaptiveCard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAssessments } from "@/hooks/useAssessments";
 
@@ -53,7 +52,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <ResponsiveContainer>
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="space-y-6">
           <DashboardHeader />
 
@@ -82,12 +81,14 @@ const Dashboard = () => {
             </TabsContent>
 
             <TabsContent value="analytics" className="space-y-6">
-              <AdaptiveCard
-                title="Traditional Analytics"
-                subtitle="Standard charts and metrics"
-              >
-                <DashboardCharts />
-              </AdaptiveCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Traditional Analytics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <DashboardCharts />
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="ai-insights">
@@ -95,7 +96,7 @@ const Dashboard = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </ResponsiveContainer>
+      </div>
     </div>
   );
 };

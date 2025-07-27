@@ -31,7 +31,6 @@ export const useLoadingState = (initialLoading = false): UseLoadingStateReturn =
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       setError(errorMessage);
-      console.error('Operation failed:', err);
       return null;
     } finally {
       setIsLoading(false);

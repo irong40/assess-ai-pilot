@@ -235,9 +235,8 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
       }, 2000);
 
     } catch (error) {
-      console.error("Error during assessment:", error);
       toast({
-        title: "Assessment Error", 
+        title: "Assessment Error",
         description: "An error occurred during the assessment. Please try again.",
         variant: "destructive"
       });

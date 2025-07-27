@@ -1,11 +1,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, User, Shield, TestTube } from "lucide-react";
+import { LogOut, User, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
-import { DeviceTypeIndicator } from "@/components/responsive/DeviceTypeIndicator";
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -45,19 +44,11 @@ const Header = () => {
               >
                 Feedback
               </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/test")}
-              >
-                <TestTube className="h-4 w-4 mr-2" />
-                Test Suite
-              </Button>
             </nav>
           </div>
 
           {user && (
             <div className="flex items-center space-x-4">
-              <DeviceTypeIndicator />
               <NotificationBell />
               
               <div className="flex items-center space-x-2">

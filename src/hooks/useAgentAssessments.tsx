@@ -33,7 +33,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching agent assessments:', error);
         throw error;
       }
       
@@ -65,7 +64,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         .single();
 
       if (error) {
-        console.error('Error creating agent assessment:', error);
         throw error;
       }
       
@@ -117,12 +115,10 @@ export const useAgentAssessments = (assessmentId: string) => {
             .single();
 
           if (insertError) {
-            console.error('Error inserting agent assessment:', insertError);
             throw insertError;
           }
           return insertData;
         } else {
-          console.error('Error updating agent assessment:', updateError);
           throw updateError;
         }
       }
@@ -132,8 +128,7 @@ export const useAgentAssessments = (assessmentId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['agent-assessments', assessmentId, user?.id] });
     },
-    onError: (error) => {
-      console.error('Failed to update agent assessment:', error);
+    onError: () => {
       toast({
         title: "Update Failed",
         description: "Failed to update agent assessment. Please try again.",
@@ -154,7 +149,6 @@ export const useAgentAssessments = (assessmentId: string) => {
         .eq('user_id', user.id);
 
       if (error) {
-        console.error('Error deleting agent assessment:', error);
         throw error;
       }
     },

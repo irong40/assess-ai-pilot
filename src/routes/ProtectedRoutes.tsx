@@ -11,20 +11,8 @@ import LeadSummary from "@/pages/LeadSummary";
 import ISSMReview from "@/pages/ISSMReview";
 import Feedback from "@/pages/Feedback";
 import Admin from "@/pages/Admin";
-import TestPage from "@/pages/TestPage";
-
 const ProtectedRoutes = () => (
   <>
-    <Route
-      path="/test"
-      element={
-        <ProtectedRoute>
-          <NDAGate>
-            <TestPage />
-          </NDAGate>
-        </ProtectedRoute>
-      }
-    />
     <Route
       path="/admin"
       element={

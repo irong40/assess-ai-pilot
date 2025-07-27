@@ -5,8 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ResponsiveGrid } from '@/components/responsive/ResponsiveGrid';
-import { AdaptiveCard } from '@/components/responsive/AdaptiveCard';
 import { AIRiskAnalysisService } from '@/services/AIRiskAnalysisService';
 import { RiskInsight, MaturityTrend, RiskPrediction } from '@/types/analytics';
 import { toast } from '@/hooks/use-toast';
@@ -38,8 +36,8 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, onAction }) => {
   };
 
   return (
-    <AdaptiveCard className="h-full">
-      <div className="space-y-4">
+    <Card className="h-full">
+      <CardContent className="space-y-4 p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-2">
             <div className="p-2 bg-primary/10 rounded-lg">
@@ -103,8 +101,8 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, onAction }) => {
             Take Action
           </Button>
         )}
-      </div>
-    </AdaptiveCard>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -130,8 +128,8 @@ const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
   };
 
   return (
-    <AdaptiveCard>
-      <div className="space-y-3">
+    <Card>
+      <CardContent className="space-y-3 p-6">
         <div className="flex items-center justify-between">
           <h3 className="font-medium text-sm">{trend.domain}</h3>
           <span className="text-lg">{getTrendIcon(trend.trend)}</span>
@@ -153,8 +151,8 @@ const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
             Velocity: {trend.velocity.toFixed(2)}
           </span>
         </div>
-      </div>
-    </AdaptiveCard>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -174,8 +172,8 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ prediction }) => {
   };
 
   return (
-    <AdaptiveCard>
-      <div className="space-y-3">
+    <Card>
+      <CardContent className="space-y-3 p-6">
         <h3 className="font-medium text-sm">{prediction.domain}</h3>
         
         <div className="space-y-2">
@@ -212,8 +210,8 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ prediction }) => {
             </ul>
           </div>
         )}
-      </div>
-    </AdaptiveCard>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -242,7 +240,6 @@ export const AIInsightsDashboard: React.FC = () => {
         setTrends(generatedTrends);
         setPredictions(generatedPredictions);
       } catch (error) {
-        console.error('Failed to load AI analytics:', error);
         toast({
           title: "Error",
           description: "Failed to load AI analytics. Please try again.",
@@ -297,7 +294,7 @@ export const AIInsightsDashboard: React.FC = () => {
         </TabsList>
 
         <TabsContent value="insights" className="space-y-4">
-          <ResponsiveGrid columns={{ mobile: 1, tablet: 2, desktop: 2 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {insights.map((insight) => (
               <InsightCard
                 key={insight.id}
@@ -305,23 +302,23 @@ export const AIInsightsDashboard: React.FC = () => {
                 onAction={handleInsightAction}
               />
             ))}
-          </ResponsiveGrid>
+          </div>
         </TabsContent>
 
         <TabsContent value="trends" className="space-y-4">
-          <ResponsiveGrid columns={{ mobile: 1, tablet: 2, desktop: 4 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {trends.map((trend, index) => (
               <TrendCard key={index} trend={trend} />
             ))}
-          </ResponsiveGrid>
+          </div>
         </TabsContent>
 
         <TabsContent value="predictions" className="space-y-4">
-          <ResponsiveGrid columns={{ mobile: 1, tablet: 2, desktop: 4 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {predictions.map((prediction, index) => (
               <PredictionCard key={index} prediction={prediction} />
             ))}
-          </ResponsiveGrid>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
