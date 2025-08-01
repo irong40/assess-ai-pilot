@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "12.2.12 (cd3cf9e)"
   }
   public: {
     Tables: {
@@ -626,6 +626,231 @@ export type Database = {
           },
         ]
       }
+      notification_correlations: {
+        Row: {
+          correlation_reason: string | null
+          correlation_score: number | null
+          correlation_type: string
+          created_at: string | null
+          detected_at: string | null
+          detection_method: string | null
+          id: string
+          primary_notification_id: string | null
+          related_notification_id: string | null
+        }
+        Insert: {
+          correlation_reason?: string | null
+          correlation_score?: number | null
+          correlation_type: string
+          created_at?: string | null
+          detected_at?: string | null
+          detection_method?: string | null
+          id?: string
+          primary_notification_id?: string | null
+          related_notification_id?: string | null
+        }
+        Update: {
+          correlation_reason?: string | null
+          correlation_score?: number | null
+          correlation_type?: string
+          created_at?: string | null
+          detected_at?: string | null
+          detection_method?: string | null
+          id?: string
+          primary_notification_id?: string | null
+          related_notification_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_correlations_primary_notification_id_fkey"
+            columns: ["primary_notification_id"]
+            isOneToOne: false
+            referencedRelation: "high_priority_notifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_correlations_primary_notification_id_fkey"
+            columns: ["primary_notification_id"]
+            isOneToOne: false
+            referencedRelation: "notification_intelligence"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_correlations_related_notification_id_fkey"
+            columns: ["related_notification_id"]
+            isOneToOne: false
+            referencedRelation: "high_priority_notifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_correlations_related_notification_id_fkey"
+            columns: ["related_notification_id"]
+            isOneToOne: false
+            referencedRelation: "notification_intelligence"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_intelligence: {
+        Row: {
+          actionability: Database["public"]["Enums"]["actionability"]
+          ai_priority: Database["public"]["Enums"]["notification_priority"]
+          category: Database["public"]["Enums"]["notification_category"]
+          company_id: string | null
+          correlation_data: Json | null
+          created_at: string | null
+          id: string
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_category"]
+          processed_at: string
+          processing_version: string | null
+          raw_payload: Json
+          real_time_sent: boolean | null
+          real_time_sent_at: string | null
+          reasoning: string
+          recommended_actions: string[] | null
+          requires_immediate_attention: boolean | null
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          source: string
+          timestamp: string
+          updated_at: string | null
+          user_role: string | null
+          workflow_execution_id: string | null
+        }
+        Insert: {
+          actionability: Database["public"]["Enums"]["actionability"]
+          ai_priority: Database["public"]["Enums"]["notification_priority"]
+          category: Database["public"]["Enums"]["notification_category"]
+          company_id?: string | null
+          correlation_data?: Json | null
+          created_at?: string | null
+          id?: string
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_category"]
+          processed_at?: string
+          processing_version?: string | null
+          raw_payload?: Json
+          real_time_sent?: boolean | null
+          real_time_sent_at?: string | null
+          reasoning: string
+          recommended_actions?: string[] | null
+          requires_immediate_attention?: boolean | null
+          risk_level: Database["public"]["Enums"]["risk_level"]
+          source?: string
+          timestamp?: string
+          updated_at?: string | null
+          user_role?: string | null
+          workflow_execution_id?: string | null
+        }
+        Update: {
+          actionability?: Database["public"]["Enums"]["actionability"]
+          ai_priority?: Database["public"]["Enums"]["notification_priority"]
+          category?: Database["public"]["Enums"]["notification_category"]
+          company_id?: string | null
+          correlation_data?: Json | null
+          created_at?: string | null
+          id?: string
+          message?: string
+          notification_type?: Database["public"]["Enums"]["notification_category"]
+          processed_at?: string
+          processing_version?: string | null
+          raw_payload?: Json
+          real_time_sent?: boolean | null
+          real_time_sent_at?: string | null
+          reasoning?: string
+          recommended_actions?: string[] | null
+          requires_immediate_attention?: boolean | null
+          risk_level?: Database["public"]["Enums"]["risk_level"]
+          source?: string
+          timestamp?: string
+          updated_at?: string | null
+          user_role?: string | null
+          workflow_execution_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_intelligence_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          ai_filtering_enabled: boolean | null
+          company_id: string | null
+          correlation_enabled: boolean | null
+          created_at: string | null
+          email_enabled: boolean | null
+          enabled_categories:
+            | Database["public"]["Enums"]["notification_category"][]
+            | null
+          id: string
+          immediate_attention_override: boolean | null
+          priority_threshold:
+            | Database["public"]["Enums"]["notification_priority"]
+            | null
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          real_time_enabled: boolean | null
+          timezone: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_filtering_enabled?: boolean | null
+          company_id?: string | null
+          correlation_enabled?: boolean | null
+          created_at?: string | null
+          email_enabled?: boolean | null
+          enabled_categories?:
+            | Database["public"]["Enums"]["notification_category"][]
+            | null
+          id?: string
+          immediate_attention_override?: boolean | null
+          priority_threshold?:
+            | Database["public"]["Enums"]["notification_priority"]
+            | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          real_time_enabled?: boolean | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_filtering_enabled?: boolean | null
+          company_id?: string | null
+          correlation_enabled?: boolean | null
+          created_at?: string | null
+          email_enabled?: boolean | null
+          enabled_categories?:
+            | Database["public"]["Enums"]["notification_category"][]
+            | null
+          id?: string
+          immediate_attention_override?: boolean | null
+          priority_threshold?:
+            | Database["public"]["Enums"]["notification_priority"]
+            | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          real_time_enabled?: boolean | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       opportunities: {
         Row: {
           agency: string | null
@@ -903,9 +1128,127 @@ export type Database = {
           },
         ]
       }
+      workflow_executions: {
+        Row: {
+          api_calls_made: number | null
+          company_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          execution_id: string | null
+          id: string
+          input_data: Json | null
+          output_data: Json | null
+          processing_duration_ms: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["workflow_status"]
+          tokens_used: number | null
+          updated_at: string | null
+          workflow_name: string | null
+          workflow_type: string
+        }
+        Insert: {
+          api_calls_made?: number | null
+          company_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_id?: string | null
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          processing_duration_ms?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["workflow_status"]
+          tokens_used?: number | null
+          updated_at?: string | null
+          workflow_name?: string | null
+          workflow_type: string
+        }
+        Update: {
+          api_calls_made?: number | null
+          company_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_id?: string | null
+          id?: string
+          input_data?: Json | null
+          output_data?: Json | null
+          processing_duration_ms?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["workflow_status"]
+          tokens_used?: number | null
+          updated_at?: string | null
+          workflow_name?: string | null
+          workflow_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_executions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      high_priority_notifications: {
+        Row: {
+          actionability: Database["public"]["Enums"]["actionability"] | null
+          ai_priority:
+            | Database["public"]["Enums"]["notification_priority"]
+            | null
+          category: Database["public"]["Enums"]["notification_category"] | null
+          company_id: string | null
+          company_name: string | null
+          correlation_data: Json | null
+          created_at: string | null
+          id: string | null
+          message: string | null
+          notification_type:
+            | Database["public"]["Enums"]["notification_category"]
+            | null
+          processed_at: string | null
+          processing_version: string | null
+          raw_payload: Json | null
+          real_time_sent: boolean | null
+          real_time_sent_at: string | null
+          reasoning: string | null
+          recommended_actions: string[] | null
+          requires_immediate_attention: boolean | null
+          risk_level: Database["public"]["Enums"]["risk_level"] | null
+          source: string | null
+          timestamp: string | null
+          updated_at: string | null
+          user_name: string | null
+          user_role: string | null
+          workflow_execution_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_intelligence_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_execution_summary: {
+        Row: {
+          avg_duration_ms: number | null
+          failed_executions: number | null
+          last_execution: string | null
+          successful_executions: number | null
+          total_executions: number | null
+          total_tokens_used: number | null
+          workflow_type: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       create_company_with_admin: {
@@ -937,6 +1280,11 @@ export type Database = {
       }
     }
     Enums: {
+      actionability:
+        | "immediate"
+        | "within_24h"
+        | "within_week"
+        | "informational"
       app_role: "admin" | "isso" | "issm"
       contract_status:
         | "draft"
@@ -944,18 +1292,29 @@ export type Database = {
         | "active"
         | "completed"
         | "terminated"
+      notification_category:
+        | "security_incident"
+        | "compliance_alert"
+        | "system_status"
+        | "assessment_update"
+        | "threat_intelligence"
+        | "user_action"
+        | "general"
+      notification_priority: "1" | "2" | "3" | "4" | "5"
       proposal_status:
         | "draft"
         | "in_review"
         | "submitted"
         | "awarded"
         | "rejected"
+      risk_level: "critical" | "high" | "medium" | "low" | "informational"
       user_role:
         | "admin"
         | "proposal_writer"
         | "reviewer"
         | "contract_manager"
         | "viewer"
+      workflow_status: "running" | "completed" | "error" | "timeout"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1083,6 +1442,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      actionability: [
+        "immediate",
+        "within_24h",
+        "within_week",
+        "informational",
+      ],
       app_role: ["admin", "isso", "issm"],
       contract_status: [
         "draft",
@@ -1091,6 +1456,16 @@ export const Constants = {
         "completed",
         "terminated",
       ],
+      notification_category: [
+        "security_incident",
+        "compliance_alert",
+        "system_status",
+        "assessment_update",
+        "threat_intelligence",
+        "user_action",
+        "general",
+      ],
+      notification_priority: ["1", "2", "3", "4", "5"],
       proposal_status: [
         "draft",
         "in_review",
@@ -1098,6 +1473,7 @@ export const Constants = {
         "awarded",
         "rejected",
       ],
+      risk_level: ["critical", "high", "medium", "low", "informational"],
       user_role: [
         "admin",
         "proposal_writer",
@@ -1105,6 +1481,7 @@ export const Constants = {
         "contract_manager",
         "viewer",
       ],
+      workflow_status: ["running", "completed", "error", "timeout"],
     },
   },
 } as const
