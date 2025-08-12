@@ -36,8 +36,10 @@ const AgentTemplate = ({
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [context, setContext] = useState("");
   
+  console.log('🔍 AgentTemplate - agentId:', agentId, 'assessmentId:', id);
   const { getAgentStatus, updateAgentAssessment } = useAgentAssessments(id || '');
   const agentStatus = getAgentStatus(agentId);
+  console.log('📊 AgentTemplate - agentStatus:', agentStatus);
   const isComplete = agentStatus.status === 'completed';
 
   useState(() => {
@@ -53,18 +55,13 @@ const AgentTemplate = ({
     
     try {
       await updateAgentAssessment.mutateAsync({
-        agentId,
-        status: 'in-progress',
-        progress: 50,
+        status: 'in_progress',
       });
 
       const analysisResult = await analyzeAgent(agentId, uploadedFiles, context);
       
       await updateAgentAssessment.mutateAsync({
-        agentId,
         status: 'completed',
-        progress: 100,
-        analysisResult: analysisResult,
       });
 
       setAnalysis(analysisResult);
@@ -81,9 +78,7 @@ const AgentTemplate = ({
       });
       
       await updateAgentAssessment.mutateAsync({
-        agentId,
-        status: 'not-started',
-        progress: 0,
+        status: 'not_started',
       });
     } finally {
       setIsAnalyzing(false);

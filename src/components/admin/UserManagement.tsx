@@ -18,17 +18,15 @@ const UserManagement = () => {
 
   const roleColors = {
     admin: "bg-red-500",
-    proposal_writer: "bg-blue-500", 
-    reviewer: "bg-green-500",
-    contract_manager: "bg-purple-500",
+    issm: "bg-blue-500", 
+    isso: "bg-green-500",
     viewer: "bg-gray-500"
   };
 
   const roleLabels = {
     admin: "Administrator",
-    proposal_writer: "Proposal Writer",
-    reviewer: "Reviewer",
-    contract_manager: "Contract Manager",
+    issm: "ISSM",
+    isso: "ISSO", 
     viewer: "Viewer"
   };
 
@@ -82,16 +80,13 @@ const UserManagement = () => {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {user.roles.map((role) => (
-                        <Badge 
-                          key={role} 
-                          className={`${roleColors[role]} text-white`}
-                        >
-                          {roleLabels[role]}
-                        </Badge>
-                      ))}
-                      {user.roles.length === 0 && (
-                        <span className="text-slate-500 text-sm">No roles</span>
+                      <Badge 
+                        className={`${roleColors[user.role]} text-white`}
+                      >
+                        {roleLabels[user.role]}
+                      </Badge>
+                      {!user.role && (
+                        <span className="text-slate-500 text-sm">No role</span>
                       )}
                     </div>
                   </TableCell>
@@ -103,9 +98,8 @@ const UserManagement = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="proposal_writer">Proposal Writer</SelectItem>
-                          <SelectItem value="reviewer">Reviewer</SelectItem>
-                          <SelectItem value="contract_manager">Contract Manager</SelectItem>
+                          <SelectItem value="issm">ISSM</SelectItem>
+                          <SelectItem value="isso">ISSO</SelectItem>
                           <SelectItem value="viewer">Viewer</SelectItem>
                         </SelectContent>
                       </Select>
@@ -113,7 +107,7 @@ const UserManagement = () => {
                       <Button
                         size="sm"
                         onClick={() => handleAssignRole(user.id, selectedRole)}
-                        disabled={user.roles.includes(selectedRole) || isAssigningRole}
+                        disabled={user.role === selectedRole || isAssigningRole}
                         className="bg-green-600 hover:bg-green-700"
                       >
                         <UserPlus className="h-4 w-4" />
@@ -123,7 +117,7 @@ const UserManagement = () => {
                         size="sm"
                         variant="destructive"
                         onClick={() => handleRemoveRole(user.id, selectedRole)}
-                        disabled={!user.roles.includes(selectedRole) || isRemovingRole}
+                        disabled={user.role !== selectedRole || isRemovingRole}
                       >
                         <UserMinus className="h-4 w-4" />
                       </Button>

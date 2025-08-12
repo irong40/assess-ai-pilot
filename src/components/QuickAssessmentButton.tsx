@@ -153,7 +153,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         if (!agentStatus.exists) {
           await createAgentAssessment.mutateAsync({
             agentId,
-            status: 'not-started',
+            status: 'not_started',
             progress: 0,
           });
         }
@@ -176,7 +176,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         // Update status to in-progress
         await updateAgentAssessment.mutateAsync({
           agentId,
-          status: 'in-progress',
+          status: 'in_progress',
           progress: 25,
         });
 
@@ -185,7 +185,7 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         
         await updateAgentAssessment.mutateAsync({
           agentId,
-          status: 'in-progress',
+          status: 'in_progress',
           progress: 50,
         });
 

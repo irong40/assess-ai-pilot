@@ -9,8 +9,10 @@ const DashboardHeader = () => {
   const { signOut, user } = useAuth();
   const { data: profile } = useUserProfile();
 
-  const userRoles = profile?.roles || [];
-  const isAdmin = userRoles.includes('admin');
+  const userRole = profile?.role || 'viewer';
+  console.log('📊 Dashboard Header - user profile:', profile);
+  console.log('📊 Dashboard Header - user role:', userRole);
+  const isAdmin = userRole === 'admin';
 
   const handleSignOut = async () => {
     await signOut();

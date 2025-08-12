@@ -18,8 +18,11 @@ const Admin = () => {
     return null;
   }
 
-  const userRoles = profile?.roles || [];
-  const isAdmin = userRoles.includes('admin');
+  const userRole = profile?.role || 'viewer';
+  console.log('🔐 Admin page - user profile:', profile);
+  console.log('🔐 Admin page - user role:', userRole);
+  const isAdmin = userRole === 'admin';
+  console.log('🔐 Admin page - isAdmin:', isAdmin);
 
   if (!isAdmin) {
     return (
