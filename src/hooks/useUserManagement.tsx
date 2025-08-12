@@ -7,13 +7,15 @@ import { Database } from "@/integrations/supabase/types";
 
 type UserRole = Database["public"]["Enums"]["user_role"];
 
-interface UserWithRoles {
+interface UserWithRole {
   id: string;
   email: string;
   first_name: string | null;
   last_name: string | null;
+  role: UserRole;
+  company_id: string;
   created_at: string;
-  roles: UserRole[];
+  updated_at: string;
 }
 
 export const useUserManagement = () => {
@@ -25,7 +27,7 @@ export const useUserManagement = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      // Fetch all profiles
+      // Fetch all profiles from the same company
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -33,22 +35,7 @@ export const useUserManagement = () => {
 
       if (profilesError) throw profilesError;
 
-      // Fetch all user roles
-      const { data: userRoles, error: rolesError } = await supabase
-        .from('user_roles')
-        .select('user_id, role');
-
-      if (rolesError) throw rolesError;
-
-      // Combine profiles with their roles
-      const usersWithRoles: UserWithRoles[] = profiles.map(profile => ({
-        ...profile,
-        roles: userRoles
-          .filter(role => role.user_id === profile.id)
-          .map(role => role.role as UserRole)
-      }));
-
-      return usersWithRoles;
+      return profiles as UserWithRole[];
     },
     enabled: !!user,
   });
@@ -56,12 +43,9 @@ export const useUserManagement = () => {
   const assignRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
-        .from('user_roles')
-        .insert({ 
-          user_id: userId, 
-          role,
-          company_id: user?.user_metadata?.company_id || '00000000-0000-0000-0000-000000000000'
-        });
+        .from('profiles')
+        .update({ role })
+        .eq('id', userId);
 
       if (error) throw error;
     },
@@ -82,12 +66,11 @@ export const useUserManagement = () => {
   });
 
   const removeRoleMutation = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
+    mutationFn: async ({ userId }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId)
-        .eq('role', role);
+        .from('profiles')
+        .update({ role: 'viewer' })
+        .eq('id', userId);
 
       if (error) throw error;
     },

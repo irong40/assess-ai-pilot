@@ -9,11 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/integrations/supabase/types";
 
-type AppRole = Database["public"]["Enums"]["app_role"];
+type UserRole = Database["public"]["Enums"]["user_role"];
 
 interface RoleBasedRouteProps {
   children: React.ReactNode;
-  requiredRoles?: AppRole[];
+  requiredRoles?: UserRole[];
   fallbackPath?: string;
 }
 
@@ -37,12 +37,9 @@ const RoleBasedRoute = ({
     }
 
     if (!profileLoading && user && requiredRoles.length > 0) {
-      // For now, we'll check if user is admin in the company roles and map it to app roles
-      const userRoles = profile?.roles || [];
-      const isCompanyAdmin = userRoles.includes('admin');
-      
-      // Simple mapping: if user is company admin, they have all app roles
-      const hasRequiredRole = isCompanyAdmin || requiredRoles.length === 0;
+      // Check if user has any of the required roles
+      const userRole = profile?.role || 'viewer';
+      const hasRequiredRole = requiredRoles.includes(userRole) || requiredRoles.length === 0;
 
       if (!hasRequiredRole) {
         setRedirecting(true);
@@ -67,11 +64,8 @@ const RoleBasedRoute = ({
 
   // Check role access
   if (requiredRoles.length > 0) {
-    const userRoles = profile?.roles || [];
-    const isCompanyAdmin = userRoles.includes('admin');
-    
-    // Simple mapping: if user is company admin, they have all app roles
-    const hasRequiredRole = isCompanyAdmin || requiredRoles.length === 0;
+    const userRole = profile?.role || 'viewer';
+    const hasRequiredRole = requiredRoles.includes(userRole) || requiredRoles.length === 0;
 
     if (!hasRequiredRole && redirecting) {
       return (

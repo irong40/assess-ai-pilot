@@ -20,18 +20,7 @@ export const useUserProfile = () => {
 
       if (profileError) throw profileError;
 
-      // Fetch roles
-      const { data: roles, error: rolesError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id);
-
-      if (rolesError) throw rolesError;
-
-      return {
-        ...profile,
-        roles: roles.map(r => r.role)
-      };
+      return profile;
     },
     enabled: !!user,
   });

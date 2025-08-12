@@ -9,7 +9,7 @@ export interface AgentAssessment {
   assessment_id: string;
   agent_id: string;
   user_id: string;
-  status: 'not-started' | 'in-progress' | 'completed';
+  status: 'not_started' | 'in_progress' | 'completed';
   progress: number;
   analysis_result?: string;
   created_at: string;
@@ -26,9 +26,9 @@ export const useAgentAssessments = (assessmentId: string) => {
       if (!user) return [];
       
       const { data, error } = await supabase
-        .from('agent_assessments')
+        .from('assessments')
         .select('*')
-        .eq('assessment_id', assessmentId)
+        .eq('id', assessmentId)
         .eq('user_id', user.id)
         .order('created_at', { ascending: true });
 
@@ -43,22 +43,31 @@ export const useAgentAssessments = (assessmentId: string) => {
 
   const createAgentAssessment = useMutation({
     mutationFn: async (params: {
-      agentId: string;
-      status?: 'not-started' | 'in-progress' | 'completed';
-      progress?: number;
-      analysisResult?: string;
+      systemName: string;
+      environment: string;
+      complianceScope: string;
+      status?: 'not_started' | 'in_progress' | 'completed';
     }) => {
       if (!user) throw new Error('User not authenticated');
 
+      // Get user's profile to get company_id
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('company_id')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) throw profileError;
+
       const { data, error } = await supabase
-        .from('agent_assessments')
+        .from('assessments')
         .insert({
-          assessment_id: assessmentId,
-          agent_id: params.agentId,
+          system_name: params.systemName,
+          environment: params.environment,
+          compliance_scope: params.complianceScope,
           user_id: user.id,
-          status: params.status || 'not-started',
-          progress: params.progress || 0,
-          analysis_result: params.analysisResult,
+          company_id: profile.company_id,
+          status: params.status || 'not_started',
         })
         .select()
         .single();
@@ -76,54 +85,25 @@ export const useAgentAssessments = (assessmentId: string) => {
 
   const updateAgentAssessment = useMutation({
     mutationFn: async (params: {
-      agentId: string;
-      status: 'not-started' | 'in-progress' | 'completed';
-      progress: number;
-      analysisResult?: string;
+      status: 'not_started' | 'in_progress' | 'completed';
     }) => {
       if (!user) throw new Error('User not authenticated');
 
-      // First try to update existing record
-      const { data: updateData, error: updateError } = await supabase
-        .from('agent_assessments')
+      const { data, error } = await supabase
+        .from('assessments')
         .update({
           status: params.status,
-          progress: params.progress,
-          analysis_result: params.analysisResult,
-          updated_at: new Date().toISOString()
         })
-        .eq('assessment_id', assessmentId)
-        .eq('agent_id', params.agentId)
+        .eq('id', assessmentId)
         .eq('user_id', user.id)
         .select()
         .single();
 
-      if (updateError) {
-        // If update fails (record doesn't exist), create new record
-        if (updateError.code === 'PGRST116') {
-          const { data: insertData, error: insertError } = await supabase
-            .from('agent_assessments')
-            .insert({
-              assessment_id: assessmentId,
-              agent_id: params.agentId,
-              user_id: user.id,
-              status: params.status,
-              progress: params.progress,
-              analysis_result: params.analysisResult,
-            })
-            .select()
-            .single();
-
-          if (insertError) {
-            throw insertError;
-          }
-          return insertData;
-        } else {
-          throw updateError;
-        }
+      if (error) {
+        throw error;
       }
 
-      return updateData;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['agent-assessments', assessmentId, user?.id] });
@@ -131,21 +111,20 @@ export const useAgentAssessments = (assessmentId: string) => {
     onError: () => {
       toast({
         title: "Update Failed",
-        description: "Failed to update agent assessment. Please try again.",
+        description: "Failed to update assessment. Please try again.",
         variant: "destructive",
       });
     },
   });
 
   const deleteAgentAssessment = useMutation({
-    mutationFn: async (agentId: string) => {
+    mutationFn: async () => {
       if (!user) throw new Error('User not authenticated');
 
       const { error } = await supabase
-        .from('agent_assessments')
+        .from('assessments')
         .delete()
-        .eq('assessment_id', assessmentId)
-        .eq('agent_id', agentId)
+        .eq('id', assessmentId)
         .eq('user_id', user.id);
 
       if (error) {
@@ -157,40 +136,41 @@ export const useAgentAssessments = (assessmentId: string) => {
     },
   });
 
-  const getAgentStatus = (agentId: string) => {
-    const agentData = agentAssessments.find(
-      assessment => assessment.agent_id === agentId
-    );
+  const getAssessmentStatus = () => {
+    const assessment = agentAssessments.find(a => a.id === assessmentId);
     
     return {
-      status: agentData?.status || 'not-started',
-      progress: agentData?.progress || 0,
-      analysisResult: agentData?.analysis_result,
-      exists: !!agentData
+      status: assessment?.status || 'not_started',
+      systemName: assessment?.system_name || '',
+      environment: assessment?.environment || '',
+      complianceScope: assessment?.compliance_scope || '',
+      exists: !!assessment
     };
   };
 
   const getAllCompletedResults = () => {
     return agentAssessments
-      .filter(assessment => assessment.status === 'completed' && assessment.analysis_result)
+      .filter(assessment => assessment.status === 'completed')
       .map(assessment => ({
-        agentId: assessment.agent_id,
-        result: assessment.analysis_result!,
+        id: assessment.id,
+        systemName: assessment.system_name,
+        environment: assessment.environment,
+        complianceScope: assessment.compliance_scope,
         completedAt: assessment.updated_at
       }));
   };
 
   const getAssessmentProgress = () => {
-    const totalAgents = agentAssessments.length;
-    const completedAgents = agentAssessments.filter(a => a.status === 'completed').length;
-    const inProgressAgents = agentAssessments.filter(a => a.status === 'in-progress').length;
+    const totalAssessments = agentAssessments.length;
+    const completedAssessments = agentAssessments.filter(a => a.status === 'completed').length;
+    const inProgressAssessments = agentAssessments.filter(a => a.status === 'in_progress').length;
     
     return {
-      total: totalAgents,
-      completed: completedAgents,
-      inProgress: inProgressAgents,
-      notStarted: totalAgents - completedAgents - inProgressAgents,
-      overallProgress: totalAgents > 0 ? (completedAgents / totalAgents) * 100 : 0
+      total: totalAssessments,
+      completed: completedAssessments,
+      inProgress: inProgressAssessments,
+      notStarted: totalAssessments - completedAssessments - inProgressAssessments,
+      overallProgress: totalAssessments > 0 ? (completedAssessments / totalAssessments) * 100 : 0
     };
   };
 
@@ -200,7 +180,7 @@ export const useAgentAssessments = (assessmentId: string) => {
     createAgentAssessment,
     updateAgentAssessment,
     deleteAgentAssessment,
-    getAgentStatus,
+    getAssessmentStatus,
     getAllCompletedResults,
     getAssessmentProgress,
   };
