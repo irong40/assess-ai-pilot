@@ -15,7 +15,7 @@ const Dashboard = () => {
   const { assessments, isLoading } = useAssessments();
 
   const handleViewAssessment = (id: string) => {
-    navigate(`/assessment/${id}/agents`);
+    navigate(`/assessment/${id}/wizard`);
   };
 
   const handleNewAssessment = () => {
