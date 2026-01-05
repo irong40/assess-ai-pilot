@@ -61,8 +61,8 @@ const NewAssessment = () => {
         description: `Assessment "${formData.systemName}" has been created successfully with ${uploadedFiles.length} document(s)`,
       });
 
-      // Navigate to agent hub with the real assessment ID
-      navigate(`/assessment/${assessment.id}/agents`);
+      // Navigate to wizard hub with the real assessment ID
+      navigate(`/assessment/${assessment.id}/wizard`);
     } catch (error: unknown) {
       toast({
         title: "Error Creating Assessment",

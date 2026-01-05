@@ -14,6 +14,9 @@ import RAGChatInterface from "@/components/rag/RAGChatInterface";
 import POAMManager from "@/components/poam/POAMManager";
 import AuditLogViewer from "@/components/audit/AuditLogViewer";
 import DocumentManagement from "@/pages/DocumentManagement";
+import WizardHub from "@/pages/WizardHub";
+import SelfAssessmentWizard from "@/pages/SelfAssessmentWizard";
+import AssessmentResults from "@/pages/AssessmentResults";
 
 const ProtectedRoutes = () => (
   <>
@@ -53,6 +56,36 @@ const ProtectedRoutes = () => (
         <ProtectedRoute>
           <NDAGate>
             <AgentHub />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/assessment/:id/wizard"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <WizardHub />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/assessment/:id/wizard/:domainId"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <SelfAssessmentWizard />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/assessment/:id/results"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <AssessmentResults />
           </NDAGate>
         </ProtectedRoute>
       }
