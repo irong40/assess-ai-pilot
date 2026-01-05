@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2, FileText, ThumbsUp, ThumbsDown, BookOpen, AlertTriangle, FileSearch } from "lucide-react";
+import { Send, Bot, User, Loader2, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { ragService, type RAGQueryResponse } from "@/services/aiService";
+import { DOCUMENT_TYPE_GROUPS, RMF_DOCUMENT_TYPES, isValidDocumentType } from "@/types/documentTypes";
 
 interface Message {
   id: string;
@@ -34,12 +36,13 @@ export const RAGChatInterface: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const documentTypes = [
-    { value: "policy", label: "Policies", icon: FileText },
-    { value: "assessment", label: "Assessments", icon: FileSearch },
-    { value: "finding", label: "Findings", icon: AlertTriangle },
-    { value: "framework", label: "Frameworks", icon: BookOpen },
-  ];
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(["core"]);
+
+  const toggleGroup = (category: string) => {
+    setExpandedGroups((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -145,20 +148,66 @@ export const RAGChatInterface: React.FC = () => {
           </div>
         </div>
 
-        {/* Document Type Filters */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          <span className="text-sm text-muted-foreground mr-2">Filter by:</span>
-          {documentTypes.map(type => (
-            <Badge
-              key={type.value}
-              variant={selectedDocTypes.includes(type.value) ? "default" : "outline"}
-              className="cursor-pointer"
-              onClick={() => toggleDocType(type.value)}
-            >
-              <type.icon className="h-3 w-3 mr-1" />
-              {type.label}
-            </Badge>
-          ))}
+        {/* Document Type Filters - Grouped */}
+        <div className="space-y-2 pt-2 max-h-[200px] overflow-y-auto">
+          <span className="text-sm text-muted-foreground">Filter by document type:</span>
+          <div className="space-y-1">
+            {DOCUMENT_TYPE_GROUPS.map((group) => (
+              <Collapsible
+                key={group.category}
+                open={expandedGroups.includes(group.category)}
+                onOpenChange={() => toggleGroup(group.category)}
+              >
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-between px-2 h-8"
+                  >
+                    <span className="text-xs font-medium">{group.label}</span>
+                    {expandedGroups.includes(group.category) ? (
+                      <ChevronUp className="h-3 w-3" />
+                    ) : (
+                      <ChevronDown className="h-3 w-3" />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pl-2">
+                  <div className="flex flex-wrap gap-1 py-1">
+                    {group.types.map((type) => {
+                      const Icon = type.icon;
+                      return (
+                        <Badge
+                          key={type.value}
+                          variant={selectedDocTypes.includes(type.value) ? "default" : "outline"}
+                          className="cursor-pointer text-xs"
+                          onClick={() => toggleDocType(type.value)}
+                        >
+                          <Icon className="h-3 w-3 mr-1" />
+                          {type.label}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            ))}
+          </div>
+          {selectedDocTypes.length > 0 && (
+            <div className="flex items-center gap-2 pt-1">
+              <span className="text-xs text-muted-foreground">
+                {selectedDocTypes.length} filter{selectedDocTypes.length !== 1 ? "s" : ""} active
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 text-xs"
+                onClick={() => setSelectedDocTypes([])}
+              >
+                Clear all
+              </Button>
+            </div>
+          )}
         </div>
       </CardHeader>
 
@@ -222,7 +271,9 @@ export const RAGChatInterface: React.FC = () => {
                           >
                             <span className="font-medium">{source.document_name}</span>
                             <Badge variant="outline" className="ml-2 text-[10px]">
-                              {source.document_type}
+                              {isValidDocumentType(source.document_type)
+                                ? RMF_DOCUMENT_TYPES[source.document_type].label
+                                : source.document_type}
                             </Badge>
                             <span className="text-muted-foreground ml-2">
                               ({(source.similarity * 100).toFixed(0)}% match)

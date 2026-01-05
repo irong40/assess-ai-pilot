@@ -246,6 +246,39 @@ export type Database = {
           },
         ]
       }
+      document_type_metadata: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          display_name: string
+          icon_name: string
+          required_for_ato: boolean | null
+          sort_order: number | null
+          type_code: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          display_name: string
+          icon_name: string
+          required_for_ato?: boolean | null
+          sort_order?: number | null
+          type_code: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          icon_name?: string
+          required_for_ato?: boolean | null
+          sort_order?: number | null
+          type_code?: string
+        }
+        Relationships: []
+      }
       notification_intelligence: {
         Row: {
           actionability: Database["public"]["Enums"]["actionability_level"]

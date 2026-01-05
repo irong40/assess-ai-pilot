@@ -1,4 +1,3 @@
-
 import { Route } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import RoleBasedRoute from "@/components/RoleBasedRoute";
@@ -14,6 +13,7 @@ import Admin from "@/pages/Admin";
 import RAGChatInterface from "@/components/rag/RAGChatInterface";
 import POAMManager from "@/components/poam/POAMManager";
 import AuditLogViewer from "@/components/audit/AuditLogViewer";
+import DocumentManagement from "@/pages/DocumentManagement";
 
 const ProtectedRoutes = () => (
   <>
@@ -127,6 +127,16 @@ const ProtectedRoutes = () => (
         <ProtectedRoute>
           <NDAGate>
             <AuditLogViewer />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/compliance/documents"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <DocumentManagement />
           </NDAGate>
         </ProtectedRoute>
       }

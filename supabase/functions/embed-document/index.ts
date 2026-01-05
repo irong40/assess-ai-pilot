@@ -6,10 +6,27 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// RMF Document Types - aligned with DCSA/RMF authorization package requirements
+type RMFDocumentType =
+  // Core Authorization Documents
+  | "ssp" | "sar" | "poam" | "ato" | "rar" | "cms"
+  // Security Policies & Procedures
+  | "policy" | "procedure" | "plan" | "rup"
+  // Technical Documentation
+  | "diagram" | "inventory" | "baseline" | "stig"
+  // Agreements & External
+  | "isa" | "mou" | "sla"
+  // Assessment Artifacts
+  | "scan_report" | "pentest" | "audit_report" | "assessment" | "finding"
+  // Reference Materials
+  | "framework" | "guidance" | "threat_intel"
+  // Other
+  | "other";
+
 interface EmbedRequest {
   document_id: string;
   document_name: string;
-  document_type: "policy" | "assessment" | "finding" | "threat_intel" | "framework" | "other";
+  document_type: RMFDocumentType;
   content: string;
   metadata?: Record<string, any>;
 }
