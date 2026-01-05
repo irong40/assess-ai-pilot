@@ -51,13 +51,9 @@ const NewAssessment = () => {
 
     try {
       const assessment = await createAssessment.mutateAsync({
-        systemName: formData.systemName,
+        system_name: formData.systemName,
         environment: formData.environment,
-        complianceScope: formData.complianceScope,
-        ownerName: formData.ownerName || undefined,
-        ownerRole: formData.ownerRole || undefined,
-        description: formData.description || undefined,
-        criticalityLevel: formData.criticalityLevel || undefined,
+        compliance_scope: formData.complianceScope,
       });
       
       toast({

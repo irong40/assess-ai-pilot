@@ -43,9 +43,7 @@ const AgentNetwork = () => {
     
     try {
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
-        status: 'in-progress',
-        progress: 50,
+        status: 'in_progress',
       });
 
       // Convert UploadedFile[] to format expected by analyzeAgent
@@ -53,10 +51,7 @@ const AgentNetwork = () => {
       const analysisResult = await analyzeAgent('network', filesForAnalysis, context);
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
         status: 'completed',
-        progress: 100,
-        analysisResult: analysisResult,
       });
 
       setAnalysis(analysisResult);
@@ -73,9 +68,7 @@ const AgentNetwork = () => {
       });
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'network',
-        status: 'not-started',
-        progress: 0,
+        status: 'not_started',
       });
     } finally {
       setIsAnalyzing(false);

@@ -4,12 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 
-type AssessmentStatus = 'not-started' | 'in-progress' | 'completed';
+type AssessmentStatus = 'not_started' | 'in_progress' | 'completed' | 'needs_review';
 
 const VALID_TRANSITIONS: Record<AssessmentStatus, AssessmentStatus[]> = {
-  'not-started': ['in-progress'],
-  'in-progress': ['completed'],
-  'completed': [] // No transitions allowed from completed
+  'not_started': ['in_progress'],
+  'in_progress': ['completed', 'needs_review'],
+  'completed': [],
+  'needs_review': ['in_progress', 'completed']
 };
 
 export const useAssessmentStatus = () => {

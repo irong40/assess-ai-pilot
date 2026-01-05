@@ -4,12 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Shield, ChevronRight, Clock, CheckCircle, Play } from "lucide-react";
 
-interface AssessmentCardProps {
+export interface AssessmentCardProps {
   id: string;
   systemName: string;
   environment: string;
   scope: string;
-  status: 'not-started' | 'in-progress' | 'completed';
+  status: 'not_started' | 'in_progress' | 'completed' | 'needs_review';
   owner: string;
   lastUpdated: string;
   onView: (id: string) => void;
@@ -33,10 +33,16 @@ const AssessmentCard = ({
           text: 'Completed',
           icon: <CheckCircle className="h-3 w-3" />
         };
-      case 'in-progress': 
+      case 'in_progress': 
         return {
           color: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
           text: 'In Progress',
+          icon: <Clock className="h-3 w-3" />
+        };
+      case 'needs_review':
+        return {
+          color: 'bg-orange-100 text-orange-800 hover:bg-orange-200',
+          text: 'Needs Review',
           icon: <Clock className="h-3 w-3" />
         };
       default: 
@@ -94,8 +100,8 @@ const AssessmentCard = ({
               className="w-full bg-slate-900 hover:bg-slate-800 text-white"
               size="sm"
             >
-              {status === 'not-started' ? 'Start Assessment' : 
-               status === 'in-progress' ? 'Continue Assessment' : 'View Results'}
+              {status === 'not_started' ? 'Start Assessment' : 
+               status === 'in_progress' || status === 'needs_review' ? 'Continue Assessment' : 'View Results'}
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           </div>

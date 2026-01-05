@@ -43,19 +43,14 @@ const AgentPrivacy = () => {
     
     try {
       await updateAgentAssessment.mutateAsync({
-        agentId: 'privacy',
-        status: 'in-progress',
-        progress: 50,
+        status: 'in_progress',
       });
 
       const filesForAnalysis = uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }));
       const analysisResult = await analyzeAgent('privacy', filesForAnalysis, context);
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'privacy',
         status: 'completed',
-        progress: 100,
-        analysisResult: analysisResult,
       });
 
       setAnalysis(analysisResult);
@@ -72,9 +67,7 @@ const AgentPrivacy = () => {
       });
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'privacy',
-        status: 'not-started',
-        progress: 0,
+        status: 'not_started',
       });
     } finally {
       setIsAnalyzing(false);

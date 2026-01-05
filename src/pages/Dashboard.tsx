@@ -29,12 +29,12 @@ const Dashboard = () => {
     environment: assessment.environment,
     scope: assessment.compliance_scope,
     status: assessment.status,
-    owner: assessment.owner_name || "Unknown",
+    owner: "System Owner",
     lastUpdated: new Date(assessment.updated_at).toLocaleDateString()
   }));
 
   const completedAssessments = transformedAssessments.filter(a => a.status === 'completed').length;
-  const inProgressAssessments = transformedAssessments.filter(a => a.status === 'in-progress').length;
+  const inProgressAssessments = transformedAssessments.filter(a => a.status === 'in_progress').length;
   const averageComplianceScore = 82; // Mock data - calculate from compliance frameworks
 
   if (isLoading) {

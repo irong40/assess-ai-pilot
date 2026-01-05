@@ -43,19 +43,14 @@ const AgentRecovery = () => {
     
     try {
       await updateAgentAssessment.mutateAsync({
-        agentId: 'recovery',
-        status: 'in-progress',
-        progress: 50,
+        status: 'in_progress',
       });
 
       const filesForAnalysis = uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type }));
       const analysisResult = await analyzeAgent('recovery', filesForAnalysis, context);
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'recovery',
         status: 'completed',
-        progress: 100,
-        analysisResult: analysisResult,
       });
 
       setAnalysis(analysisResult);
@@ -72,9 +67,7 @@ const AgentRecovery = () => {
       });
       
       await updateAgentAssessment.mutateAsync({
-        agentId: 'recovery',
-        status: 'not-started',
-        progress: 0,
+        status: 'not_started',
       });
     } finally {
       setIsAnalyzing(false);
