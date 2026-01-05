@@ -8,7 +8,6 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { NotificationProvider } from "@/context/NotificationContext";
 import AuthRoutes from "@/routes/AuthRoutes";
 import ProtectedRoutes from "@/routes/ProtectedRoutes";
-import AgentRoutes from "@/routes/AgentRoutes";
 import NotFound from "./pages/NotFound";
 import NDA from "./pages/NDA";
 
@@ -26,7 +25,6 @@ const App = () => (
               <Route path="/nda" element={<NDA />} />
               {AuthRoutes()}
               {ProtectedRoutes()}
-              {AgentRoutes()}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
