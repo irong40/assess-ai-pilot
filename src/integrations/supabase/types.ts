@@ -14,39 +14,266 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_findings: {
+        Row: {
+          assessment_id: string
+          company_id: string
+          control_id: string
+          created_at: string
+          description: string
+          id: string
+          poam_entry_id: string | null
+          question_id: string
+          recommendation: string | null
+          response_id: string | null
+          severity: Database["public"]["Enums"]["risk_level"]
+          status: Database["public"]["Enums"]["finding_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_id: string
+          company_id: string
+          control_id: string
+          created_at?: string
+          description: string
+          id?: string
+          poam_entry_id?: string | null
+          question_id: string
+          recommendation?: string | null
+          response_id?: string | null
+          severity: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["finding_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_id?: string
+          company_id?: string
+          control_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          poam_entry_id?: string | null
+          question_id?: string
+          recommendation?: string | null
+          response_id?: string | null
+          severity?: Database["public"]["Enums"]["risk_level"]
+          status?: Database["public"]["Enums"]["finding_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_findings_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_findings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_findings_poam_entry_id_fkey"
+            columns: ["poam_entry_id"]
+            isOneToOne: false
+            referencedRelation: "poam_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_findings_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_findings_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_questions: {
+        Row: {
+          control_id: string
+          created_at: string
+          domain_id: string
+          domain_name: string
+          finding_template: string | null
+          help_text: string | null
+          id: string
+          is_active: boolean
+          order_index: number
+          question_text: string
+          remediation_template: string | null
+          response_type: Database["public"]["Enums"]["question_response_type"]
+          risk_weight: number
+          updated_at: string
+        }
+        Insert: {
+          control_id: string
+          created_at?: string
+          domain_id: string
+          domain_name: string
+          finding_template?: string | null
+          help_text?: string | null
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          question_text: string
+          remediation_template?: string | null
+          response_type?: Database["public"]["Enums"]["question_response_type"]
+          risk_weight?: number
+          updated_at?: string
+        }
+        Update: {
+          control_id?: string
+          created_at?: string
+          domain_id?: string
+          domain_name?: string
+          finding_template?: string | null
+          help_text?: string | null
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          question_text?: string
+          remediation_template?: string | null
+          response_type?: Database["public"]["Enums"]["question_response_type"]
+          risk_weight?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      assessment_responses: {
+        Row: {
+          answered_at: string
+          answered_by: string | null
+          assessment_id: string
+          company_id: string
+          created_at: string
+          creates_finding: boolean
+          id: string
+          notes: string | null
+          question_id: string
+          response_value: string
+          updated_at: string
+        }
+        Insert: {
+          answered_at?: string
+          answered_by?: string | null
+          assessment_id: string
+          company_id: string
+          created_at?: string
+          creates_finding?: boolean
+          id?: string
+          notes?: string | null
+          question_id: string
+          response_value: string
+          updated_at?: string
+        }
+        Update: {
+          answered_at?: string
+          answered_by?: string | null
+          assessment_id?: string
+          company_id?: string
+          created_at?: string
+          creates_finding?: boolean
+          id?: string
+          notes?: string | null
+          question_id?: string
+          response_value?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_responses_answered_by_fkey"
+            columns: ["answered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_responses_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_responses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_responses_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessments: {
         Row: {
           company_id: string
+          completed_domains: Json | null
           compliance_scope: string
           created_at: string
+          current_domain: string | null
+          domain_scores: Json | null
           environment: string
           id: string
+          overall_score: number | null
           status: Database["public"]["Enums"]["assessment_status"]
           system_name: string
           updated_at: string
           user_id: string
+          wizard_completed_at: string | null
+          wizard_started_at: string | null
         }
         Insert: {
           company_id: string
+          completed_domains?: Json | null
           compliance_scope: string
           created_at?: string
+          current_domain?: string | null
+          domain_scores?: Json | null
           environment: string
           id?: string
+          overall_score?: number | null
           status?: Database["public"]["Enums"]["assessment_status"]
           system_name: string
           updated_at?: string
           user_id: string
+          wizard_completed_at?: string | null
+          wizard_started_at?: string | null
         }
         Update: {
           company_id?: string
+          completed_domains?: Json | null
           compliance_scope?: string
           created_at?: string
+          current_domain?: string | null
+          domain_scores?: Json | null
           environment?: string
           id?: string
+          overall_score?: number | null
           status?: Database["public"]["Enums"]["assessment_status"]
           system_name?: string
           updated_at?: string
           user_id?: string
+          wizard_completed_at?: string | null
+          wizard_started_at?: string | null
         }
         Relationships: [
           {
@@ -842,6 +1069,7 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "needs_review"
+      finding_status: "open" | "in_progress" | "remediated" | "accepted"
       notification_category:
         | "security_incident"
         | "compliance_alert"
@@ -855,6 +1083,12 @@ export type Database = {
         | "assessment_reminder"
         | "poam_update"
         | "system_status"
+      question_response_type:
+        | "yes_no"
+        | "yes_no_partial"
+        | "yes_no_na"
+        | "scale"
+        | "text"
       risk_level: "critical" | "high" | "medium" | "low"
       user_role: "admin" | "issm" | "isso" | "viewer"
       workflow_status: "running" | "completed" | "error" | "timeout"
@@ -998,6 +1232,7 @@ export const Constants = {
         "completed",
         "needs_review",
       ],
+      finding_status: ["open", "in_progress", "remediated", "accepted"],
       notification_category: [
         "security_incident",
         "compliance_alert",
@@ -1012,6 +1247,13 @@ export const Constants = {
         "assessment_reminder",
         "poam_update",
         "system_status",
+      ],
+      question_response_type: [
+        "yes_no",
+        "yes_no_partial",
+        "yes_no_na",
+        "scale",
+        "text",
       ],
       risk_level: ["critical", "high", "medium", "low"],
       user_role: ["admin", "issm", "isso", "viewer"],
