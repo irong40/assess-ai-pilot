@@ -6,7 +6,6 @@ import { ArrowLeft, Shield, Bot, CheckCircle, FileText, Download } from "lucide-
 import Header from "@/components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { useAgentAssessments } from "@/hooks/useAgentAssessments";
 import AgentSummaryCard from "@/components/AgentSummaryCard";
 import ExecutiveSummaryCard from "@/components/ExecutiveSummaryCard";
 import ComplianceMatrix from "@/components/ComplianceMatrix";
@@ -18,9 +17,7 @@ const LeadSummary = () => {
   const [isCompiling, setIsCompiling] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const { getAgentStatus } = useAgentAssessments(id || '');
-
-  // Agent findings data based on actual agent status
+  // Agent findings data (mock data for summary display)
   const agentFindings = [
     {
       agent: "ISSO-Policy",
@@ -64,11 +61,8 @@ const LeadSummary = () => {
     }
   ] as const;
 
-  // Calculate metrics
-  const completedAgents = agentFindings.filter(agent => 
-    getAgentStatus(agent.agentId).status === 'completed'
-  ).length;
-
+  // Calculate metrics (using static data since agents are deprecated)
+  const completedAgents = agentFindings.length;
   const totalFindings = agentFindings.reduce((sum, agent) => sum + agent.findings, 0);
   const totalCritical = agentFindings.reduce((sum, agent) => sum + agent.criticalIssues, 0);
   const overallRiskLevel = totalCritical > 5 ? "High" : totalCritical > 2 ? "Medium" : "Low";
@@ -197,20 +191,17 @@ This assessment is ready for final ISSM review and approval. All critical findin
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Agent Analysis Results</h2>
                 <div className="space-y-4">
-                  {agentFindings.map((agent) => {
-                    const agentStatus = getAgentStatus(agent.agentId);
-                    return (
-                      <AgentSummaryCard
-                        key={agent.agent}
-                        agentName={agent.agent}
-                        status={agentStatus.status}
-                        findings={agent.findings}
-                        criticalIssues={agent.criticalIssues}
-                        riskLevel={agent.riskLevel as "High" | "Medium" | "Low"}
-                        summary={agent.summary}
-                      />
-                    );
-                  })}
+                  {agentFindings.map((agent) => (
+                    <AgentSummaryCard
+                      key={agent.agent}
+                      agentName={agent.agent}
+                      status="completed"
+                      findings={agent.findings}
+                      criticalIssues={agent.criticalIssues}
+                      riskLevel={agent.riskLevel as "High" | "Medium" | "Low"}
+                      summary={agent.summary}
+                    />
+                  ))}
                 </div>
               </div>
 
