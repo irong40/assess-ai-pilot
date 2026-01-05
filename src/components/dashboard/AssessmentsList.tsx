@@ -11,7 +11,7 @@ interface Assessment {
   systemName: string;
   environment: string;
   scope: string;
-  status: 'not-started' | 'in-progress' | 'completed';
+  status: 'not_started' | 'in_progress' | 'completed' | 'needs_review';
   owner: string;
   lastUpdated: string;
 }
@@ -55,8 +55,8 @@ const AssessmentsList = ({ assessments, onViewAssessment, onNewAssessment }: Ass
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-4">
           <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="not-started">Not Started</TabsTrigger>
-          <TabsTrigger value="in-progress">In Progress</TabsTrigger>
+          <TabsTrigger value="not_started">Not Started</TabsTrigger>
+          <TabsTrigger value="in_progress">In Progress</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
 

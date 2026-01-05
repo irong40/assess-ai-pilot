@@ -152,9 +152,10 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         
         if (!agentStatus.exists) {
           await createAgentAssessment.mutateAsync({
-            agentId,
+            systemName: `Assessment for ${agentId}`,
+            environment: 'production',
+            complianceScope: 'nist-800-53',
             status: 'not_started',
-            progress: 0,
           });
         }
       }
@@ -175,19 +176,11 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
 
         // Update status to in-progress
         await updateAgentAssessment.mutateAsync({
-          agentId,
           status: 'in_progress',
-          progress: 25,
         });
 
         // Simulate progress during analysis
         await new Promise(resolve => setTimeout(resolve, 800));
-        
-        await updateAgentAssessment.mutateAsync({
-          agentId,
-          status: 'in_progress',
-          progress: 50,
-        });
 
         // Run actual analysis with realistic context
         const analysisResult = await analyzeAgent(
@@ -198,12 +191,9 @@ const QuickAssessmentButton = ({ assessmentId, agentIds, onComplete }: QuickAsse
         
         analysisResults.push(analysisResult);
 
-        // Update agent status to completed with analysis result
+        // Update agent status to completed
         await updateAgentAssessment.mutateAsync({
-          agentId,
           status: 'completed',
-          progress: 100,
-          analysisResult
         });
       }
 

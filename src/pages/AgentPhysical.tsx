@@ -45,9 +45,7 @@ const AgentPhysical = () => {
     try {
       // Update status to in-progress
       await updateAgentAssessment.mutateAsync({
-        agentId: 'physical',
-        status: 'in-progress',
-        progress: 50,
+        status: 'in_progress',
       });
 
       // Perform analysis - convert UploadedFile[] to File[] format expected by analyzeAgent
@@ -56,10 +54,7 @@ const AgentPhysical = () => {
       
       // Update with completed status and results
       await updateAgentAssessment.mutateAsync({
-        agentId: 'physical',
         status: 'completed',
-        progress: 100,
-        analysisResult: analysisResult,
       });
 
       setAnalysis(analysisResult);
@@ -77,9 +72,7 @@ const AgentPhysical = () => {
       
       // Reset status on error
       await updateAgentAssessment.mutateAsync({
-        agentId: 'physical',
-        status: 'not-started',
-        progress: 0,
+        status: 'not_started',
       });
     } finally {
       setIsAnalyzing(false);
