@@ -25,24 +25,21 @@ const Header = () => {
               <h1 className="text-xl font-bold text-foreground">Sentinel AI</h1>
             </div>
             
-            <nav className="hidden md:flex items-center space-x-6 ml-8">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/dashboard")}
-              >
+            <nav className="hidden md:flex items-center space-x-4 ml-8">
+              <Button variant="ghost" onClick={() => navigate("/dashboard")}>
                 Dashboard
               </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/new-assessment")}
-              >
+              <Button variant="ghost" onClick={() => navigate("/new-assessment")}>
                 New Assessment
               </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/feedback")}
-              >
-                Feedback
+              <Button variant="ghost" onClick={() => navigate("/compliance/rag")}>
+                Knowledge AI
+              </Button>
+              <Button variant="ghost" onClick={() => navigate("/compliance/poam")}>
+                POA&M
+              </Button>
+              <Button variant="ghost" onClick={() => navigate("/compliance/audit")}>
+                Audit Log
               </Button>
             </nav>
           </div>
