@@ -65,6 +65,59 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          action: string
+          ai_reasoning: string | null
+          company_id: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: unknown
+          resource_id: string | null
+          resource_name: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          ai_reasoning?: string | null
+          company_id: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_name?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          ai_reasoning?: string | null
+          company_id?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          resource_id?: string | null
+          resource_name?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           created_at: string
@@ -133,6 +186,59 @@ export type Database = {
           },
           {
             foreignKeyName: "compliance_metrics_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_embeddings: {
+        Row: {
+          chunk_index: number
+          chunk_text: string
+          company_id: string
+          created_at: string | null
+          document_id: string
+          document_name: string
+          document_type: string
+          embedding: string | null
+          id: string
+          metadata: Json | null
+          token_count: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          chunk_index: number
+          chunk_text: string
+          company_id: string
+          created_at?: string | null
+          document_id: string
+          document_name: string
+          document_type: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          token_count?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          chunk_index?: number
+          chunk_text?: string
+          company_id?: string
+          created_at?: string | null
+          document_id?: string
+          document_name?: string
+          document_type?: string
+          embedding?: string | null
+          id?: string
+          metadata?: Json | null
+          token_count?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_embeddings_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -288,46 +394,76 @@ export type Database = {
       }
       poam_entries: {
         Row: {
+          actual_completion_date: string | null
           ai_confidence_score: number | null
+          ai_generated: boolean | null
+          ai_reasoning: string | null
           assessment_id: string | null
           assigned_to: string | null
-          auto_generated: boolean | null
           company_id: string
           control_id: string
           created_at: string
+          created_by: string | null
+          estimated_cost: string | null
+          finding_id: string | null
           id: string
+          milestones: Json | null
           planned_completion_date: string
+          remediation_plan: string | null
+          resources_required: string | null
+          responsible_party: string | null
           risk_level: Database["public"]["Enums"]["risk_level"]
+          scheduled_completion_date: string | null
           status: string
           updated_at: string
           weakness_description: string
         }
         Insert: {
+          actual_completion_date?: string | null
           ai_confidence_score?: number | null
+          ai_generated?: boolean | null
+          ai_reasoning?: string | null
           assessment_id?: string | null
           assigned_to?: string | null
-          auto_generated?: boolean | null
           company_id: string
           control_id: string
           created_at?: string
+          created_by?: string | null
+          estimated_cost?: string | null
+          finding_id?: string | null
           id?: string
+          milestones?: Json | null
           planned_completion_date: string
+          remediation_plan?: string | null
+          resources_required?: string | null
+          responsible_party?: string | null
           risk_level: Database["public"]["Enums"]["risk_level"]
+          scheduled_completion_date?: string | null
           status?: string
           updated_at?: string
           weakness_description: string
         }
         Update: {
+          actual_completion_date?: string | null
           ai_confidence_score?: number | null
+          ai_generated?: boolean | null
+          ai_reasoning?: string | null
           assessment_id?: string | null
           assigned_to?: string | null
-          auto_generated?: boolean | null
           company_id?: string
           control_id?: string
           created_at?: string
+          created_by?: string | null
+          estimated_cost?: string | null
+          finding_id?: string | null
           id?: string
+          milestones?: Json | null
           planned_completion_date?: string
+          remediation_plan?: string | null
+          resources_required?: string | null
+          responsible_party?: string | null
           risk_level?: Database["public"]["Enums"]["risk_level"]
+          scheduled_completion_date?: string | null
           status?: string
           updated_at?: string
           weakness_description?: string
@@ -396,6 +532,125 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rag_queries: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          feedback_rating: number | null
+          feedback_text: string | null
+          id: string
+          latency_ms: number | null
+          llm_model: string | null
+          llm_response: string | null
+          query_embedding: string | null
+          query_text: string
+          retrieved_chunks: string[] | null
+          token_usage: Json | null
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          feedback_rating?: number | null
+          feedback_text?: string | null
+          id?: string
+          latency_ms?: number | null
+          llm_model?: string | null
+          llm_response?: string | null
+          query_embedding?: string | null
+          query_text: string
+          retrieved_chunks?: string[] | null
+          token_usage?: Json | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          feedback_rating?: number | null
+          feedback_text?: string | null
+          id?: string
+          latency_ms?: number | null
+          llm_model?: string | null
+          llm_response?: string | null
+          query_embedding?: string | null
+          query_text?: string
+          retrieved_chunks?: string[] | null
+          token_usage?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rag_queries_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      threat_intelligence: {
+        Row: {
+          created_at: string | null
+          cvss_score: number | null
+          cvss_vector: string | null
+          cwe_id: string | null
+          description: string | null
+          external_id: string
+          id: string
+          is_exploited: boolean | null
+          last_modified: string | null
+          patch_available: boolean | null
+          priority_score: number | null
+          published_date: string | null
+          reference_urls: Json | null
+          severity: string | null
+          source: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cvss_score?: number | null
+          cvss_vector?: string | null
+          cwe_id?: string | null
+          description?: string | null
+          external_id: string
+          id?: string
+          is_exploited?: boolean | null
+          last_modified?: string | null
+          patch_available?: boolean | null
+          priority_score?: number | null
+          published_date?: string | null
+          reference_urls?: Json | null
+          severity?: string | null
+          source?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cvss_score?: number | null
+          cvss_vector?: string | null
+          cwe_id?: string | null
+          description?: string | null
+          external_id?: string
+          id?: string
+          is_exploited?: boolean | null
+          last_modified?: string | null
+          patch_available?: boolean | null
+          priority_score?: number | null
+          published_date?: string | null
+          reference_urls?: Json | null
+          severity?: string | null
+          source?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       workflow_executions: {
         Row: {
@@ -510,6 +765,36 @@ export type Database = {
       get_user_company_role: {
         Args: { user_id: string }
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      log_audit_event: {
+        Args: {
+          p_action: string
+          p_ai_reasoning?: string
+          p_company_id: string
+          p_details?: Json
+          p_resource_id?: string
+          p_resource_name?: string
+          p_resource_type: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      match_documents: {
+        Args: {
+          match_company_id: string
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          chunk_index: number
+          chunk_text: string
+          document_id: string
+          document_name: string
+          document_type: string
+          id: string
+          similarity: number
+        }[]
       }
     }
     Enums: {

@@ -11,6 +11,10 @@ import LeadSummary from "@/pages/LeadSummary";
 import ISSMReview from "@/pages/ISSMReview";
 import Feedback from "@/pages/Feedback";
 import Admin from "@/pages/Admin";
+import RAGChatInterface from "@/components/rag/RAGChatInterface";
+import POAMManager from "@/components/poam/POAMManager";
+import AuditLogViewer from "@/components/audit/AuditLogViewer";
+
 const ProtectedRoutes = () => (
   <>
     <Route
@@ -93,6 +97,36 @@ const ProtectedRoutes = () => (
         <ProtectedRoute>
           <NDAGate>
             <Feedback />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/compliance/rag"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <RAGChatInterface />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/compliance/poam"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <POAMManager />
+          </NDAGate>
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/compliance/audit"
+      element={
+        <ProtectedRoute>
+          <NDAGate>
+            <AuditLogViewer />
           </NDAGate>
         </ProtectedRoute>
       }
