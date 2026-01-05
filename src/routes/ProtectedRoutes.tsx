@@ -4,7 +4,6 @@ import RoleBasedRoute from "@/components/RoleBasedRoute";
 import NDAGate from "@/components/NDAGate";
 import Dashboard from "@/pages/Dashboard";
 import NewAssessment from "@/pages/NewAssessment";
-import AgentHub from "@/pages/AgentHub";
 import ReportBuilder from "@/pages/ReportBuilder";
 import LeadSummary from "@/pages/LeadSummary";
 import ISSMReview from "@/pages/ISSMReview";
@@ -46,16 +45,6 @@ const ProtectedRoutes = () => (
         <ProtectedRoute>
           <NDAGate>
             <NewAssessment />
-          </NDAGate>
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/assessment/:id/agents"
-      element={
-        <ProtectedRoute>
-          <NDAGate>
-            <AgentHub />
           </NDAGate>
         </ProtectedRoute>
       }
