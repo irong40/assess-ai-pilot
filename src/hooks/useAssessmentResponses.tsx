@@ -4,10 +4,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import type {
   AssessmentResponse,
-  AssessmentResponseInsert,
-  AssessmentResponseUpdate,
   SecurityDomainId,
 } from "@/types/questionnaire";
+import { syncFindingWithResponse } from "@/services/findingsGenerator";
 
 /**
  * Fetch all responses for an assessment
@@ -89,7 +88,7 @@ export const useResponseMutations = (assessmentId: string) => {
     return profile.company_id;
   };
 
-  // Create or update a response (upsert)
+  // Create or update a response (upsert) and sync findings
   const saveResponse = useMutation({
     mutationFn: async ({
       questionId,
@@ -113,6 +112,8 @@ export const useResponseMutations = (assessmentId: string) => {
         .eq('question_id', questionId)
         .single();
 
+      let responseData;
+
       if (existing) {
         // Update existing response
         const { data, error } = await supabase
@@ -129,7 +130,7 @@ export const useResponseMutations = (assessmentId: string) => {
           .single();
 
         if (error) throw error;
-        return data;
+        responseData = data;
       } else {
         // Insert new response
         const { data, error } = await supabase
@@ -147,14 +148,29 @@ export const useResponseMutations = (assessmentId: string) => {
           .single();
 
         if (error) throw error;
-        return data;
+        responseData = data;
       }
+
+      // Auto-generate or remove finding based on response
+      await syncFindingWithResponse(
+        {
+          assessmentId,
+          questionId,
+          responseId: responseData.id,
+          responseValue,
+          companyId,
+        },
+        createsFinding
+      );
+
+      return responseData;
     },
     onSuccess: () => {
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: ['assessment-responses', assessmentId] });
       queryClient.invalidateQueries({ queryKey: ['questions-with-responses', assessmentId] });
       queryClient.invalidateQueries({ queryKey: ['wizard-progress', assessmentId] });
+      queryClient.invalidateQueries({ queryKey: ['assessment-findings', assessmentId] });
     },
     onError: (error: Error) => {
       toast({
