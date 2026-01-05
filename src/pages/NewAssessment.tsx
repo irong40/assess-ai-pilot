@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, FileText } from "lucide-react";
-import Header from "@/components/Header";
+import { Shield, FileText } from "lucide-react";
+import { AppLayout } from "@/components/layout/AppLayout";
 import FileUpload, { UploadedFile } from "@/components/FileUpload";
 import DaapmPositionsSelect from "@/components/DaapmPositionsSelect";
 import { useNavigate } from "react-router-dom";
@@ -75,27 +74,14 @@ const NewAssessment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-8">
+    <AppLayout>
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center space-x-4 mb-8">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/dashboard")}
-              className="text-slate-600 hover:text-slate-900"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </div>
-
           <div className="flex items-center space-x-3 mb-8">
-            <Shield className="h-8 w-8 text-blue-600" />
+            <Shield className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">Create New Assessment</h1>
-              <p className="text-slate-600">Set up a comprehensive cybersecurity assessment for your system</p>
+              <h1 className="text-3xl font-bold text-foreground">Create New Assessment</h1>
+              <p className="text-muted-foreground">Set up a comprehensive cybersecurity assessment for your system</p>
             </div>
           </div>
 
@@ -103,7 +89,7 @@ const NewAssessment = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
+                  <FileText className="h-5 w-5 text-primary" />
                   <span>System Information</span>
                 </CardTitle>
               </CardHeader>
@@ -260,7 +246,7 @@ const NewAssessment = () => {
               
               <Button 
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                className="px-8"
                 size="lg"
                 disabled={isSubmitting}
               >
@@ -269,8 +255,8 @@ const NewAssessment = () => {
             </div>
           </form>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

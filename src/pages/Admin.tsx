@@ -1,6 +1,6 @@
-
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { AppLayout } from "@/components/layout/AppLayout";
 import UserManagement from "@/components/admin/UserManagement";
 import Loading from "@/components/Loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,23 +19,20 @@ const Admin = () => {
   }
 
   const userRole = profile?.role || 'viewer';
-  console.log('🔐 Admin page - user profile:', profile);
-  console.log('🔐 Admin page - user role:', userRole);
   const isAdmin = userRole === 'admin';
-  console.log('🔐 Admin page - isAdmin:', isAdmin);
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 p-3 bg-red-100 rounded-full w-fit">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+            <div className="mx-auto mb-4 p-3 bg-destructive/10 rounded-full w-fit">
+              <AlertTriangle className="h-6 w-6 text-destructive" />
             </div>
-            <CardTitle className="text-red-900">Access Denied</CardTitle>
+            <CardTitle className="text-destructive">Access Denied</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-gray-600 text-sm">
+            <p className="text-muted-foreground text-sm">
               You need administrator privileges to access this page.
             </p>
           </CardContent>
@@ -45,11 +42,11 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <UserManagement />
       </div>
-    </div>
+    </AppLayout>
   );
 };
 

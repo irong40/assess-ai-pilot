@@ -4,15 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle } from "lucide-react";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { QuestionCard } from "@/components/wizard/QuestionCard";
 import { DomainProgress } from "@/components/wizard/DomainProgress";
 import { ScoreDisplay } from "@/components/wizard/ScoreDisplay";
-import { WizardHeader } from "@/components/wizard/WizardHeader";
 import { useAssessmentWizard, useWizardProgress, useWizardMutations } from "@/hooks/useWizardProgress";
 import { useQuestionsWithResponses } from "@/hooks/useAssessmentQuestions";
 import { useResponseMutations } from "@/hooks/useAssessmentResponses";
 import { SECURITY_DOMAINS, type SecurityDomainId } from "@/types/questionnaire";
-import { cn } from "@/lib/utils";
 
 export default function SelfAssessmentWizard() {
   const { id: assessmentId, domainId } = useParams<{ id: string; domainId: string }>();
@@ -107,10 +106,7 @@ export default function SelfAssessmentWizard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="border-b p-4">
-          <Skeleton className="h-10 w-64" />
-        </div>
+      <AppLayout>
         <div className="container py-8">
           <div className="flex gap-8">
             <Skeleton className="hidden lg:block w-64 h-96" />
@@ -121,42 +117,35 @@ export default function SelfAssessmentWizard() {
             </div>
           </div>
         </div>
-      </div>
+      </AppLayout>
     );
   }
 
   if (!assessment || !currentDomain) {
     return (
-      <div className="container py-8">
-        <Card>
-          <CardContent className="py-12 text-center">
-            <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h2 className="text-lg font-semibold mb-2">Invalid Assessment or Domain</h2>
-            <Button onClick={() => navigate("/dashboard")}>
-              Return to Dashboard
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <AppLayout>
+        <div className="container py-8">
+          <Card>
+            <CardContent className="py-12 text-center">
+              <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h2 className="text-lg font-semibold mb-2">Invalid Assessment or Domain</h2>
+              <Button onClick={() => navigate("/dashboard")}>
+                Return to Dashboard
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <WizardHeader
-        assessmentId={assessmentId!}
-        systemName={assessment.system_name}
-        currentDomain={currentDomain}
-        progress={progress}
-        onComplete={handleCompleteAssessment}
-        isSaving={isSaving}
-      />
-
+    <AppLayout>
       <div className="container py-6">
         <div className="flex gap-8">
           {/* Sidebar - Domain Navigation */}
           <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-20 space-y-6">
               <DomainProgress
                 progress={progress?.domains || []}
                 currentDomain={currentDomain}
@@ -238,6 +227,6 @@ export default function SelfAssessmentWizard() {
           </main>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
