@@ -4,7 +4,7 @@ import { Upload, Library, Database, Loader2 } from "lucide-react";
 import { DocumentUpload } from "@/components/documents/DocumentUpload";
 import { DocumentLibrary } from "@/components/documents/DocumentLibrary";
 import { ATOReadinessCard } from "@/components/compliance/ATOReadinessCard";
-import Header from "@/components/Header";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,9 +38,8 @@ const DocumentManagement: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-8">
+    <AppLayout>
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Document Management</h1>
           <p className="text-muted-foreground mt-2">
@@ -112,8 +111,8 @@ const DocumentManagement: React.FC = () => {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

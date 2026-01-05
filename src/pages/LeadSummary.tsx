@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, Bot, CheckCircle, FileText, Download } from "lucide-react";
-import Header from "@/components/Header";
+import { Shield, Bot, CheckCircle, FileText, Download } from "lucide-react";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import AgentSummaryCard from "@/components/AgentSummaryCard";
@@ -146,29 +145,16 @@ This assessment is ready for final ISSM review and approval. All critical findin
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-8">
+    <AppLayout>
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center space-x-4 mb-8">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate(`/assessment/${id}/agents`)}
-              className="text-slate-600 hover:text-slate-900"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Agent Hub
-            </Button>
-          </div>
-
           <div className="flex items-center space-x-3 mb-8">
             <div className="p-3 bg-purple-50 rounded-lg">
               <Shield className="h-8 w-8 text-purple-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">Assessment Summary & Analysis</h1>
-              <p className="text-slate-600">Comprehensive security assessment results and recommendations</p>
+              <h1 className="text-3xl font-bold text-foreground">Assessment Summary & Analysis</h1>
+              <p className="text-muted-foreground">Comprehensive security assessment results and recommendations</p>
             </div>
             {isComplete && <CheckCircle className="h-8 w-8 text-green-600" />}
           </div>
@@ -189,7 +175,7 @@ This assessment is ready for final ISSM review and approval. All critical findin
             {/* Agent Results */}
             <div className="lg:col-span-2 space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">Agent Analysis Results</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-6">Agent Analysis Results</h2>
                 <div className="space-y-4">
                   {agentFindings.map((agent) => (
                     <AgentSummaryCard
@@ -220,7 +206,7 @@ This assessment is ready for final ISSM review and approval. All critical findin
                   <CardTitle>Generate Final Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="text-sm text-slate-600 mb-4">
+                  <div className="text-sm text-muted-foreground mb-4">
                     Compile comprehensive analysis from all completed agents for ISSM review.
                   </div>
                   
@@ -307,14 +293,14 @@ This assessment is ready for final ISSM review and approval. All critical findin
               </CardHeader>
               <CardContent>
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap text-sm bg-slate-50 p-4 rounded-lg border">{summary}</pre>
+                  <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-lg border">{summary}</pre>
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

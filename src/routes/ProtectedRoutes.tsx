@@ -9,9 +9,9 @@ import LeadSummary from "@/pages/LeadSummary";
 import ISSMReview from "@/pages/ISSMReview";
 import Feedback from "@/pages/Feedback";
 import Admin from "@/pages/Admin";
-import RAGChatInterface from "@/components/rag/RAGChatInterface";
-import POAMManager from "@/components/poam/POAMManager";
-import AuditLogViewer from "@/components/audit/AuditLogViewer";
+import KnowledgeAI from "@/pages/KnowledgeAI";
+import POAMManagement from "@/pages/POAMManagement";
+import AuditLog from "@/pages/AuditLog";
 import DocumentManagement from "@/pages/DocumentManagement";
 import WizardHub from "@/pages/WizardHub";
 import SelfAssessmentWizard from "@/pages/SelfAssessmentWizard";
@@ -128,7 +128,7 @@ const ProtectedRoutes = () => (
       element={
         <ProtectedRoute>
           <NDAGate>
-            <RAGChatInterface />
+            <KnowledgeAI />
           </NDAGate>
         </ProtectedRoute>
       }
@@ -138,7 +138,7 @@ const ProtectedRoutes = () => (
       element={
         <ProtectedRoute>
           <NDAGate>
-            <POAMManager />
+            <POAMManagement />
           </NDAGate>
         </ProtectedRoute>
       }
@@ -148,7 +148,7 @@ const ProtectedRoutes = () => (
       element={
         <ProtectedRoute>
           <NDAGate>
-            <AuditLogViewer />
+            <AuditLog />
           </NDAGate>
         </ProtectedRoute>
       }

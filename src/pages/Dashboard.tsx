@@ -1,6 +1,5 @@
-
 import { useNavigate } from "react-router-dom";
-import Header from "@/components/Header";
+import { AppLayout } from "@/components/layout/AppLayout";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import AnalyticsCards from "@/components/dashboard/AnalyticsCards";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
@@ -39,19 +38,16 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="container mx-auto px-4 py-8">
+      <AppLayout>
+        <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading assessments...</div>
-        </main>
-      </div>
+        </div>
+      </AppLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
+    <AppLayout>
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="space-y-6">
           <DashboardHeader />
@@ -97,7 +93,7 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 };
 
