@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.fetch-cve-feed]
 verify_jwt = false
+
+[functions.seed-knowledge-base]
+verify_jwt = true
