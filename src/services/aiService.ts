@@ -28,10 +28,12 @@ export interface RAGQueryResponse {
   error?: string;
 }
 
+import type { RMFDocumentType } from "@/types/documentTypes";
+
 export interface EmbedDocumentRequest {
   documentId: string;
   documentName: string;
-  documentType: "policy" | "assessment" | "finding" | "threat_intel" | "framework" | "other";
+  documentType: RMFDocumentType;
   content: string;
   metadata?: Record<string, unknown>;
 }
