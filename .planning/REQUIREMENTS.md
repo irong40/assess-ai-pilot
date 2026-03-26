@@ -23,7 +23,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Agent Infrastructure
 
 - [ ] **INFRA-01**: Agent state management via PostgreSQL tables (status, assignments, history)
-- [ ] **INFRA-02**: Agent message bus via Supabase Realtime Broadcast channels
+- [ ] **INFRA-02**: Agent message bus via pgmq (PostgreSQL Message Queue) with pg_cron-scheduled Edge Function worker
 - [ ] **INFRA-03**: Agent execution engine using Supabase Edge Functions with Vercel AI SDK
 - [ ] **INFRA-04**: Async task chain architecture (single-step Edge Function invocations with state persistence)
 - [ ] **INFRA-05**: Human approval gate system with tiered trust levels (auto-approve low risk, require approval for high risk)
@@ -226,7 +226,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ONBD-04 | Phase 4: Onboarding and Access | Pending |
 | DATA-01 | Phase 1: Foundation | Pending |
 | DATA-02 | Phase 1: Foundation | Pending |
-| DATA-03 | Phase 1: Foundation | Pending |
+| DATA-03 | Phase 2: Core Agents | Pending |
 
 **Coverage:**
 - v1 requirements: 65 total

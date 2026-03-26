@@ -24,7 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### Phase 1: Foundation
 **Goal**: The platform has seeded CMMC control data (NIST 800-171r2), a working agent runtime with message bus and approval gates, and a CUI-free data architecture -- so that agents can be built on a solid, multi-tenant, auditable foundation.
 **Depends on**: Nothing (first phase)
-**Requirements**: CMMC-01, CMMC-02, CMMC-03, CMMC-04, INFRA-01, INFRA-02, INFRA-03, INFRA-04, INFRA-05, INFRA-06, INFRA-07, INFRA-08, DATA-01, DATA-02, DATA-03
+**Requirements**: CMMC-01, CMMC-02, CMMC-03, CMMC-04, INFRA-01, INFRA-02, INFRA-03, INFRA-04, INFRA-05, INFRA-06, INFRA-07, INFRA-08, DATA-01, DATA-02
 **Success Criteria** (what must be TRUE):
   1. User can browse all 17 CMMC Level 1 practices and all 110 CMMC Level 2 practices mapped from NIST 800-171 Rev 2
   2. User can calculate their SPRS score from assessment responses against CMMC controls
@@ -41,7 +41,7 @@ Plans:
 ### Phase 2: Core Agents
 **Goal**: The GRC Analyst and CISO Orchestrator agents are operational -- the GRC agent performs compliance gap analysis and generates remediation recommendations, while the CISO Orchestrator delegates tasks, maintains risk posture, and produces executive summaries. This is the minimum viable "AI security team."
 **Depends on**: Phase 1
-**Requirements**: CISO-01, CISO-02, CISO-03, CISO-04, CISO-05, GRC-01, GRC-02, GRC-03, GRC-04, GRC-05, CMMC-05
+**Requirements**: CISO-01, CISO-02, CISO-03, CISO-04, CISO-05, GRC-01, GRC-02, GRC-03, GRC-04, GRC-05, CMMC-05, DATA-03
 **Success Criteria** (what must be TRUE):
   1. GRC agent auto-assesses uploaded documents against CMMC L1/L2 controls and produces a gap analysis report with multi-option remediation recommendations ranked by cost and effort
   2. CISO Orchestrator agent delegates tasks to the GRC agent, escalates high-risk findings for human approval, and generates an executive summary from agent outputs
