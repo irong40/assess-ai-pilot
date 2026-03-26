@@ -1,0 +1,128 @@
+/**
+ * CISO Orchestrator system prompt, tool definitions, and prompt builder.
+ *
+ * Node/vitest-compatible version. The Deno Edge Function counterpart at
+ * supabase/functions/_shared/ciso-tools.ts mirrors these constants and
+ * additionally provides the runtime tool implementations that interact
+ * with Supabase.
+ *
+ * Exports used by tests:
+ * - CISO_SYSTEM_PROMPT: The system prompt for the CISO Orchestrator
+ * - CISO_TOOL_NAMES: Array of tool names the CISO has access to
+ * - buildCisoPrompt: Constructs action-specific user prompts
+ */
+
+// --------------------------------------------------------------------------
+// CISO System Prompt
+// --------------------------------------------------------------------------
+export const CISO_SYSTEM_PROMPT = `You are the CISO Orchestrator for the ASSESS-AI CMMC compliance platform.
+
+## Role
+You receive high-level compliance requests, break them into scoped tasks, delegate to specialist agents (primarily the GRC Analyst), and synthesize their results into executive-level summaries.
+
+## Critical Rule
+You NEVER perform detailed compliance analysis directly. All analysis work is delegated to the GRC Analyst or other specialist agents via the delegateToGRC tool.
+
+## Priority Ordering
+When planning delegation tasks, follow this strict priority queue:
+1. Critical controls (highest priority, always first):
+   - MFA (3.5.3) - Multi-factor authentication
+   - FIPS encryption (3.13.11) - Cryptographic protection of CUI
+   - Incident response (3.6.1, 3.6.2) - IR plan and reporting
+   - Audit logging (3.3.1, 3.3.2) - System audit and accountability
+   - System Security Plan (SSP) - Foundational documentation
+2. High-SPRS-weight controls (5-point controls) - highest score impact
+3. Controls with existing findings - remediation tracking
+4. User-requested assessments before scheduled assessments
+
+## Delegation Rules
+- Use the delegateToGRC tool to assign work to the GRC Analyst
+- Scope each delegation by control family or specific control IDs
+- Include the CMMC level and company context in every delegation
+- Track your delegation plan in the task output
+
+## Escalation Rules
+- Set risk_level to 'high' for findings involving critical controls listed above
+- Set risk_level to 'high' for systemic failures (multiple controls in same family failing)
+- The existing approval gate system will block high-risk tasks for human review
+- Medium and low risk findings proceed automatically
+
+## Synthesis Behavior
+- When reading completed subtask results, look for patterns across control families
+- Generate an executive summary that a non-technical CISO can act on
+- Always include SPRS score impact and trend direction
+- Prioritize recommendations by risk reduction value
+`;
+
+// --------------------------------------------------------------------------
+// Tool Names
+// --------------------------------------------------------------------------
+export const CISO_TOOL_NAMES = [
+  'delegateToGRC',
+  'readCompletedTaskResults',
+  'getCurrentRiskPosture',
+  'createFollowUpTask',
+] as const;
+
+// --------------------------------------------------------------------------
+// Prompt Builder
+// --------------------------------------------------------------------------
+
+/**
+ * Builds action-specific user prompts for the CISO Orchestrator.
+ *
+ * @param action - The CISO action to perform
+ * @param input - Input parameters for the action
+ * @returns Formatted prompt string
+ */
+export function buildCisoPrompt(
+  action: string,
+  input: Record<string, unknown>
+): string {
+  switch (action) {
+    case 'run-compliance-assessment':
+      return (
+        `Run a compliance assessment for company. ` +
+        `Assessment ID: ${input.assessment_id ?? 'not specified'}. ` +
+        `CMMC Level: ${input.cmmc_level ?? 2}. ` +
+        (input.control_family
+          ? `Focus on control family: ${input.control_family}. `
+          : 'Assess all control families. ') +
+        `Plan your delegation strategy, prioritize critical controls, delegate gap analyses to the GRC Analyst, ` +
+        `and create a follow-up task to synthesize results once all delegations complete.`
+      );
+
+    case 'synthesize-results':
+      return (
+        `Synthesize the results from completed subtasks. ` +
+        `Read all completed task outputs using the readCompletedTaskResults tool. ` +
+        `Identify patterns across control families, calculate overall compliance posture, ` +
+        `and generate an executive summary with prioritized recommendations.`
+      );
+
+    case 'generate-executive-summary':
+      return (
+        `Generate an executive summary of the current compliance state. ` +
+        `Use getCurrentRiskPosture to get the latest compliance snapshot, ` +
+        `then read any recent completed assessments. ` +
+        `Produce a summary suitable for a non-technical CISO covering: ` +
+        `overall posture, critical gaps, SPRS score trend, and prioritized next steps.`
+      );
+
+    case 'assess-risk-posture':
+      return (
+        `Assess the current risk posture for the company. ` +
+        `Use getCurrentRiskPosture to retrieve the latest compliance snapshot. ` +
+        `Analyze domain-level risks, identify the top findings by SPRS weight impact, ` +
+        `determine the overall trend (improving/stable/declining), ` +
+        `and flag any domains requiring immediate attention.`
+      );
+
+    default:
+      return (
+        `Execute CISO action: ${action}. ` +
+        `Input: ${JSON.stringify(input)}. ` +
+        `Determine the appropriate delegation strategy and proceed.`
+      );
+  }
+}
