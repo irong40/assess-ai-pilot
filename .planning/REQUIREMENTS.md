@@ -162,13 +162,77 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmapper) | | |
+| CMMC-01 | Phase 1: Foundation | Pending |
+| CMMC-02 | Phase 1: Foundation | Pending |
+| CMMC-03 | Phase 1: Foundation | Pending |
+| CMMC-04 | Phase 1: Foundation | Pending |
+| CMMC-05 | Phase 2: Core Agents | Pending |
+| CMMC-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| CMMC-07 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| CMMC-08 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| CMMC-09 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| CMMC-10 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| INFRA-01 | Phase 1: Foundation | Pending |
+| INFRA-02 | Phase 1: Foundation | Pending |
+| INFRA-03 | Phase 1: Foundation | Pending |
+| INFRA-04 | Phase 1: Foundation | Pending |
+| INFRA-05 | Phase 1: Foundation | Pending |
+| INFRA-06 | Phase 1: Foundation | Pending |
+| INFRA-07 | Phase 1: Foundation | Pending |
+| INFRA-08 | Phase 1: Foundation | Pending |
+| CISO-01 | Phase 2: Core Agents | Pending |
+| CISO-02 | Phase 2: Core Agents | Pending |
+| CISO-03 | Phase 2: Core Agents | Pending |
+| CISO-04 | Phase 2: Core Agents | Pending |
+| CISO-05 | Phase 2: Core Agents | Pending |
+| GRC-01 | Phase 2: Core Agents | Pending |
+| GRC-02 | Phase 2: Core Agents | Pending |
+| GRC-03 | Phase 2: Core Agents | Pending |
+| GRC-04 | Phase 2: Core Agents | Pending |
+| GRC-05 | Phase 2: Core Agents | Pending |
+| SOC-01 | Phase 5: Security Operations Agents | Pending |
+| SOC-02 | Phase 5: Security Operations Agents | Pending |
+| SOC-03 | Phase 5: Security Operations Agents | Pending |
+| SOC-04 | Phase 5: Security Operations Agents | Pending |
+| THRT-01 | Phase 5: Security Operations Agents | Pending |
+| THRT-02 | Phase 5: Security Operations Agents | Pending |
+| THRT-03 | Phase 5: Security Operations Agents | Pending |
+| THRT-04 | Phase 5: Security Operations Agents | Pending |
+| IR-01 | Phase 6: Advanced Agents | Pending |
+| IR-02 | Phase 6: Advanced Agents | Pending |
+| IR-03 | Phase 6: Advanced Agents | Pending |
+| IR-04 | Phase 6: Advanced Agents | Pending |
+| ASEC-01 | Phase 6: Advanced Agents | Pending |
+| ASEC-02 | Phase 6: Advanced Agents | Pending |
+| ASEC-03 | Phase 6: Advanced Agents | Pending |
+| ASEC-04 | Phase 6: Advanced Agents | Pending |
+| PENT-01 | Phase 6: Advanced Agents | Pending |
+| PENT-02 | Phase 6: Advanced Agents | Pending |
+| PENT-03 | Phase 6: Advanced Agents | Pending |
+| PENT-04 | Phase 6: Advanced Agents | Pending |
+| DASH-01 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| DASH-02 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| DASH-03 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| DASH-04 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-01 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-02 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-03 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-04 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-05 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| ONBD-01 | Phase 4: Onboarding and Access | Pending |
+| ONBD-02 | Phase 4: Onboarding and Access | Pending |
+| ONBD-03 | Phase 4: Onboarding and Access | Pending |
+| ONBD-04 | Phase 4: Onboarding and Access | Pending |
+| DATA-01 | Phase 1: Foundation | Pending |
+| DATA-02 | Phase 1: Foundation | Pending |
+| DATA-03 | Phase 1: Foundation | Pending |
 
 **Coverage:**
-- v1 requirements: 53 total
-- Mapped to phases: 0
-- Unmapped: 53
+- v1 requirements: 65 total
+- Mapped to phases: 65
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-26*
-*Last updated: 2026-03-26 after initial definition*
+*Last updated: 2026-03-26 after roadmap creation (traceability populated, count corrected from 53 to 65)*
