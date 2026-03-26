@@ -13,7 +13,7 @@ ASSESS-AI delivers an AI-powered security operations platform for small defense 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - CMMC control data, agent runtime infrastructure, and CUI-free data architecture
-- [ ] **Phase 2: Core Agents** - GRC Analyst and CISO Orchestrator deliver the minimum viable AI security team
+- [x] **Phase 2: Core Agents** - GRC Analyst and CISO Orchestrator deliver the minimum viable AI security team
 - [ ] **Phase 3: Dashboards and Compliance Outputs** - Agent dashboard, compliance reporting, evidence management, and audit-ready exports
 - [ ] **Phase 4: Onboarding and Access** - New customer sign-up, guided onboarding, and agent-aware permissions
 - [ ] **Phase 5: Security Operations Agents** - SOC Analyst and Threat Intelligence agents add continuous monitoring
@@ -53,7 +53,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md -- GRC Analyst agent (Zod schemas, domain tools, Edge Function, gap analysis tables, compliance tracking)
 - [x] 02-02-PLAN.md -- CISO Orchestrator agent (delegation tools, executive summaries, frontend hooks, agent service)
-- [ ] 02-03-PLAN.md -- Replace mock AIRiskAnalysisService with agent-driven analysis (DATA-03 closure)
+- [x] 02-03-PLAN.md -- Replace mock AIRiskAnalysisService with agent-driven analysis (DATA-03 closure)
 
 ### Phase 3: Dashboards and Compliance Outputs
 **Goal**: Users can see what their AI security team is doing (agent dashboard), view their compliance posture (compliance dashboard), manage evidence, and export audit-ready documents -- closing the loop between agent analysis and user-consumable outputs.
@@ -126,7 +126,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-26 |
-| 2. Core Agents | 2/3 | In progress | - |
+| 2. Core Agents | 3/3 | Complete | 2026-03-26 |
 | 3. Dashboards and Compliance Outputs | 0/3 | Not started | - |
 | 4. Onboarding and Access | 0/2 | Not started | - |
 | 5. Security Operations Agents | 0/2 | Not started | - |

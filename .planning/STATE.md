@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 02-01-PLAN.md (GRC Analyst agent with schemas, tools, Edge Function, and compliance tracking)
-last_updated: "2026-03-26T20:39:01Z"
-last_activity: 2026-03-26 -- Completed 02-01-PLAN.md (GRC Analyst agent)
+stopped_at: Completed 02-03-PLAN.md (Mock service migration -- AIInsightsDashboard wired to agent-driven analysis)
+last_updated: "2026-03-26T20:46:01Z"
+last_activity: 2026-03-26 -- Completed 02-03-PLAN.md (Mock service migration)
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 100
 ---
 
 # Project State
@@ -21,34 +21,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 2: Core Agents -- GRC Analyst and CISO Orchestrator complete, integration remaining
+**Current focus:** Phase 2: Core Agents -- COMPLETE. GRC Analyst, CISO Orchestrator, and mock service migration all done.
 
 ## Current Position
 
 Phase: 2 of 6 (Core Agents)
-Plan: 2 of 3 in current phase (02-01 and 02-02 complete, 02-03 remaining)
-Status: In Progress
-Last activity: 2026-03-26 -- Completed 02-01-PLAN.md (GRC Analyst agent)
+Plan: 3 of 3 in current phase (02-01, 02-02, 02-03 all complete)
+Status: Phase Complete
+Last activity: 2026-03-26 -- Completed 02-03-PLAN.md (Mock service migration)
 
-Progress: [██████----] 67% (Phase 2)
+Progress: [██████████] 100% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 7.4 min
-- Total execution time: 0.62 hours
+- Total plans completed: 6
+- Average duration: 6.8 min
+- Total execution time: 0.68 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 3/3 | 22 min | 7.3 min |
-| 2. Core Agents | 2/3 | 15 min | 7.5 min |
+| 2. Core Agents | 3/3 | 19 min | 6.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (8 min), 01-03 (7 min), 02-02 (7 min), 02-01 (8 min)
-- Trend: Consistent
+- Last 5 plans: 01-03 (7 min), 02-02 (7 min), 02-01 (8 min), 02-03 (4 min)
+- Trend: Consistent (02-03 faster due to single focused task)
 
 *Updated after each plan completion*
 
@@ -81,6 +81,9 @@ Recent decisions affecting current work:
 - [02-02]: CISO tools are closures bound to (supabase, task) -- no global state, fully testable via dependency injection
 - [02-02]: createFollowUpTask uses pgmq for async synthesis scheduling after delegations complete
 - [02-02]: agentService inserts task row then invokes agent-worker for immediate processing (pg_cron fallback)
+- [02-03]: Transform pattern: GRC GapAnalysisFinding[] -> RiskInsight[] preserves existing InsightCard UI while sourcing data from real agent output
+- [02-03]: Empty state dispatches via CISO orchestrator (not directly to GRC) -- respects hub-and-spoke topology
+- [02-03]: Severity derivation uses control family prefix heuristic (AC/SC/IA/AU = high-weight) approximating SPRS weights
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T20:39:01Z
-Stopped at: Completed 02-01-PLAN.md (GRC Analyst agent with schemas, tools, Edge Function, and compliance tracking)
-Resume file: .planning/phases/02-core-agents/02-01-SUMMARY.md
+Last session: 2026-03-26T20:46:01Z
+Stopped at: Completed 02-03-PLAN.md (Mock service migration -- Phase 2 complete)
+Resume file: .planning/phases/02-core-agents/02-03-SUMMARY.md

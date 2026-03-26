@@ -109,7 +109,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **DATA-01**: Platform is CUI-free by design — stores assessment metadata, not actual CUI documents
 - [x] **DATA-02**: Clear data handling documentation for customers explaining what is/isn't stored
-- [ ] **DATA-03**: Replace mock AIRiskAnalysisService with real agent-driven analysis
+- [x] **DATA-03**: Replace mock AIRiskAnalysisService with real agent-driven analysis
 
 ## v2 Requirements
 
@@ -226,7 +226,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ONBD-04 | Phase 4: Onboarding and Access | Pending |
 | DATA-01 | Phase 1: Foundation | Complete (01-03) |
 | DATA-02 | Phase 1: Foundation | Complete (01-03) |
-| DATA-03 | Phase 2: Core Agents | Pending |
+| DATA-03 | Phase 2: Core Agents | Complete (02-03) |
 
 **Coverage:**
 - v1 requirements: 65 total
