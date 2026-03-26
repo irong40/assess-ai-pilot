@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- CMMC control data seeding from OSCAL JSON and SPRS score calculation
+- [x] 01-01-PLAN.md -- CMMC control data seeding from OSCAL JSON and SPRS score calculation
 - [ ] 01-02-PLAN.md -- Agent runtime infrastructure (state tables, pgmq message bus, Edge Function execution engine)
 - [ ] 01-03-PLAN.md -- Approval gates, audit trail extension, multi-tenant isolation, and CUI-free data architecture
 
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Planning complete | - |
+| 1. Foundation | 1/3 | In progress | - |
 | 2. Core Agents | 0/3 | Not started | - |
 | 3. Dashboards and Compliance Outputs | 0/3 | Not started | - |
 | 4. Onboarding and Access | 0/2 | Not started | - |

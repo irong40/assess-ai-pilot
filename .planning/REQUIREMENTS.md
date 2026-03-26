@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### CMMC Framework
 
-- [ ] **CMMC-01**: User can view all CMMC Level 1 controls (17 practices) mapped from NIST 800-171r2
-- [ ] **CMMC-02**: User can view all CMMC Level 2 controls (110 practices) mapped from NIST 800-171r2
-- [ ] **CMMC-03**: System seeds CMMC control data from NIST OSCAL JSON catalogs
-- [ ] **CMMC-04**: User can calculate their SPRS score based on assessment responses
+- [x] **CMMC-01**: User can view all CMMC Level 1 controls (17 practices) mapped from NIST 800-171r2
+- [x] **CMMC-02**: User can view all CMMC Level 2 controls (110 practices) mapped from NIST 800-171r2
+- [x] **CMMC-03**: System seeds CMMC control data from NIST OSCAL JSON catalogs
+- [x] **CMMC-04**: User can calculate their SPRS score based on assessment responses
 - [ ] **CMMC-05**: GRC agent identifies gaps between current posture and CMMC L1/L2 requirements
 - [ ] **CMMC-06**: User can upload evidence documents and associate them with specific CMMC controls
 - [ ] **CMMC-07**: User can track evidence completeness per control (what's collected vs what's needed)
@@ -162,10 +162,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CMMC-01 | Phase 1: Foundation | Pending |
-| CMMC-02 | Phase 1: Foundation | Pending |
-| CMMC-03 | Phase 1: Foundation | Pending |
-| CMMC-04 | Phase 1: Foundation | Pending |
+| CMMC-01 | Phase 1: Foundation | Complete (01-01) |
+| CMMC-02 | Phase 1: Foundation | Complete (01-01) |
+| CMMC-03 | Phase 1: Foundation | Complete (01-01) |
+| CMMC-04 | Phase 1: Foundation | Complete (01-01) |
 | CMMC-05 | Phase 2: Core Agents | Pending |
 | CMMC-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | CMMC-07 | Phase 3: Dashboards and Compliance Outputs | Pending |
