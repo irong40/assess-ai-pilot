@@ -168,6 +168,62 @@ describe('CUI-free Data Architecture', () => {
   });
 });
 
+describe('AIRiskAnalysisService has no remaining callers (DATA-03)', () => {
+  /**
+   * Scans all .ts and .tsx files in src/components/ and src/pages/ to verify
+   * that no file imports or references AIRiskAnalysisService. This enforces
+   * the migration to agent-driven analysis from Phase 2.
+   *
+   * The service file itself (src/services/AIRiskAnalysisService.ts) is exempt
+   * since it defines the deprecated class. Test files are also exempt.
+   */
+
+  function getAllSourceFiles(dir: string, extensions: string[]): string[] {
+    const results: string[] = [];
+    if (!fs.existsSync(dir)) return results;
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...getAllSourceFiles(fullPath, extensions));
+      } else if (extensions.some((ext) => entry.name.endsWith(ext))) {
+        results.push(fullPath);
+      }
+    }
+    return results;
+  }
+
+  it('no file in src/components/ imports AIRiskAnalysisService', () => {
+    const componentsDir = path.resolve(__dirname, '../../components');
+    const files = getAllSourceFiles(componentsDir, ['.ts', '.tsx']);
+
+    const callers: string[] = [];
+    for (const file of files) {
+      const content = fs.readFileSync(file, 'utf-8');
+      if (content.includes('AIRiskAnalysisService')) {
+        callers.push(path.relative(path.resolve(__dirname, '../../..'), file));
+      }
+    }
+
+    expect(callers).toEqual([]);
+  });
+
+  it('no file in src/pages/ imports AIRiskAnalysisService', () => {
+    const pagesDir = path.resolve(__dirname, '../../pages');
+    const files = getAllSourceFiles(pagesDir, ['.ts', '.tsx']);
+
+    const callers: string[] = [];
+    for (const file of files) {
+      const content = fs.readFileSync(file, 'utf-8');
+      if (content.includes('AIRiskAnalysisService')) {
+        callers.push(path.relative(path.resolve(__dirname, '../../..'), file));
+      }
+    }
+
+    expect(callers).toEqual([]);
+  });
+});
+
 describe('Data Handling Documentation', () => {
   it('DATA-HANDLING.md exists', () => {
     const docPath = path.resolve(__dirname, '../../../docs/DATA-HANDLING.md');

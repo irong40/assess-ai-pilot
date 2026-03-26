@@ -1,22 +1,27 @@
 import { RiskInsight, MaturityTrend, RiskPrediction } from '../types/analytics';
 
 /**
+ * @deprecated This mock service has been replaced by agent-driven analysis (Phase 2).
+ * All callers have been migrated. This file is preserved for reference only.
+ * Do not add new callers. If you need risk analysis, use agentService.ts.
+ *
+ * ---
+ *
+ * ORIGINAL DOCUMENTATION (kept for reference):
+ *
  * MOCK SERVICE -- DATA-03 Replacement Path
  *
- * This class is a stub that returns hardcoded/randomized values. It does NOT
- * connect to any AI provider or database. It exists as a placeholder from the
+ * This class was a stub that returned hardcoded/randomized values. It did NOT
+ * connect to any AI provider or database. It existed as a placeholder from the
  * initial scaffold.
  *
- * REPLACEMENT: The agent-driven analysis pipeline (GRC Analyst agent) built
- * in Phase 2 (Plan 02-01) will replace this mock. The agent runtime
- * infrastructure from Phase 1 Plans 01-02 and 01-03 provides:
- *   - executeAgentTask() for lifecycle management
- *   - pgmq message queue for durable task dispatch
- *   - Approval gates for high-risk analysis actions
- *   - Audit trail with AI reasoning
+ * REPLACED BY:
+ *   - src/services/agentService.ts (dispatchCisoAssessment, dispatchAgentTask)
+ *   - src/hooks/useAgentTasks.ts (useAgentTasks for querying agent results)
+ *   - supabase/functions/agent-grc-analyst/ (GRC Analyst Edge Function)
+ *   - supabase/functions/agent-ciso-orchestrator/ (CISO Orchestrator Edge Function)
  *
- * Once the GRC agent is operational, all callers of AIRiskAnalysisService
- * should migrate to agent task dispatch via supabase.functions.invoke().
+ * Migration completed in Phase 2 Plan 02-03 (DATA-03).
  *
  * See: docs/DATA-HANDLING.md for the CUI-free data architecture
  * See: supabase/functions/_shared/agent-base.ts for the agent framework
