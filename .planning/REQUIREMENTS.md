@@ -33,11 +33,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### CISO Orchestrator Agent
 
-- [ ] **CISO-01**: CISO agent delegates tasks to specialist agents based on priority queue
-- [ ] **CISO-02**: CISO agent generates executive summary reports from all agent outputs
-- [ ] **CISO-03**: CISO agent escalates high-risk findings to human operators for approval
-- [ ] **CISO-04**: CISO agent maintains a prioritized risk assessment across all agent domains
-- [ ] **CISO-05**: User can view CISO agent's current task queue and delegation status
+- [x] **CISO-01**: CISO agent delegates tasks to specialist agents based on priority queue
+- [x] **CISO-02**: CISO agent generates executive summary reports from all agent outputs
+- [x] **CISO-03**: CISO agent escalates high-risk findings to human operators for approval
+- [x] **CISO-04**: CISO agent maintains a prioritized risk assessment across all agent domains
+- [x] **CISO-05**: User can view CISO agent's current task queue and delegation status
 
 ### GRC Analyst Agent
 
@@ -180,11 +180,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-06 | Phase 1: Foundation | Complete (01-03) |
 | INFRA-07 | Phase 1: Foundation | Complete (01-03) |
 | INFRA-08 | Phase 1: Foundation | Complete |
-| CISO-01 | Phase 2: Core Agents | Pending |
-| CISO-02 | Phase 2: Core Agents | Pending |
-| CISO-03 | Phase 2: Core Agents | Pending |
-| CISO-04 | Phase 2: Core Agents | Pending |
-| CISO-05 | Phase 2: Core Agents | Pending |
+| CISO-01 | Phase 2: Core Agents | Complete |
+| CISO-02 | Phase 2: Core Agents | Complete |
+| CISO-03 | Phase 2: Core Agents | Complete |
+| CISO-04 | Phase 2: Core Agents | Complete |
+| CISO-05 | Phase 2: Core Agents | Complete |
 | GRC-01 | Phase 2: Core Agents | Pending |
 | GRC-02 | Phase 2: Core Agents | Pending |
 | GRC-03 | Phase 2: Core Agents | Pending |

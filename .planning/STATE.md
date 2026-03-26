@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 01-03-PLAN.md (Approval gates, multi-tenant isolation, CUI-free architecture)
-last_updated: "2026-03-26T18:54:53.773Z"
-last_activity: 2026-03-26 -- Completed 01-03-PLAN.md (Approval gates, multi-tenant isolation, CUI-free architecture)
+status: in_progress
+stopped_at: Completed 02-02-PLAN.md (CISO Orchestrator agent with delegation, synthesis, and frontend hooks)
+last_updated: "2026-03-26T20:37:34Z"
+last_activity: 2026-03-26 -- Completed 02-02-PLAN.md (CISO Orchestrator agent)
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 3
-  completed_plans: 3
-  percent: 100
+  completed_plans: 1
+  percent: 33
 ---
 
 # Project State
@@ -21,32 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 1: Foundation (COMPLETE) -- Ready for Phase 2: Core Agents
+**Current focus:** Phase 2: Core Agents -- CISO Orchestrator complete, GRC Analyst and integration remaining
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation) -- COMPLETE
-Plan: 3 of 3 in current phase (all done)
-Status: Phase 1 Complete
-Last activity: 2026-03-26 -- Completed 01-03-PLAN.md (Approval gates, multi-tenant isolation, CUI-free architecture)
+Phase: 2 of 6 (Core Agents)
+Plan: 2 of 3 in current phase
+Status: In Progress
+Last activity: 2026-03-26 -- Completed 02-02-PLAN.md (CISO Orchestrator agent)
 
-Progress: [██████████] 100% (Phase 1)
+Progress: [███-------] 33% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 7.3 min
-- Total execution time: 0.37 hours
+- Total execution time: 0.49 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 3/3 | 22 min | 7.3 min |
+| 2. Core Agents | 1/3 | 7 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (7 min)
+- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (7 min), 02-02 (7 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
@@ -72,6 +73,10 @@ Recent decisions affecting current work:
 - [01-03]: Only admin and issm roles can approve high-risk actions -- isso and user cannot
 - [01-03]: Approval requests expire after 24 hours to prevent stale approvals blocking workflows
 - [01-03]: Architecture decision tests validate SQL migrations at file level, not requiring live database
+- [02-02]: Dual-module pattern (Deno + Node) for CISO schemas/tools -- maintains vitest testability while supporting Edge Functions
+- [02-02]: CISO tools are closures bound to (supabase, task) -- no global state, fully testable via dependency injection
+- [02-02]: createFollowUpTask uses pgmq for async synthesis scheduling after delegations complete
+- [02-02]: agentService inserts task row then invokes agent-worker for immediate processing (pg_cron fallback)
 
 ### Pending Todos
 
@@ -86,6 +91,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T18:44:32Z
-Stopped at: Completed 01-03-PLAN.md (Approval gates, multi-tenant isolation, CUI-free architecture)
-Resume file: .planning/phases/01-foundation/01-03-SUMMARY.md
+Last session: 2026-03-26T20:37:34Z
+Stopped at: Completed 02-02-PLAN.md (CISO Orchestrator agent with delegation, synthesis, and frontend hooks)
+Resume file: .planning/phases/02-core-agents/02-02-SUMMARY.md

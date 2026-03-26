@@ -52,7 +52,7 @@ Plans:
 
 Plans:
 - [ ] 02-01-PLAN.md -- GRC Analyst agent (Zod schemas, domain tools, Edge Function, gap analysis tables, compliance tracking)
-- [ ] 02-02-PLAN.md -- CISO Orchestrator agent (delegation tools, executive summaries, frontend hooks, agent service)
+- [x] 02-02-PLAN.md -- CISO Orchestrator agent (delegation tools, executive summaries, frontend hooks, agent service)
 - [ ] 02-03-PLAN.md -- Replace mock AIRiskAnalysisService with agent-driven analysis (DATA-03 closure)
 
 ### Phase 3: Dashboards and Compliance Outputs
@@ -126,7 +126,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-26 |
-| 2. Core Agents | 0/3 | Not started | - |
+| 2. Core Agents | 1/3 | In progress | - |
 | 3. Dashboards and Compliance Outputs | 0/3 | Not started | - |
 | 4. Onboarding and Access | 0/2 | Not started | - |
 | 5. Security Operations Agents | 0/2 | Not started | - |
