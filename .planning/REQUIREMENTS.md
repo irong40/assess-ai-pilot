@@ -26,9 +26,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **INFRA-02**: Agent message bus via pgmq (PostgreSQL Message Queue) with pg_cron-scheduled Edge Function worker
 - [x] **INFRA-03**: Agent execution engine using Supabase Edge Functions with Vercel AI SDK
 - [x] **INFRA-04**: Async task chain architecture (single-step Edge Function invocations with state persistence)
-- [ ] **INFRA-05**: Human approval gate system with tiered trust levels (auto-approve low risk, require approval for high risk)
-- [ ] **INFRA-06**: Agent audit trail — every agent decision logged with AI reasoning
-- [ ] **INFRA-07**: Multi-tenant agent data isolation scoped by company_id
+- [x] **INFRA-05**: Human approval gate system with tiered trust levels (auto-approve low risk, require approval for high risk)
+- [x] **INFRA-06**: Agent audit trail — every agent decision logged with AI reasoning
+- [x] **INFRA-07**: Multi-tenant agent data isolation scoped by company_id
 - [x] **INFRA-08**: Hub-and-spoke agent topology enforced (all cross-agent communication via CISO Orchestrator)
 
 ### CISO Orchestrator Agent
@@ -107,8 +107,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data Architecture
 
-- [ ] **DATA-01**: Platform is CUI-free by design — stores assessment metadata, not actual CUI documents
-- [ ] **DATA-02**: Clear data handling documentation for customers explaining what is/isn't stored
+- [x] **DATA-01**: Platform is CUI-free by design — stores assessment metadata, not actual CUI documents
+- [x] **DATA-02**: Clear data handling documentation for customers explaining what is/isn't stored
 - [ ] **DATA-03**: Replace mock AIRiskAnalysisService with real agent-driven analysis
 
 ## v2 Requirements
@@ -176,9 +176,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1: Foundation | Complete |
 | INFRA-03 | Phase 1: Foundation | Complete |
 | INFRA-04 | Phase 1: Foundation | Complete |
-| INFRA-05 | Phase 1: Foundation | Pending |
-| INFRA-06 | Phase 1: Foundation | Pending |
-| INFRA-07 | Phase 1: Foundation | Pending |
+| INFRA-05 | Phase 1: Foundation | Complete (01-03) |
+| INFRA-06 | Phase 1: Foundation | Complete (01-03) |
+| INFRA-07 | Phase 1: Foundation | Complete (01-03) |
 | INFRA-08 | Phase 1: Foundation | Complete |
 | CISO-01 | Phase 2: Core Agents | Pending |
 | CISO-02 | Phase 2: Core Agents | Pending |
@@ -224,8 +224,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ONBD-02 | Phase 4: Onboarding and Access | Pending |
 | ONBD-03 | Phase 4: Onboarding and Access | Pending |
 | ONBD-04 | Phase 4: Onboarding and Access | Pending |
-| DATA-01 | Phase 1: Foundation | Pending |
-| DATA-02 | Phase 1: Foundation | Pending |
+| DATA-01 | Phase 1: Foundation | Complete (01-03) |
+| DATA-02 | Phase 1: Foundation | Complete (01-03) |
 | DATA-03 | Phase 2: Core Agents | Pending |
 
 **Coverage:**

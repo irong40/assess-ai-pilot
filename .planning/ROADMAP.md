@@ -12,7 +12,7 @@ ASSESS-AI delivers an AI-powered security operations platform for small defense 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - CMMC control data, agent runtime infrastructure, and CUI-free data architecture
+- [x] **Phase 1: Foundation** - CMMC control data, agent runtime infrastructure, and CUI-free data architecture
 - [ ] **Phase 2: Core Agents** - GRC Analyst and CISO Orchestrator deliver the minimum viable AI security team
 - [ ] **Phase 3: Dashboards and Compliance Outputs** - Agent dashboard, compliance reporting, evidence management, and audit-ready exports
 - [ ] **Phase 4: Onboarding and Access** - New customer sign-up, guided onboarding, and agent-aware permissions
@@ -35,8 +35,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- CMMC control data seeding from OSCAL JSON and SPRS score calculation
-- [ ] 01-02-PLAN.md -- Agent runtime infrastructure (state tables, pgmq message bus, Edge Function execution engine)
-- [ ] 01-03-PLAN.md -- Approval gates, audit trail extension, multi-tenant isolation, and CUI-free data architecture
+- [x] 01-02-PLAN.md -- Agent runtime infrastructure (state tables, pgmq message bus, Edge Function execution engine)
+- [x] 01-03-PLAN.md -- Approval gates, audit trail extension, multi-tenant isolation, and CUI-free data architecture
 
 ### Phase 2: Core Agents
 **Goal**: The GRC Analyst and CISO Orchestrator agents are operational -- the GRC agent performs compliance gap analysis and generates remediation recommendations, while the CISO Orchestrator delegates tasks, maintains risk posture, and produces executive summaries. This is the minimum viable "AI security team."
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/3 | In progress | - |
+| 1. Foundation | 3/3 | Complete | 2026-03-26 |
 | 2. Core Agents | 0/3 | Not started | - |
 | 3. Dashboards and Compliance Outputs | 0/3 | Not started | - |
 | 4. Onboarding and Access | 0/2 | Not started | - |
