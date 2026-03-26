@@ -28,13 +28,22 @@ describe('Gap Analysis Tables Migration', () => {
     sql = readMigrationFile('gap_analysis_tables');
   });
 
+  // Helper: extract CREATE TABLE block including nested parentheses
+  // Uses the text between "CREATE TABLE public.<name> (" and the next ");" at line start
+  function extractCreateTable(fullSql: string, tableName: string): string {
+    const pattern = new RegExp(
+      `CREATE\\s+TABLE\\s+public\\.${tableName}\\s*\\([\\s\\S]+?\\);`,
+      'i'
+    );
+    const match = fullSql.match(pattern);
+    if (!match) throw new Error(`CREATE TABLE public.${tableName} not found`);
+    return match[0];
+  }
+
   describe('gap_analysis_results table', () => {
     it('creates table with company_id NOT NULL', () => {
-      expect(sql).toMatch(/CREATE\s+TABLE\s+public\.gap_analysis_results/i);
-      // Extract gap_analysis_results CREATE TABLE block
-      const tableMatch = sql.match(/CREATE\s+TABLE\s+public\.gap_analysis_results\s*\([^)]+\)/is);
-      expect(tableMatch).not.toBeNull();
-      expect(tableMatch![0]).toMatch(/company_id\s+UUID\s+NOT\s+NULL/i);
+      const createBlock = extractCreateTable(sql, 'gap_analysis_results');
+      expect(createBlock).toMatch(/company_id\s+UUID\s+NOT\s+NULL/i);
     });
 
     it('has RLS enabled', () => {
@@ -42,16 +51,15 @@ describe('Gap Analysis Tables Migration', () => {
     });
 
     it('has time-series index on (company_id, created_at DESC)', () => {
-      expect(sql).toMatch(/CREATE\s+INDEX.*gap_analysis_results.*company_id.*created_at\s+DESC/i);
+      // Index may span multiple lines; check the full SQL
+      expect(sql).toMatch(/CREATE\s+INDEX\s+\w+\s+ON\s+public\.gap_analysis_results\s*\(company_id,\s*created_at\s+DESC\)/i);
     });
   });
 
   describe('compliance_snapshots table', () => {
     it('creates table with company_id NOT NULL', () => {
-      expect(sql).toMatch(/CREATE\s+TABLE\s+public\.compliance_snapshots/i);
-      const tableMatch = sql.match(/CREATE\s+TABLE\s+public\.compliance_snapshots\s*\([^)]+\)/is);
-      expect(tableMatch).not.toBeNull();
-      expect(tableMatch![0]).toMatch(/company_id\s+UUID\s+NOT\s+NULL/i);
+      const createBlock = extractCreateTable(sql, 'compliance_snapshots');
+      expect(createBlock).toMatch(/company_id\s+UUID\s+NOT\s+NULL/i);
     });
 
     it('has RLS enabled', () => {
@@ -59,14 +67,13 @@ describe('Gap Analysis Tables Migration', () => {
     });
 
     it('has time-series index on (company_id, created_at DESC)', () => {
-      expect(sql).toMatch(/CREATE\s+INDEX.*compliance_snapshots.*company_id.*created_at\s+DESC/i);
+      expect(sql).toMatch(/CREATE\s+INDEX\s+\w+\s+ON\s+public\.compliance_snapshots\s*\(company_id,\s*created_at\s+DESC\)/i);
     });
 
     it('has poam_eligible and critical_controls_met columns', () => {
-      const tableMatch = sql.match(/CREATE\s+TABLE\s+public\.compliance_snapshots\s*\([^)]+\)/is);
-      expect(tableMatch).not.toBeNull();
-      expect(tableMatch![0]).toMatch(/poam_eligible/i);
-      expect(tableMatch![0]).toMatch(/critical_controls_met/i);
+      const createBlock = extractCreateTable(sql, 'compliance_snapshots');
+      expect(createBlock).toMatch(/poam_eligible/i);
+      expect(createBlock).toMatch(/critical_controls_met/i);
     });
   });
 });
