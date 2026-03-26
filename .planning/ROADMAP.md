@@ -48,12 +48,12 @@ Plans:
   3. User can view the CISO agent's current task queue and delegation status
   4. GRC agent tracks compliance status changes over time and prepares audit-ready documentation packages
   5. Hub-and-spoke topology is enforced -- all cross-agent communication routes through the CISO Orchestrator
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01: GRC Analyst agent (gap analysis, remediation, compliance tracking)
-- [ ] 02-02: CISO Orchestrator agent (delegation, risk posture, executive reporting)
-- [ ] 02-03: Replace mock AIRiskAnalysisService with agent-driven analysis
+- [ ] 02-01-PLAN.md -- GRC Analyst agent (Zod schemas, domain tools, Edge Function, gap analysis tables, compliance tracking)
+- [ ] 02-02-PLAN.md -- CISO Orchestrator agent (delegation tools, executive summaries, frontend hooks, agent service)
+- [ ] 02-03-PLAN.md -- Replace mock AIRiskAnalysisService with agent-driven analysis (DATA-03 closure)
 
 ### Phase 3: Dashboards and Compliance Outputs
 **Goal**: Users can see what their AI security team is doing (agent dashboard), view their compliance posture (compliance dashboard), manage evidence, and export audit-ready documents -- closing the loop between agent analysis and user-consumable outputs.
