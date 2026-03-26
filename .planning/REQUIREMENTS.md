@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CMMC-02**: User can view all CMMC Level 2 controls (110 practices) mapped from NIST 800-171r2
 - [x] **CMMC-03**: System seeds CMMC control data from NIST OSCAL JSON catalogs
 - [x] **CMMC-04**: User can calculate their SPRS score based on assessment responses
-- [ ] **CMMC-05**: GRC agent identifies gaps between current posture and CMMC L1/L2 requirements
+- [x] **CMMC-05**: GRC agent identifies gaps between current posture and CMMC L1/L2 requirements
 - [ ] **CMMC-06**: User can upload evidence documents and associate them with specific CMMC controls
 - [ ] **CMMC-07**: User can track evidence completeness per control (what's collected vs what's needed)
 - [ ] **CMMC-08**: User can export audit-ready System Security Plan (SSP) document
@@ -41,11 +41,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### GRC Analyst Agent
 
-- [ ] **GRC-01**: GRC agent auto-assesses compliance gaps from uploaded documents
-- [ ] **GRC-02**: GRC agent generates gap analysis reports against CMMC L1/L2 controls
-- [ ] **GRC-03**: GRC agent generates multi-option remediation recommendations with cost/effort ranking
-- [ ] **GRC-04**: GRC agent tracks compliance status changes over time
-- [ ] **GRC-05**: GRC agent prepares audit-ready documentation packages
+- [x] **GRC-01**: GRC agent auto-assesses compliance gaps from uploaded documents
+- [x] **GRC-02**: GRC agent generates gap analysis reports against CMMC L1/L2 controls
+- [x] **GRC-03**: GRC agent generates multi-option remediation recommendations with cost/effort ranking
+- [x] **GRC-04**: GRC agent tracks compliance status changes over time
+- [x] **GRC-05**: GRC agent prepares audit-ready documentation packages
 
 ### SOC Analyst Agent
 
@@ -166,7 +166,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CMMC-02 | Phase 1: Foundation | Complete (01-01) |
 | CMMC-03 | Phase 1: Foundation | Complete (01-01) |
 | CMMC-04 | Phase 1: Foundation | Complete (01-01) |
-| CMMC-05 | Phase 2: Core Agents | Pending |
+| CMMC-05 | Phase 2: Core Agents | Complete |
 | CMMC-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | CMMC-07 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | CMMC-08 | Phase 3: Dashboards and Compliance Outputs | Pending |
@@ -185,11 +185,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CISO-03 | Phase 2: Core Agents | Complete |
 | CISO-04 | Phase 2: Core Agents | Complete |
 | CISO-05 | Phase 2: Core Agents | Complete |
-| GRC-01 | Phase 2: Core Agents | Pending |
-| GRC-02 | Phase 2: Core Agents | Pending |
-| GRC-03 | Phase 2: Core Agents | Pending |
-| GRC-04 | Phase 2: Core Agents | Pending |
-| GRC-05 | Phase 2: Core Agents | Pending |
+| GRC-01 | Phase 2: Core Agents | Complete |
+| GRC-02 | Phase 2: Core Agents | Complete |
+| GRC-03 | Phase 2: Core Agents | Complete |
+| GRC-04 | Phase 2: Core Agents | Complete |
+| GRC-05 | Phase 2: Core Agents | Complete |
 | SOC-01 | Phase 5: Security Operations Agents | Pending |
 | SOC-02 | Phase 5: Security Operations Agents | Pending |
 | SOC-03 | Phase 5: Security Operations Agents | Pending |

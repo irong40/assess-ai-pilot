@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 02-02-PLAN.md (CISO Orchestrator agent with delegation, synthesis, and frontend hooks)
-last_updated: "2026-03-26T20:37:34Z"
-last_activity: 2026-03-26 -- Completed 02-02-PLAN.md (CISO Orchestrator agent)
+stopped_at: Completed 02-01-PLAN.md (GRC Analyst agent with schemas, tools, Edge Function, and compliance tracking)
+last_updated: "2026-03-26T20:39:01Z"
+last_activity: 2026-03-26 -- Completed 02-01-PLAN.md (GRC Analyst agent)
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -21,33 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 2: Core Agents -- CISO Orchestrator complete, GRC Analyst and integration remaining
+**Current focus:** Phase 2: Core Agents -- GRC Analyst and CISO Orchestrator complete, integration remaining
 
 ## Current Position
 
 Phase: 2 of 6 (Core Agents)
-Plan: 2 of 3 in current phase
+Plan: 2 of 3 in current phase (02-01 and 02-02 complete, 02-03 remaining)
 Status: In Progress
-Last activity: 2026-03-26 -- Completed 02-02-PLAN.md (CISO Orchestrator agent)
+Last activity: 2026-03-26 -- Completed 02-01-PLAN.md (GRC Analyst agent)
 
-Progress: [███-------] 33% (Phase 2)
+Progress: [██████----] 67% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 7.3 min
-- Total execution time: 0.49 hours
+- Total plans completed: 5
+- Average duration: 7.4 min
+- Total execution time: 0.62 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 3/3 | 22 min | 7.3 min |
-| 2. Core Agents | 1/3 | 7 min | 7.0 min |
+| 2. Core Agents | 2/3 | 15 min | 7.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (7 min), 02-02 (7 min)
+- Last 5 plans: 01-02 (8 min), 01-03 (7 min), 02-02 (7 min), 02-01 (8 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
@@ -73,6 +73,10 @@ Recent decisions affecting current work:
 - [01-03]: Only admin and issm roles can approve high-risk actions -- isso and user cannot
 - [01-03]: Approval requests expire after 24 hours to prevent stale approvals blocking workflows
 - [01-03]: Architecture decision tests validate SQL migrations at file level, not requiring live database
+- [02-01]: Deno-vitest bridge pattern: grc-tools-testable.ts and grc-schemas-frontend.ts mirror Deno modules with standard npm imports for vitest compatibility
+- [02-01]: Tool factory returns plain objects with description/parameters for testing; Deno module uses actual tool() calls
+- [02-01]: GRC Edge Function uses maxSteps: 10 (vs agent-test's 3) for compliance reasoning depth
+- [02-01]: storeGrcResult creates both gap_analysis_results and compliance_snapshot on every analysis for time-series tracking
 - [02-02]: Dual-module pattern (Deno + Node) for CISO schemas/tools -- maintains vitest testability while supporting Edge Functions
 - [02-02]: CISO tools are closures bound to (supabase, task) -- no global state, fully testable via dependency injection
 - [02-02]: createFollowUpTask uses pgmq for async synthesis scheduling after delegations complete
@@ -91,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T20:37:34Z
-Stopped at: Completed 02-02-PLAN.md (CISO Orchestrator agent with delegation, synthesis, and frontend hooks)
-Resume file: .planning/phases/02-core-agents/02-02-SUMMARY.md
+Last session: 2026-03-26T20:39:01Z
+Stopped at: Completed 02-01-PLAN.md (GRC Analyst agent with schemas, tools, Edge Function, and compliance tracking)
+Resume file: .planning/phases/02-core-agents/02-01-SUMMARY.md
