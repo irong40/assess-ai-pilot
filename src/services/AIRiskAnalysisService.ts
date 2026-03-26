@@ -1,5 +1,26 @@
 import { RiskInsight, MaturityTrend, RiskPrediction } from '../types/analytics';
 
+/**
+ * MOCK SERVICE -- DATA-03 Replacement Path
+ *
+ * This class is a stub that returns hardcoded/randomized values. It does NOT
+ * connect to any AI provider or database. It exists as a placeholder from the
+ * initial scaffold.
+ *
+ * REPLACEMENT: The agent-driven analysis pipeline (GRC Analyst agent) built
+ * in Phase 2 (Plan 02-01) will replace this mock. The agent runtime
+ * infrastructure from Phase 1 Plans 01-02 and 01-03 provides:
+ *   - executeAgentTask() for lifecycle management
+ *   - pgmq message queue for durable task dispatch
+ *   - Approval gates for high-risk analysis actions
+ *   - Audit trail with AI reasoning
+ *
+ * Once the GRC agent is operational, all callers of AIRiskAnalysisService
+ * should migrate to agent task dispatch via supabase.functions.invoke().
+ *
+ * See: docs/DATA-HANDLING.md for the CUI-free data architecture
+ * See: supabase/functions/_shared/agent-base.ts for the agent framework
+ */
 export class AIRiskAnalysisService {
   // Extend existing calculateMaturityScore with trend analysis
   static calculateMaturityTrend(
