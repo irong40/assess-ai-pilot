@@ -19,6 +19,10 @@ import {
   MAX_DELEGATION_DEPTH,
   isValidTransition,
 } from "./agent-types.ts";
+import {
+  checkApprovalRequired,
+  createApprovalRequest,
+} from "./approval-gate.ts";
 
 /**
  * The result returned by an agent handler function.
@@ -94,13 +98,27 @@ export async function executeAgentTask(
     // 5. Execute the handler
     const result = await handler(task);
 
-    // 6. High risk: set 'awaiting_approval', do NOT write output yet
-    if (task.risk_level === "high") {
+    // 6. High risk: create approval request, set 'awaiting_approval'
+    if (checkApprovalRequired(task)) {
       await updateTaskStatus(supabase, task, "awaiting_approval", {
         reasoning_summary: result.reasoning,
         // Output is stored but task stays in awaiting_approval until approved
         output: result.output,
       });
+
+      // Create formal approval request and broadcast via Realtime
+      try {
+        await createApprovalRequest(supabase, task);
+      } catch (err) {
+        console.error(
+          `Failed to create approval request for task ${task.id}:`,
+          err
+        );
+        // Approval request creation failure does not fail the task --
+        // the task is already in awaiting_approval state and can be
+        // discovered via dashboard query
+      }
+
       await logAuditEvent(
         supabase,
         task,
@@ -277,6 +295,10 @@ async function logAuditEvent(
         parent_task_id: task.parent_task_id,
       },
       p_ai_reasoning: reasoning.substring(0, 2000), // Truncate to reasonable length
+      // New agent-specific fields (Phase 1 Plan 03)
+      p_agent_id: task.id,
+      p_agent_type: task.agent_type.replace(/-/g, "_"), // Convert to Postgres enum format
+      p_reasoning_summary: reasoning.substring(0, 500),
     });
   } catch (err) {
     // Audit logging should not fail the task
