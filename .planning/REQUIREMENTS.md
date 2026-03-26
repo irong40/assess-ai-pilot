@@ -22,14 +22,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Agent Infrastructure
 
-- [ ] **INFRA-01**: Agent state management via PostgreSQL tables (status, assignments, history)
-- [ ] **INFRA-02**: Agent message bus via pgmq (PostgreSQL Message Queue) with pg_cron-scheduled Edge Function worker
-- [ ] **INFRA-03**: Agent execution engine using Supabase Edge Functions with Vercel AI SDK
-- [ ] **INFRA-04**: Async task chain architecture (single-step Edge Function invocations with state persistence)
+- [x] **INFRA-01**: Agent state management via PostgreSQL tables (status, assignments, history)
+- [x] **INFRA-02**: Agent message bus via pgmq (PostgreSQL Message Queue) with pg_cron-scheduled Edge Function worker
+- [x] **INFRA-03**: Agent execution engine using Supabase Edge Functions with Vercel AI SDK
+- [x] **INFRA-04**: Async task chain architecture (single-step Edge Function invocations with state persistence)
 - [ ] **INFRA-05**: Human approval gate system with tiered trust levels (auto-approve low risk, require approval for high risk)
 - [ ] **INFRA-06**: Agent audit trail — every agent decision logged with AI reasoning
 - [ ] **INFRA-07**: Multi-tenant agent data isolation scoped by company_id
-- [ ] **INFRA-08**: Hub-and-spoke agent topology enforced (all cross-agent communication via CISO Orchestrator)
+- [x] **INFRA-08**: Hub-and-spoke agent topology enforced (all cross-agent communication via CISO Orchestrator)
 
 ### CISO Orchestrator Agent
 
@@ -172,14 +172,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CMMC-08 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | CMMC-09 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | CMMC-10 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| INFRA-01 | Phase 1: Foundation | Pending |
-| INFRA-02 | Phase 1: Foundation | Pending |
-| INFRA-03 | Phase 1: Foundation | Pending |
-| INFRA-04 | Phase 1: Foundation | Pending |
+| INFRA-01 | Phase 1: Foundation | Complete |
+| INFRA-02 | Phase 1: Foundation | Complete |
+| INFRA-03 | Phase 1: Foundation | Complete |
+| INFRA-04 | Phase 1: Foundation | Complete |
 | INFRA-05 | Phase 1: Foundation | Pending |
 | INFRA-06 | Phase 1: Foundation | Pending |
 | INFRA-07 | Phase 1: Foundation | Pending |
-| INFRA-08 | Phase 1: Foundation | Pending |
+| INFRA-08 | Phase 1: Foundation | Complete |
 | CISO-01 | Phase 2: Core Agents | Pending |
 | CISO-02 | Phase 2: Core Agents | Pending |
 | CISO-03 | Phase 2: Core Agents | Pending |
