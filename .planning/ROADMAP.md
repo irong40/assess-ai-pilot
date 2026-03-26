@@ -31,12 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A test agent can be dispatched via the message bus, execute a task in an Edge Function, persist its state and result to PostgreSQL, and appear in the audit trail with AI reasoning
   4. The approval gate system blocks a high-risk test action until a human approves it, and auto-approves a low-risk action
   5. All agent data is scoped by company_id with no cross-tenant leakage, and the platform stores zero CUI (assessment metadata only)
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: CMMC control data seeding and SPRS scoring
-- [ ] 01-02: Agent runtime infrastructure (state, message bus, execution engine)
-- [ ] 01-03: Approval gates, audit trail, and CUI-free data architecture
+- [ ] 01-01-PLAN.md -- CMMC control data seeding from OSCAL JSON and SPRS score calculation
+- [ ] 01-02-PLAN.md -- Agent runtime infrastructure (state tables, pgmq message bus, Edge Function execution engine)
+- [ ] 01-03-PLAN.md -- Approval gates, audit trail extension, multi-tenant isolation, and CUI-free data architecture
 
 ### Phase 2: Core Agents
 **Goal**: The GRC Analyst and CISO Orchestrator agents are operational -- the GRC agent performs compliance gap analysis and generates remediation recommendations, while the CISO Orchestrator delegates tasks, maintains risk posture, and produces executive summaries. This is the minimum viable "AI security team."
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/3 | Planning complete | - |
 | 2. Core Agents | 0/3 | Not started | - |
 | 3. Dashboards and Compliance Outputs | 0/3 | Not started | - |
 | 4. Onboarding and Access | 0/2 | Not started | - |
