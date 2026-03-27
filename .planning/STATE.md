@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 05-01-PLAN.md (SOC Analyst Agent)
-last_updated: "2026-03-27T20:34:00Z"
-last_activity: 2026-03-27 -- Completed 05-01-PLAN.md (SOC Analyst Agent)
+stopped_at: Completed 05-02-PLAN.md (Threat Intelligence Agent)
+last_updated: "2026-03-27T20:48:00Z"
+last_activity: 2026-03-27 -- Completed 05-02-PLAN.md (Threat Intelligence Agent)
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 12
-  percent: 85
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -21,23 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 5 in progress. SOC Analyst agent delivered (05-01). Threat Intel agent next (05-02).
+**Current focus:** Phase 5 complete. All 13 plans across 5 phases delivered. Phase 6 (Incident Response) pending legal review.
 
 ## Current Position
 
-Phase: 5 of 6 (Security Operations Agents)
-Plan: 1 of 2 in current phase (05-01 complete)
-Status: In Progress
-Last activity: 2026-03-27 -- Completed 05-01-PLAN.md (SOC Analyst Agent)
+Phase: 5 of 6 (Security Operations Agents) -- COMPLETE
+Plan: 2 of 2 in current phase (05-01, 05-02 complete)
+Status: Phase 5 Complete
+Last activity: 2026-03-27 -- Completed 05-02-PLAN.md (Threat Intelligence Agent)
 
-Progress: [████████░░] 85% (Overall -- 12 of 13 plans complete through Phase 5-01)
+Progress: [██████████] 100% (Overall -- 13 of 13 plans complete through Phase 5)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 7.4 min
-- Total execution time: 1.10 hours
+- Total plans completed: 13
+- Average duration: 7.5 min
+- Total execution time: 1.38 hours
 
 **By Phase:**
 
@@ -53,11 +53,11 @@ Progress: [████████░░] 85% (Overall -- 12 of 13 plans comple
 
 | 4. Onboarding | 2/2 | 12 min | 6.0 min |
 
-| 5. Security Ops | 1/2 | 8 min | 8.0 min |
+| 5. Security Ops | 2/2 | 18 min | 9.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (8 min), 03-03 (10 min), 04-02 (5 min), 04-01 (7 min), 05-01 (8 min)
-- Trend: Consistent at ~7.6 min average
+- Last 5 plans: 03-03 (10 min), 04-02 (5 min), 04-01 (7 min), 05-01 (8 min), 05-02 (10 min)
+- Trend: Consistent at ~8.0 min average
 
 *Updated after each plan completion*
 
@@ -119,6 +119,12 @@ Recent decisions affecting current work:
 - [05-01]: CISO delegation extension appends to existing prompt (does not rewrite) -- preserves GRC delegation rules
 - [05-01]: SOC tools persist alerts via createSocAlert during execution -- no separate storeResult needed
 - [05-01]: Batch limit of 20 CVEs per SOC triage invocation to prevent timeout
+- [05-02]: CWE_TO_CMMC_FAMILY uses 20 entries (not 25+) per Pitfall 3 -- LLM reasons about unmapped CWEs using control descriptions
+- [05-02]: Threat Intel agent uses maxSteps: 8 consistent with SOC agent for Edge Function timeout avoidance
+- [05-02]: CISO delegation extension appends Threat Intel rules to existing prompt (does not rewrite) -- preserves GRC and SOC delegation rules
+- [05-02]: IOC deduplication via UNIQUE(company_id, indicator_type, indicator_value) with ON CONFLICT UPDATE last_seen
+- [05-02]: ioc_tracking.expires_at defaults to now() + 90 days for automatic TTL cleanup
+- [05-02]: Threat Intel tools persist briefs via saveThreatBrief during execution -- no separate storeResult needed
 
 ### Pending Todos
 
@@ -133,6 +139,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T20:34:00Z
-Stopped at: Completed 05-01-PLAN.md (SOC Analyst Agent)
+Last session: 2026-03-27T20:48:00Z
+Stopped at: Completed 05-02-PLAN.md (Threat Intelligence Agent) -- Phase 5 complete
 Resume file: None

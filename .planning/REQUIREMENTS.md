@@ -56,10 +56,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Threat Intelligence Agent
 
-- [ ] **THRT-01**: Threat Intel agent monitors NVD CVE feed (existing) with enhanced analysis
-- [ ] **THRT-02**: Threat Intel agent generates threat briefs relevant to customer's tech stack
-- [ ] **THRT-03**: Threat Intel agent maps threats to specific CMMC controls at risk
-- [ ] **THRT-04**: Threat Intel agent tracks IOCs and provides attack surface mapping
+- [x] **THRT-01**: Threat Intel agent monitors NVD CVE feed (existing) with enhanced analysis
+- [x] **THRT-02**: Threat Intel agent generates threat briefs relevant to customer's tech stack
+- [x] **THRT-03**: Threat Intel agent maps threats to specific CMMC controls at risk
+- [x] **THRT-04**: Threat Intel agent tracks IOCs and provides attack surface mapping
 
 ### Incident Response Agent
 
@@ -194,10 +194,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SOC-02 | Phase 5: Security Operations Agents | Complete |
 | SOC-03 | Phase 5: Security Operations Agents | Complete |
 | SOC-04 | Phase 5: Security Operations Agents | Complete |
-| THRT-01 | Phase 5: Security Operations Agents | Pending |
-| THRT-02 | Phase 5: Security Operations Agents | Pending |
-| THRT-03 | Phase 5: Security Operations Agents | Pending |
-| THRT-04 | Phase 5: Security Operations Agents | Pending |
+| THRT-01 | Phase 5: Security Operations Agents | Complete |
+| THRT-02 | Phase 5: Security Operations Agents | Complete |
+| THRT-03 | Phase 5: Security Operations Agents | Complete |
+| THRT-04 | Phase 5: Security Operations Agents | Complete |
 | IR-01 | Phase 6: Advanced Agents | Pending |
 | IR-02 | Phase 6: Advanced Agents | Pending |
 | IR-03 | Phase 6: Advanced Agents | Pending |
