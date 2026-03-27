@@ -44,16 +44,17 @@ describe('CISO Agent', () => {
   });
 
   describe('CISO_TOOL_NAMES', () => {
-    it('exports expected tool names including delegateToSOC', () => {
+    it('exports expected tool names including delegateToSOC and delegateToThreatIntel', () => {
       expect(CISO_TOOL_NAMES).toContain('delegateToGRC');
       expect(CISO_TOOL_NAMES).toContain('delegateToSOC');
+      expect(CISO_TOOL_NAMES).toContain('delegateToThreatIntel');
       expect(CISO_TOOL_NAMES).toContain('readCompletedTaskResults');
       expect(CISO_TOOL_NAMES).toContain('getCurrentRiskPosture');
       expect(CISO_TOOL_NAMES).toContain('createFollowUpTask');
     });
 
-    it('contains exactly 5 tools', () => {
-      expect(CISO_TOOL_NAMES).toHaveLength(5);
+    it('contains exactly 6 tools', () => {
+      expect(CISO_TOOL_NAMES).toHaveLength(6);
     });
   });
 
@@ -102,6 +103,42 @@ describe('CISO Agent', () => {
       });
       expect(prompt.toLowerCase()).toContain('triage');
       expect(prompt.toLowerCase()).toContain('soc');
+    });
+  });
+
+  describe('CISO Threat Intel Delegation', () => {
+    it('CISO_SYSTEM_PROMPT contains Threat Intelligence delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Threat.*Intelligence.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToThreatIntel/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions generate-threat-brief delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/generate-threat-brief/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions scan-iocs delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/scan-iocs/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions map-attack-surface delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/map-attack-surface/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions CWE categorization in threat briefs', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/CWE/i);
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for generate-threat-brief action', () => {
+      const prompt = buildCisoPrompt('generate-threat-brief', {});
+      expect(prompt.toLowerCase()).toContain('threat');
+      expect(prompt.toLowerCase()).toContain('intel');
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for security-posture-review action', () => {
+      const prompt = buildCisoPrompt('security-posture-review', {});
+      expect(prompt.toLowerCase()).toContain('threat');
+      expect(prompt.toLowerCase()).toContain('soc');
+      expect(prompt.toLowerCase()).toContain('grc');
     });
   });
 
@@ -201,6 +238,72 @@ describe('CISO Agent', () => {
       );
       const code = fs.readFileSync(edgeFnPath, 'utf-8');
       expect(code).toMatch(/Deno\.serve/);
+    });
+  });
+
+  describe('Threat Intel Edge Function structure', () => {
+    it('imports executeAgentTask from agent-base.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*executeAgentTask.*agent-base/s);
+    });
+
+    it('imports THREAT_INTEL_SYSTEM_PROMPT and createThreatIntelTools from threat-intel-tools.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*THREAT_INTEL_SYSTEM_PROMPT.*threat-intel-tools/s);
+      expect(code).toMatch(/import.*createThreatIntelTools.*threat-intel-tools/s);
+    });
+
+    it('imports ThreatAnalysisResultSchema from threat-intel-schemas.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*ThreatAnalysisResultSchema.*threat-intel-schemas/s);
+    });
+
+    it('uses anthropic claude model for text generation', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/anthropic\(["']claude/);
+    });
+
+    it('uses maxSteps: 8 for timeout avoidance', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/maxSteps:\s*8/);
+    });
+
+    it('uses Deno.serve pattern', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/Deno\.serve/);
+    });
+
+    it('uses buildThreatIntelPrompt for action-specific prompts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-threat-intel/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/buildThreatIntelPrompt/);
     });
   });
 });

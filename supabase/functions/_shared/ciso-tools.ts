@@ -6,9 +6,11 @@
  *
  * Tools:
  * 1. delegateToGRC - Delegates tasks to the GRC Analyst via agent-base delegateTask
- * 2. readCompletedTaskResults - Reads completed subtask outputs
- * 3. getCurrentRiskPosture - Queries latest compliance snapshot
- * 4. createFollowUpTask - Schedules follow-up CISO tasks
+ * 2. delegateToSOC - Delegates tasks to the SOC Analyst
+ * 3. delegateToThreatIntel - Delegates tasks to the Threat Intelligence agent
+ * 4. readCompletedTaskResults - Reads completed subtask outputs
+ * 5. getCurrentRiskPosture - Queries latest compliance snapshot
+ * 6. createFollowUpTask - Schedules follow-up CISO tasks
  */
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
@@ -63,6 +65,13 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate correlate-findings to link SOC alerts with compliance gaps
 - Delegate classify-alert for individual alert investigation
 - SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (IR agent not yet available)
+
+## Threat Intelligence Delegation
+- Use delegateToThreatIntel tool for strategic threat analysis tasks
+- Delegate generate-threat-brief for periodic threat landscape reports relevant to company tech stack
+- Delegate scan-iocs to extract and track indicators of compromise from recent CVEs
+- Delegate map-attack-surface for comprehensive risk mapping combining tech stack, compliance gaps, and active threats
+- Threat briefs map CVE threats to specific CMMC controls via CWE categorization
 `;
 
 // --------------------------------------------------------------------------
@@ -71,6 +80,7 @@ When planning delegation tasks, follow this strict priority queue:
 export const CISO_TOOL_NAMES = [
   "delegateToGRC",
   "delegateToSOC",
+  "delegateToThreatIntel",
   "readCompletedTaskResults",
   "getCurrentRiskPosture",
   "createFollowUpTask",
@@ -188,6 +198,58 @@ export function createCisoTools(supabase: SupabaseClient, task: AgentTask) {
           success: true,
           taskId: result.taskId,
           delegated_to: "soc-analyst",
+          action,
+          scope,
+          priority,
+        };
+      },
+    }),
+
+    /**
+     * Delegates a scoped task to the Threat Intelligence agent.
+     * Calls the shared delegateTask function from agent-base.ts.
+     */
+    delegateToThreatIntel: tool({
+      description:
+        "Delegate a threat analysis, brief generation, or IOC scanning task to the Threat Intelligence agent.",
+      parameters: z.object({
+        action: z
+          .string()
+          .describe(
+            "Threat Intel action: 'generate-threat-brief', 'scan-iocs', 'map-attack-surface'"
+          ),
+        scope: z
+          .object({
+            severity_filter: z.string().optional(),
+            time_range_hours: z.number().optional(),
+            focus_families: z.array(z.string()).optional(),
+          })
+          .describe("Scope of the Threat Intel task"),
+        priority: z
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Priority level for the delegated task"),
+      }),
+      execute: async ({ action, scope, priority }) => {
+        const result = await delegateTask(
+          supabase,
+          task,
+          "threat-intel",
+          action,
+          {
+            ...scope,
+            company_id: task.company_id,
+            priority,
+          }
+        );
+
+        if ("error" in result) {
+          return { success: false, error: result.error };
+        }
+
+        return {
+          success: true,
+          taskId: result.taskId,
+          delegated_to: "threat-intel",
           action,
           scope,
           priority,
@@ -435,6 +497,23 @@ export function buildCisoPrompt(
         `Time range: ${input.time_range_hours ?? 168} hours. ` +
         `Use delegateToSOC to assign triage-alerts to the SOC Analyst, ` +
         `then schedule a follow-up to review SOC escalation recommendations.`
+      );
+
+    case "generate-threat-brief":
+      return (
+        `Generate a threat intelligence brief for the company. ` +
+        `Delegate to Threat Intel agent for strategic threat analysis. ` +
+        `Use delegateToThreatIntel to assign generate-threat-brief, ` +
+        `then schedule a follow-up to review the completed brief and distribute findings.`
+      );
+
+    case "security-posture-review":
+      return (
+        `Conduct a comprehensive security posture review. ` +
+        `Delegate threat analysis to Threat Intel (generate-threat-brief), ` +
+        `alert triage to SOC (triage-alerts), ` +
+        `and compliance assessment to GRC (gap-analysis). ` +
+        `After all delegations complete, synthesize results into an executive security posture report.`
       );
 
     default:

@@ -59,6 +59,13 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate correlate-findings to link SOC alerts with compliance gaps
 - Delegate classify-alert for individual alert investigation
 - SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (IR agent not yet available)
+
+## Threat Intelligence Delegation
+- Use delegateToThreatIntel tool for strategic threat analysis tasks
+- Delegate generate-threat-brief for periodic threat landscape reports relevant to company tech stack
+- Delegate scan-iocs to extract and track indicators of compromise from recent CVEs
+- Delegate map-attack-surface for comprehensive risk mapping combining tech stack, compliance gaps, and active threats
+- Threat briefs map CVE threats to specific CMMC controls via CWE categorization
 `;
 
 // --------------------------------------------------------------------------
@@ -67,6 +74,7 @@ When planning delegation tasks, follow this strict priority queue:
 export const CISO_TOOL_NAMES = [
   'delegateToGRC',
   'delegateToSOC',
+  'delegateToThreatIntel',
   'readCompletedTaskResults',
   'getCurrentRiskPosture',
   'createFollowUpTask',
@@ -134,6 +142,23 @@ export function buildCisoPrompt(
         `Time range: ${input.time_range_hours ?? 168} hours. ` +
         `Use delegateToSOC to assign triage-alerts to the SOC Analyst, ` +
         `then schedule a follow-up to review SOC escalation recommendations.`
+      );
+
+    case 'generate-threat-brief':
+      return (
+        `Generate a threat intelligence brief for the company. ` +
+        `Delegate to Threat Intel agent for strategic threat analysis. ` +
+        `Use delegateToThreatIntel to assign generate-threat-brief, ` +
+        `then schedule a follow-up to review the completed brief and distribute findings.`
+      );
+
+    case 'security-posture-review':
+      return (
+        `Conduct a comprehensive security posture review. ` +
+        `Delegate threat analysis to Threat Intel (generate-threat-brief), ` +
+        `alert triage to SOC (triage-alerts), ` +
+        `and compliance assessment to GRC (gap-analysis). ` +
+        `After all delegations complete, synthesize results into an executive security posture report.`
       );
 
     default:
