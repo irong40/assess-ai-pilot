@@ -95,11 +95,11 @@ Plans:
   2. Threat Intel agent generates threat briefs relevant to the customer's tech stack and maps threats to specific CMMC controls at risk
   3. SOC agent escalates confirmed incidents to the IR agent (or flags for Phase 6) via the CISO Orchestrator
   4. Threat Intel agent tracks IOCs and provides attack surface mapping visible on the agent dashboard
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 05-01: SOC Analyst agent (alert triage, correlation, false positive classification)
-- [ ] 05-02: Threat Intelligence agent (threat briefs, IOC tracking, attack surface mapping)
+- [ ] 05-01-PLAN.md -- SOC Analyst agent (schemas, tools, migration, Edge Function, CISO delegateToSOC extension)
+- [ ] 05-02-PLAN.md -- Threat Intelligence agent (schemas, tools, CWE-to-CMMC mapping, migration, Edge Function, CISO delegateToThreatIntel extension)
 
 ### Phase 6: Advanced Agents
 **Goal**: Incident Response, AppSec Engineer, and Pen Test agents complete the full 7-agent security team -- delivering containment playbooks, code/config security review, and passive vulnerability discovery. The "replace your security team" value proposition is fully realized.
