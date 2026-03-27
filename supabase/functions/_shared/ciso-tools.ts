@@ -78,6 +78,13 @@ When planning delegation tasks, follow this strict priority queue:
 - IR actions: 'analyze-incident', 'generate-playbook', 'create-post-incident-report'
 - ALL IR tasks are high-risk -- always set priority to 'critical' or 'high'
 - IR recommendations require human approval before any containment action
+
+## AppSec Engineer Delegation
+- Use delegateToAppSec tool for dependency scanning and configuration review tasks
+- Delegate scan-dependencies to analyze package.json, requirements.txt, or pom.xml manifests
+- Delegate review-config to check configuration files against security rules checklist
+- Delegate security-review for comprehensive security reports aggregating all findings
+- AppSec findings map to CMMC control families AC, SI, and CM
 `;
 
 // --------------------------------------------------------------------------
@@ -88,6 +95,7 @@ export const CISO_TOOL_NAMES = [
   "delegateToSOC",
   "delegateToThreatIntel",
   "delegateToIR",
+  "delegateToAppSec",
   "readCompletedTaskResults",
   "getCurrentRiskPosture",
   "createFollowUpTask",
@@ -316,6 +324,59 @@ export function createCisoTools(supabase: SupabaseClient, task: AgentTask) {
           scope,
           priority,
           risk_level: "high",
+        };
+      },
+    }),
+
+    /**
+     * Delegates a scoped task to the AppSec Engineer agent.
+     * Calls the shared delegateTask function from agent-base.ts.
+     * AppSec tasks use default risk_level (informational findings).
+     */
+    delegateToAppSec: tool({
+      description:
+        "Delegate a dependency scanning, configuration review, or security report task to the AppSec Engineer agent.",
+      parameters: z.object({
+        action: z
+          .string()
+          .describe(
+            "AppSec action: 'scan-dependencies', 'review-config', 'generate-security-report'"
+          ),
+        scope: z
+          .object({
+            manifest_type: z.string().optional(),
+            config_type: z.string().optional(),
+            focus_areas: z.array(z.string()).optional(),
+          })
+          .describe("Scope of the AppSec task"),
+        priority: z
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Priority level for the delegated task"),
+      }),
+      execute: async ({ action, scope, priority }) => {
+        const result = await delegateTask(
+          supabase,
+          task,
+          "appsec",
+          action,
+          {
+            ...scope,
+            company_id: task.company_id,
+            priority,
+          }
+        );
+
+        if ("error" in result) {
+          return { success: false, error: result.error };
+        }
+
+        return {
+          success: true,
+          taskId: result.taskId,
+          delegated_to: "appsec",
+          action,
+          scope,
+          priority,
         };
       },
     }),
@@ -596,6 +657,23 @@ export function buildCisoPrompt(
         `Use delegateToIR to assign create-post-incident-report to the IR agent. ` +
         `The post-incident report will include root cause analysis, lessons learned, ` +
         `and compliance impact assessment for CMMC controls 3.6.1-3.6.3.`
+      );
+
+    case "scan-dependencies":
+      return (
+        `Scan dependency manifests for known vulnerabilities. ` +
+        `Manifest type: ${input.manifest_type ?? "not specified"}. ` +
+        `Use delegateToAppSec to assign scan-dependencies to the AppSec Engineer agent. ` +
+        `AppSec will parse the manifest, match against CVE data, and create findings. ` +
+        `Schedule a follow-up to review AppSec vulnerability findings.`
+      );
+
+    case "security-review":
+      return (
+        `Conduct a comprehensive application security review. ` +
+        `Use delegateToAppSec to assign generate-security-report to the AppSec Engineer agent. ` +
+        `AppSec will scan manifests, review configs, and produce a SecurityReviewReport. ` +
+        `Schedule a follow-up to review findings and integrate with compliance posture.`
       );
 
     default:

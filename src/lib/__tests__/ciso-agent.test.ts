@@ -57,8 +57,12 @@ describe('CISO Agent', () => {
       expect(CISO_TOOL_NAMES).toContain('delegateToIR');
     });
 
-    it('contains exactly 7 tools', () => {
-      expect(CISO_TOOL_NAMES).toHaveLength(7);
+    it('includes delegateToAppSec for application security delegation', () => {
+      expect(CISO_TOOL_NAMES).toContain('delegateToAppSec');
+    });
+
+    it('contains exactly 8 tools', () => {
+      expect(CISO_TOOL_NAMES).toHaveLength(8);
     });
   });
 
@@ -424,6 +428,127 @@ describe('CISO Agent', () => {
     });
   });
 
+  describe('CISO AppSec Delegation', () => {
+    it('CISO_SYSTEM_PROMPT contains AppSec Engineer Delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/AppSec.*Engineer.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToAppSec/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions scan-dependencies delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/scan-dependencies/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions review-config delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/review-config/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions security-review delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/security-review/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions CMMC control families AC, SI, CM for AppSec', () => {
+      // The AppSec delegation section references these control families
+      expect(CISO_SYSTEM_PROMPT).toMatch(/AC.*SI.*CM|AC.*CM|SI.*CM/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing GRC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Delegation Rules/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToGRC/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing SOC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/SOC.*Analyst.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing Threat Intel delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Threat.*Intelligence.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing IR delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Incident.*Response.*Delegation/i);
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for scan-dependencies action', () => {
+      const prompt = buildCisoPrompt('scan-dependencies', {});
+      expect(prompt.toLowerCase()).toContain('scan');
+      expect(prompt.toLowerCase()).toContain('dependenc');
+      expect(prompt.toLowerCase()).toContain('appsec');
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for security-review action', () => {
+      const prompt = buildCisoPrompt('security-review', {});
+      expect(prompt.toLowerCase()).toContain('security');
+      expect(prompt.toLowerCase()).toContain('review');
+      expect(prompt.toLowerCase()).toContain('appsec');
+    });
+  });
+
+  describe('AppSec Edge Function structure', () => {
+    it('imports executeAgentTask from agent-base.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*executeAgentTask.*agent-base/s);
+    });
+
+    it('imports APPSEC_SYSTEM_PROMPT and createAppSecTools from appsec-tools.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*APPSEC_SYSTEM_PROMPT.*appsec-tools/s);
+      expect(code).toMatch(/import.*createAppSecTools.*appsec-tools/s);
+    });
+
+    it('imports SecurityReviewReportSchema from appsec-schemas.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*SecurityReviewReportSchema.*appsec-schemas/s);
+    });
+
+    it('uses anthropic claude model for text generation', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/anthropic\(["']claude/);
+    });
+
+    it('uses maxSteps: 8 for timeout avoidance', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/maxSteps:\s*8/);
+    });
+
+    it('uses Deno.serve pattern', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/Deno\.serve/);
+    });
+
+    it('uses buildAppSecPrompt for action-specific prompts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-appsec/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/buildAppSecPrompt/);
+    });
+  });
+
   describe('CISO Deno module structural parity', () => {
     it('Deno ciso-tools.ts has delegateToIR in CISO_TOOL_NAMES', () => {
       const denoPath = path.resolve(
@@ -434,6 +559,15 @@ describe('CISO Agent', () => {
       expect(code).toContain('delegateToIR');
     });
 
+    it('Deno ciso-tools.ts has delegateToAppSec in CISO_TOOL_NAMES', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toContain('delegateToAppSec');
+    });
+
     it('Deno ciso-tools.ts has IR delegation section in CISO_SYSTEM_PROMPT', () => {
       const denoPath = path.resolve(
         __dirname,
@@ -441,6 +575,15 @@ describe('CISO Agent', () => {
       );
       const code = fs.readFileSync(denoPath, 'utf-8');
       expect(code).toMatch(/Incident.*Response.*Delegation/i);
+    });
+
+    it('Deno ciso-tools.ts has AppSec delegation section in CISO_SYSTEM_PROMPT', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toMatch(/AppSec.*Engineer.*Delegation/i);
     });
 
     it('Deno ciso-tools.ts imports delegateTask from agent-base.ts', () => {
