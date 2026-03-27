@@ -84,10 +84,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Agent Dashboard
 
-- [ ] **DASH-01**: User can view real-time status of all 7 agents (running, idle, waiting for approval)
-- [ ] **DASH-02**: User can view agent activity logs with AI reasoning for each action
-- [ ] **DASH-03**: User can approve or reject pending agent actions from the dashboard
-- [ ] **DASH-04**: User can configure agent settings (thresholds, notification preferences)
+- [x] **DASH-01**: User can view real-time status of all 7 agents (running, idle, waiting for approval)
+- [x] **DASH-02**: User can view agent activity logs with AI reasoning for each action
+- [x] **DASH-03**: User can approve or reject pending agent actions from the dashboard
+- [x] **DASH-04**: User can configure agent settings (thresholds, notification preferences)
 
 ### Compliance Dashboard & Reporting
 
@@ -210,10 +210,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PENT-02 | Phase 6: Advanced Agents | Pending |
 | PENT-03 | Phase 6: Advanced Agents | Pending |
 | PENT-04 | Phase 6: Advanced Agents | Pending |
-| DASH-01 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| DASH-02 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| DASH-03 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| DASH-04 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| DASH-01 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| DASH-02 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| DASH-03 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| DASH-04 | Phase 3: Dashboards and Compliance Outputs | Complete |
 | REPT-01 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | REPT-02 | Phase 3: Dashboards and Compliance Outputs | Pending |
 | REPT-03 | Phase 3: Dashboards and Compliance Outputs | Pending |
