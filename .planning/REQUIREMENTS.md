@@ -14,11 +14,11 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CMMC-03**: System seeds CMMC control data from NIST OSCAL JSON catalogs
 - [x] **CMMC-04**: User can calculate their SPRS score based on assessment responses
 - [x] **CMMC-05**: GRC agent identifies gaps between current posture and CMMC L1/L2 requirements
-- [ ] **CMMC-06**: User can upload evidence documents and associate them with specific CMMC controls
-- [ ] **CMMC-07**: User can track evidence completeness per control (what's collected vs what's needed)
-- [ ] **CMMC-08**: User can export audit-ready System Security Plan (SSP) document
-- [ ] **CMMC-09**: User can export POA&M package with CMMC control references
-- [ ] **CMMC-10**: User can export evidence matrix mapping documents to controls
+- [x] **CMMC-06**: User can upload evidence documents and associate them with specific CMMC controls
+- [x] **CMMC-07**: User can track evidence completeness per control (what's collected vs what's needed)
+- [x] **CMMC-08**: User can export audit-ready System Security Plan (SSP) document
+- [x] **CMMC-09**: User can export POA&M package with CMMC control references
+- [x] **CMMC-10**: User can export evidence matrix mapping documents to controls
 
 ### Agent Infrastructure
 
@@ -167,11 +167,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CMMC-03 | Phase 1: Foundation | Complete (01-01) |
 | CMMC-04 | Phase 1: Foundation | Complete (01-01) |
 | CMMC-05 | Phase 2: Core Agents | Complete |
-| CMMC-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| CMMC-07 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| CMMC-08 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| CMMC-09 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| CMMC-10 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| CMMC-06 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| CMMC-07 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| CMMC-08 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| CMMC-09 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| CMMC-10 | Phase 3: Dashboards and Compliance Outputs | Complete |
 | INFRA-01 | Phase 1: Foundation | Complete |
 | INFRA-02 | Phase 1: Foundation | Complete |
 | INFRA-03 | Phase 1: Foundation | Complete |
