@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 04-02-PLAN.md (Agent Permissions)
-last_updated: "2026-03-27T14:21:48.759Z"
-last_activity: 2026-03-27 -- Completed 04-02-PLAN.md (Agent Permissions)
+status: completed
+stopped_at: Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
+last_updated: "2026-03-27T14:23:21.049Z"
+last_activity: 2026-03-27 -- Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
 progress:
   total_phases: 6
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
-  completed_plans: 10
-  percent: 91
+  completed_plans: 11
+  percent: 100
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 4 in progress. Agent permissions matrix complete. Onboarding wizard pending from parallel execution.
+**Current focus:** Phase 4 complete. Trial lifecycle, onboarding wizard, and agent permissions all delivered.
 
 ## Current Position
 
-Phase: 4 of 6 (Onboarding and Access) -- IN PROGRESS
-Plan: 2 of 2 in current phase (04-02 complete)
-Status: Phase 4 In Progress
-Last activity: 2026-03-27 -- Completed 04-02-PLAN.md (Agent Permissions)
+Phase: 4 of 6 (Onboarding and Access) -- COMPLETE
+Plan: 2 of 2 in current phase (04-01, 04-02 complete)
+Status: Phase 4 Complete
+Last activity: 2026-03-27 -- Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
 
-Progress: [█████████░] 91% (Overall -- 10 of 11 plans complete through Phase 4)
+Progress: [██████████] 100% (Overall -- all 11 plans complete through Phase 4)
 
 ## Performance Metrics
 
@@ -51,8 +51,13 @@ Progress: [█████████░] 91% (Overall -- 10 of 11 plans comple
 - Last 5 plans: 02-03 (4 min), 03-01 (7 min), 03-02 (8 min), 03-03 (10 min)
 - Trend: Slightly increasing as complexity grows (~8 min average)
 
+| 4. Onboarding | 2/2 | 12 min | 6.0 min |
+
+**Recent Trend:**
+- Last 5 plans: 03-01 (7 min), 03-02 (8 min), 03-03 (10 min), 04-02 (5 min), 04-01 (7 min)
+- Trend: Consistent at ~7 min average
+
 *Updated after each plan completion*
-| Phase 04 P02 | 5min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -103,6 +108,10 @@ Recent decisions affecting current work:
 - [Phase 04-02]: CROSS JOIN seed with ON CONFLICT DO NOTHING for idempotent permission seeding
 - [Phase 04-02]: useAllAgentPermissions returns Map for O(1) per-agent-type lookups in list components
 - [Phase 04-02]: AFTER INSERT trigger with SECURITY DEFINER for auto-seeding new company permissions
+- [Phase 04-01]: New signups get admin role (org owner) instead of viewer -- they own their company
+- [Phase 04-01]: Path-based redirect loop prevention in ProtectedRoute (/onboarding and /trial-expired excluded from redirect checks)
+- [Phase 04-01]: Converted customers (trial_status=active) never show as expired regardless of trial_ends_at
+- [Phase 04-01]: Onboarding profiles use upsert on company_id unique constraint for idempotent saves
 
 ### Pending Todos
 
@@ -117,6 +126,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T14:21:48.758Z
-Stopped at: Completed 04-02-PLAN.md (Agent Permissions)
+Last session: 2026-03-27T14:23:21.046Z
+Stopped at: Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
 Resume file: None
