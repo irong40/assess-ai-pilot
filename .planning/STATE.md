@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
-last_updated: "2026-03-27T14:27:21.750Z"
-last_activity: 2026-03-27 -- Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
+status: in_progress
+stopped_at: Completed 05-01-PLAN.md (SOC Analyst Agent)
+last_updated: "2026-03-27T20:34:00Z"
+last_activity: 2026-03-27 -- Completed 05-01-PLAN.md (SOC Analyst Agent)
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
-  percent: 100
+  total_plans: 13
+  completed_plans: 12
+  percent: 85
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 4 complete. Trial lifecycle, onboarding wizard, and agent permissions all delivered.
+**Current focus:** Phase 5 in progress. SOC Analyst agent delivered (05-01). Threat Intel agent next (05-02).
 
 ## Current Position
 
-Phase: 4 of 6 (Onboarding and Access) -- COMPLETE
-Plan: 2 of 2 in current phase (04-01, 04-02 complete)
-Status: Phase 4 Complete
-Last activity: 2026-03-27 -- Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
+Phase: 5 of 6 (Security Operations Agents)
+Plan: 1 of 2 in current phase (05-01 complete)
+Status: In Progress
+Last activity: 2026-03-27 -- Completed 05-01-PLAN.md (SOC Analyst Agent)
 
-Progress: [██████████] 100% (Overall -- all 11 plans complete through Phase 4)
+Progress: [████████░░] 85% (Overall -- 12 of 13 plans complete through Phase 5-01)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 7.3 min
+- Total plans completed: 10
+- Average duration: 7.4 min
 - Total execution time: 1.10 hours
 
 **By Phase:**
@@ -53,9 +53,11 @@ Progress: [██████████] 100% (Overall -- all 11 plans complet
 
 | 4. Onboarding | 2/2 | 12 min | 6.0 min |
 
+| 5. Security Ops | 1/2 | 8 min | 8.0 min |
+
 **Recent Trend:**
-- Last 5 plans: 03-01 (7 min), 03-02 (8 min), 03-03 (10 min), 04-02 (5 min), 04-01 (7 min)
-- Trend: Consistent at ~7 min average
+- Last 5 plans: 03-02 (8 min), 03-03 (10 min), 04-02 (5 min), 04-01 (7 min), 05-01 (8 min)
+- Trend: Consistent at ~7.6 min average
 
 *Updated after each plan completion*
 
@@ -112,6 +114,11 @@ Recent decisions affecting current work:
 - [Phase 04-01]: Path-based redirect loop prevention in ProtectedRoute (/onboarding and /trial-expired excluded from redirect checks)
 - [Phase 04-01]: Converted customers (trial_status=active) never show as expired regardless of trial_ends_at
 - [Phase 04-01]: Onboarding profiles use upsert on company_id unique constraint for idempotent saves
+- [05-01]: SOC agent uses maxSteps: 8 (not 10) per Pitfall 5 to stay within 150s Edge Function timeout
+- [05-01]: 4-step false positive reasoning chain: tech stack match, compensating control, CVSS context, classification decision
+- [05-01]: CISO delegation extension appends to existing prompt (does not rewrite) -- preserves GRC delegation rules
+- [05-01]: SOC tools persist alerts via createSocAlert during execution -- no separate storeResult needed
+- [05-01]: Batch limit of 20 CVEs per SOC triage invocation to prevent timeout
 
 ### Pending Todos
 
@@ -126,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T14:23:21.046Z
-Stopped at: Completed 04-01-PLAN.md (Trial & Onboarding) -- Phase 4 complete
+Last session: 2026-03-27T20:34:00Z
+Stopped at: Completed 05-01-PLAN.md (SOC Analyst Agent)
 Resume file: None

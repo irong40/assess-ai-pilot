@@ -49,10 +49,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### SOC Analyst Agent
 
-- [ ] **SOC-01**: SOC agent triages alerts from CVE feed and enriches with severity and context
-- [ ] **SOC-02**: SOC agent correlates findings across data sources (CVE, assessment gaps, threat intel)
-- [ ] **SOC-03**: SOC agent classifies false positives and provides reasoning
-- [ ] **SOC-04**: SOC agent escalates confirmed incidents to IR agent via CISO Orchestrator
+- [x] **SOC-01**: SOC agent triages alerts from CVE feed and enriches with severity and context
+- [x] **SOC-02**: SOC agent correlates findings across data sources (CVE, assessment gaps, threat intel)
+- [x] **SOC-03**: SOC agent classifies false positives and provides reasoning
+- [x] **SOC-04**: SOC agent escalates confirmed incidents to IR agent via CISO Orchestrator
 
 ### Threat Intelligence Agent
 
@@ -190,10 +190,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GRC-03 | Phase 2: Core Agents | Complete |
 | GRC-04 | Phase 2: Core Agents | Complete |
 | GRC-05 | Phase 2: Core Agents | Complete |
-| SOC-01 | Phase 5: Security Operations Agents | Pending |
-| SOC-02 | Phase 5: Security Operations Agents | Pending |
-| SOC-03 | Phase 5: Security Operations Agents | Pending |
-| SOC-04 | Phase 5: Security Operations Agents | Pending |
+| SOC-01 | Phase 5: Security Operations Agents | Complete |
+| SOC-02 | Phase 5: Security Operations Agents | Complete |
+| SOC-03 | Phase 5: Security Operations Agents | Complete |
+| SOC-04 | Phase 5: Security Operations Agents | Complete |
 | THRT-01 | Phase 5: Security Operations Agents | Pending |
 | THRT-02 | Phase 5: Security Operations Agents | Pending |
 | THRT-03 | Phase 5: Security Operations Agents | Pending |
