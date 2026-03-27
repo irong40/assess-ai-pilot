@@ -65,12 +65,12 @@ Plans:
   3. User can upload evidence documents, associate them with specific CMMC controls, and track evidence completeness per control
   4. User can export an audit-ready SSP, POA&M package with CMMC control references, and an evidence matrix mapping documents to controls
   5. System continuously monitors compliance posture and alerts on drift, and user can schedule periodic re-assessments
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 03-01: Agent dashboard (status, logs, approval actions, configuration)
-- [ ] 03-02: Compliance dashboard and reporting (maturity score, trends, drift alerts)
-- [ ] 03-03: Evidence management and audit-ready document export (SSP, POA&M, evidence matrix)
+- [ ] 03-01-PLAN.md -- Agent dashboard (real-time status grid, activity logs, approval queue, agent settings)
+- [ ] 03-02-PLAN.md -- Compliance dashboard (SPRS score, family progress, trend chart, executive summary, drift alerts, reassessment scheduling)
+- [ ] 03-03-PLAN.md -- Evidence management and audit-ready document export (evidence upload, completeness tracking, SSP/POA&M/evidence matrix PDF export)
 
 ### Phase 4: Onboarding and Access
 **Goal**: New customer organizations can sign up for a trial, go through a guided onboarding flow that seeds their initial assessment, and have role-based access extended to agent-specific permissions -- making the product ready for external customers.
