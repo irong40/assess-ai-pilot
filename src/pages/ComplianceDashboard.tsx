@@ -15,6 +15,8 @@ import SprsScoreCard from '@/components/compliance/SprsScoreCard';
 import FamilyProgressChart from '@/components/compliance/FamilyProgressChart';
 import ComplianceTrendChart from '@/components/compliance/ComplianceTrendChart';
 import ExecutiveSummaryView from '@/components/compliance/ExecutiveSummaryView';
+import DriftAlertBanner from '@/components/compliance/DriftAlertBanner';
+import ReassessmentScheduler from '@/components/compliance/ReassessmentScheduler';
 
 export default function ComplianceDashboard() {
   const { data: snapshots, isLoading, error } = useComplianceSnapshots();
@@ -49,7 +51,8 @@ export default function ComplianceDashboard() {
         </p>
       </div>
 
-      {/* DriftAlertBanner placeholder (wired in Task 2) */}
+      {/* Drift Alert Banner */}
+      <DriftAlertBanner snapshots={snapshots ?? null} />
 
       {/* Top row: SPRS Score + Trend Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -84,7 +87,8 @@ export default function ComplianceDashboard() {
       {/* Bottom section: Executive Summary */}
       <ExecutiveSummaryView />
 
-      {/* ReassessmentScheduler placeholder (wired in Task 2) */}
+      {/* Reassessment Scheduler */}
+      <ReassessmentScheduler />
     </div>
   );
 }
