@@ -11,6 +11,8 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AgentStatusGrid } from '@/components/agents/AgentStatusGrid';
 import { AgentActivityLog } from '@/components/agents/AgentActivityLog';
+import { ApprovalQueue } from '@/components/agents/ApprovalQueue';
+import { AgentSettingsForm } from '@/components/agents/AgentSettingsForm';
 import { useRealtimeAgentStatus } from '@/hooks/useRealtimeAgentStatus';
 
 export default function AgentDashboard() {
@@ -43,15 +45,11 @@ export default function AgentDashboard() {
         </TabsContent>
 
         <TabsContent value="approvals" className="mt-6">
-          <div className="text-center py-12 text-muted-foreground">
-            Approval queue (Task 2)
-          </div>
+          <ApprovalQueue />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">
-          <div className="text-center py-12 text-muted-foreground">
-            Agent settings (Task 2)
-          </div>
+          <AgentSettingsForm />
         </TabsContent>
       </Tabs>
     </div>
