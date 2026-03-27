@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 03-03-PLAN.md (Evidence Management & Audit Export) -- Phase 3 complete
-last_updated: "2026-03-27T13:44:28.272Z"
-last_activity: 2026-03-27 -- Completed 03-03-PLAN.md (Evidence Management & Audit Export)
+status: executing
+stopped_at: Completed 04-02-PLAN.md (Agent Permissions)
+last_updated: "2026-03-27T14:21:48.759Z"
+last_activity: 2026-03-27 -- Completed 04-02-PLAN.md (Agent Permissions)
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
-  percent: 100
+  total_plans: 11
+  completed_plans: 10
+  percent: 91
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 3 complete. All dashboards and compliance outputs delivered including evidence management and audit-ready exports.
+**Current focus:** Phase 4 in progress. Agent permissions matrix complete. Onboarding wizard pending from parallel execution.
 
 ## Current Position
 
-Phase: 3 of 6 (Dashboards and Compliance Outputs) -- COMPLETE
-Plan: 3 of 3 in current phase (03-01, 03-02, 03-03 complete)
-Status: Phase 3 Complete
-Last activity: 2026-03-27 -- Completed 03-03-PLAN.md (Evidence Management & Audit Export)
+Phase: 4 of 6 (Onboarding and Access) -- IN PROGRESS
+Plan: 2 of 2 in current phase (04-02 complete)
+Status: Phase 4 In Progress
+Last activity: 2026-03-27 -- Completed 04-02-PLAN.md (Agent Permissions)
 
-Progress: [██████████] 100% (Overall -- all 9 plans complete through Phase 3)
+Progress: [█████████░] 91% (Overall -- 10 of 11 plans complete through Phase 4)
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [██████████] 100% (Overall -- all 9 plans complete
 - Trend: Slightly increasing as complexity grows (~8 min average)
 
 *Updated after each plan completion*
+| Phase 04 P02 | 5min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -98,6 +99,10 @@ Recent decisions affecting current work:
 - [03-03]: POA&M critical controls (MFA 3.5.3, FIPS 3.13.11, IR 3.6.1, Audit 3.3.1, SSP 3.12.4) flagged CANNOT BE DEFERRED
 - [03-03]: Risk/impact uses family prefix heuristic (AC/SC/IA/AU = High) consistent with SPRS weight approximation
 - [03-03]: control_evidence UNIQUE(company_id, control_id, document_id) prevents evidence double-counting
+- [Phase 04-02]: Deny-by-default: useAgentPermissions returns all-false on error or missing row
+- [Phase 04-02]: CROSS JOIN seed with ON CONFLICT DO NOTHING for idempotent permission seeding
+- [Phase 04-02]: useAllAgentPermissions returns Map for O(1) per-agent-type lookups in list components
+- [Phase 04-02]: AFTER INSERT trigger with SECURITY DEFINER for auto-seeding new company permissions
 
 ### Pending Todos
 
@@ -112,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T13:15:33Z
-Stopped at: Completed 03-03-PLAN.md (Evidence Management & Audit Export) -- Phase 3 complete
-Resume file: .planning/phases/03-dashboards-and-compliance-outputs/03-03-SUMMARY.md
+Last session: 2026-03-27T14:21:48.758Z
+Stopped at: Completed 04-02-PLAN.md (Agent Permissions)
+Resume file: None

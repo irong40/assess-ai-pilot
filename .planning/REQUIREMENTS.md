@@ -103,7 +103,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ONBD-01**: New organizations can sign up with a 14-30 day trial period with full access
 - [ ] **ONBD-02**: Guided onboarding flow captures organization profile, tech stack, and compliance goals
 - [ ] **ONBD-03**: Onboarding seeds initial assessment from organization profile data
-- [ ] **ONBD-04**: Existing role-based access extended to agent-specific permissions
+- [x] **ONBD-04**: Existing role-based access extended to agent-specific permissions
 
 ### Data Architecture
 
@@ -223,7 +223,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ONBD-01 | Phase 4: Onboarding and Access | Pending |
 | ONBD-02 | Phase 4: Onboarding and Access | Pending |
 | ONBD-03 | Phase 4: Onboarding and Access | Pending |
-| ONBD-04 | Phase 4: Onboarding and Access | Pending |
+| ONBD-04 | Phase 4: Onboarding and Access | Complete |
 | DATA-01 | Phase 1: Foundation | Complete (01-03) |
 | DATA-02 | Phase 1: Foundation | Complete (01-03) |
 | DATA-03 | Phase 2: Core Agents | Complete (02-03) |
