@@ -6,15 +6,16 @@
  * - Completeness: EvidenceCompleteness showing per-family coverage
  * - Evidence Matrix: EvidenceMatrixTable with sortable, filterable evidence records
  *
- * ExportPanel placeholder below tabs (replaced in Task 2).
+ * ExportPanel below tabs for SSP, POA&M, and evidence matrix PDF/CSV download.
  */
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { Upload, BarChart3, FileSpreadsheet, Download } from 'lucide-react';
 import EvidenceUpload from '@/components/evidence/EvidenceUpload';
 import EvidenceCompleteness from '@/components/evidence/EvidenceCompleteness';
 import EvidenceMatrixTable from '@/components/evidence/EvidenceMatrixTable';
+import ExportPanel from '@/components/export/ExportPanel';
 
 export default function EvidenceManagement() {
   return (
@@ -60,17 +61,14 @@ export default function EvidenceManagement() {
           </TabsContent>
         </Tabs>
 
-        {/* Export Panel placeholder -- replaced in Task 2 */}
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+        {/* Audit-Ready Exports */}
+        <Separator className="my-8" />
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Download className="h-5 w-5" />
             Audit-Ready Exports
           </h2>
-          <Card>
-            <CardContent className="py-6 text-center text-muted-foreground">
-              Export panel will be available after running a compliance assessment.
-            </CardContent>
-          </Card>
+          <ExportPanel />
         </div>
       </div>
     </AppLayout>
