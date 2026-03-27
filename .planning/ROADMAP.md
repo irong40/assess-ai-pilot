@@ -80,11 +80,11 @@ Plans:
   1. A new organization can sign up and receive a 14-30 day trial with full platform access including all agents
   2. Guided onboarding captures organization profile, tech stack, and compliance goals, then seeds an initial assessment from that data
   3. Role-based access controls include agent-specific permissions (who can configure agents, approve actions, view logs)
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: Trial sign-up and guided onboarding flow
-- [ ] 04-02: Agent-specific permissions and initial assessment seeding
+- [ ] 04-01-PLAN.md -- Trial sign-up lifecycle, guided onboarding wizard (4 steps), and initial assessment seeding from onboarding data
+- [ ] 04-02-PLAN.md -- Agent-specific permissions table (company_agent_permissions), permission hook, and integration with ApprovalQueue and AgentSettings
 
 ### Phase 5: Security Operations Agents
 **Goal**: The SOC Analyst and Threat Intelligence agents are operational -- adding continuous security monitoring, alert triage, threat landscape awareness, and IOC tracking that feeds into the existing GRC and CISO agent workflows.
