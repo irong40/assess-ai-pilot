@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 06-01-PLAN.md (Incident Response Agent)
-last_updated: "2026-03-27T21:48:00Z"
-last_activity: 2026-03-27 -- Completed 06-01-PLAN.md (Incident Response Agent)
+stopped_at: Completed 06-02-PLAN.md (AppSec Engineer Agent)
+last_updated: "2026-03-27T22:01:00Z"
+last_activity: 2026-03-27 -- Completed 06-02-PLAN.md (AppSec Engineer Agent)
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 16
-  completed_plans: 14
-  percent: 87
+  completed_plans: 15
+  percent: 93
 ---
 
 # Project State
@@ -21,23 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Small defense contractors can achieve and maintain CMMC compliance without hiring a security team -- at $2-5k/month.
-**Current focus:** Phase 6 in progress. IR agent complete, AppSec and Pen Test pending.
+**Current focus:** Phase 6 in progress. IR and AppSec agents complete, Pen Test pending.
 
 ## Current Position
 
 Phase: 6 of 6 (Advanced Agents)
-Plan: 1 of 3 in current phase (06-01 complete, 06-02 and 06-03 pending)
+Plan: 2 of 3 in current phase (06-01 and 06-02 complete, 06-03 pending)
 Status: In Progress
-Last activity: 2026-03-27 -- Completed 06-01-PLAN.md (Incident Response Agent)
+Last activity: 2026-03-27 -- Completed 06-02-PLAN.md (AppSec Engineer Agent)
 
-Progress: [████████░░] 87% (Overall -- 14 of 16 plans complete)
+Progress: [█████████░] 93% (Overall -- 15 of 16 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 7.6 min
-- Total execution time: 1.52 hours
+- Total plans completed: 15
+- Average duration: 7.5 min
+- Total execution time: 1.62 hours
 
 **By Phase:**
 
@@ -55,11 +55,11 @@ Progress: [████████░░] 87% (Overall -- 14 of 16 plans comple
 
 | 5. Security Ops | 2/2 | 18 min | 9.0 min |
 
-| 6. Advanced Agents | 1/3 | 8 min | 8.0 min |
+| 6. Advanced Agents | 2/3 | 14 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (5 min), 04-01 (7 min), 05-01 (8 min), 05-02 (10 min), 06-01 (8 min)
-- Trend: Consistent at ~7.6 min average
+- Last 5 plans: 04-01 (7 min), 05-01 (8 min), 05-02 (10 min), 06-01 (8 min), 06-02 (6 min)
+- Trend: Consistent at ~7.8 min average
 
 *Updated after each plan completion*
 
@@ -132,6 +132,12 @@ Recent decisions affecting current work:
 - [06-01]: CISO delegation extension appends IR rules to existing prompt (does not rewrite) -- preserves GRC, SOC, and Threat Intel delegation rules
 - [06-01]: Post-incident reports create compliance_snapshots linking incident to compliance impact (Pitfall 6)
 - [06-01]: IR tools persist data via createIrIncident/saveContainmentPlan/savePostIncidentReport during execution
+- [06-02]: AppSec agent uses maxSteps: 8 consistent with SOC, Threat Intel, and IR for Edge Function timeout avoidance
+- [06-02]: AppSec tasks use default risk_level (not hardcoded high like IR) -- findings are informational
+- [06-02]: CISO delegation extension appends AppSec rules to existing prompt (does not rewrite) -- preserves GRC, SOC, Threat Intel, and IR delegation rules
+- [06-02]: CONFIG_SECURITY_RULES uses JSON-key-aware regex patterns (optional trailing quote before colon)
+- [06-02]: parseDependencyManifest is a pure function: package.json via JSON.parse, requirements.txt via line-split, pom.xml via regex
+- [06-02]: AppSec tools persist findings via createAppSecFinding during execution -- no separate storeResult needed
 
 ### Pending Todos
 
@@ -146,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T21:48:00Z
-Stopped at: Completed 06-01-PLAN.md (Incident Response Agent)
+Last session: 2026-03-27T22:01:00Z
+Stopped at: Completed 06-02-PLAN.md (AppSec Engineer Agent)
 Resume file: None
