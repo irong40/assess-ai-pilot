@@ -91,12 +91,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Compliance Dashboard & Reporting
 
-- [ ] **REPT-01**: User can view compliance maturity score across all CMMC domains
-- [ ] **REPT-02**: User can view domain-level progress (percentage complete per security domain)
-- [ ] **REPT-03**: User can view compliance trend over time (readiness trajectory)
-- [ ] **REPT-04**: CISO agent generates board-ready executive summary reports
-- [ ] **REPT-05**: System continuously monitors compliance posture and alerts on drift
-- [ ] **REPT-06**: User can schedule periodic compliance re-assessments
+- [x] **REPT-01**: User can view compliance maturity score across all CMMC domains
+- [x] **REPT-02**: User can view domain-level progress (percentage complete per security domain)
+- [x] **REPT-03**: User can view compliance trend over time (readiness trajectory)
+- [x] **REPT-04**: CISO agent generates board-ready executive summary reports
+- [x] **REPT-05**: System continuously monitors compliance posture and alerts on drift
+- [x] **REPT-06**: User can schedule periodic compliance re-assessments
 
 ### Onboarding & Access
 
@@ -214,12 +214,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-02 | Phase 3: Dashboards and Compliance Outputs | Complete |
 | DASH-03 | Phase 3: Dashboards and Compliance Outputs | Complete |
 | DASH-04 | Phase 3: Dashboards and Compliance Outputs | Complete |
-| REPT-01 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| REPT-02 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| REPT-03 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| REPT-04 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| REPT-05 | Phase 3: Dashboards and Compliance Outputs | Pending |
-| REPT-06 | Phase 3: Dashboards and Compliance Outputs | Pending |
+| REPT-01 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| REPT-02 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| REPT-03 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| REPT-04 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| REPT-05 | Phase 3: Dashboards and Compliance Outputs | Complete |
+| REPT-06 | Phase 3: Dashboards and Compliance Outputs | Complete |
 | ONBD-01 | Phase 4: Onboarding and Access | Pending |
 | ONBD-02 | Phase 4: Onboarding and Access | Pending |
 | ONBD-03 | Phase 4: Onboarding and Access | Pending |
