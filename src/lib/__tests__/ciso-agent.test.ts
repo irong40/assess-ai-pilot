@@ -53,8 +53,12 @@ describe('CISO Agent', () => {
       expect(CISO_TOOL_NAMES).toContain('createFollowUpTask');
     });
 
-    it('contains exactly 6 tools', () => {
-      expect(CISO_TOOL_NAMES).toHaveLength(6);
+    it('includes delegateToIR for incident response delegation', () => {
+      expect(CISO_TOOL_NAMES).toContain('delegateToIR');
+    });
+
+    it('contains exactly 7 tools', () => {
+      expect(CISO_TOOL_NAMES).toHaveLength(7);
     });
   });
 
@@ -139,6 +143,53 @@ describe('CISO Agent', () => {
       expect(prompt.toLowerCase()).toContain('threat');
       expect(prompt.toLowerCase()).toContain('soc');
       expect(prompt.toLowerCase()).toContain('grc');
+    });
+  });
+
+  describe('CISO IR Delegation', () => {
+    it('CISO_SYSTEM_PROMPT contains Incident Response Delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Incident.*Response.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToIR/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions analyze-incident action', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/analyze-incident/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions generate-playbook action', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/generate-playbook/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions create-post-incident-report action', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/create-post-incident-report/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions IR tasks are high-risk', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/IR.*high.risk|high.risk.*IR|all.*IR.*tasks/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing GRC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Delegation Rules/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToGRC/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing SOC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/SOC.*Analyst.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing Threat Intel delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Threat.*Intelligence.*Delegation/i);
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for handle-incident action', () => {
+      const prompt = buildCisoPrompt('handle-incident', {});
+      expect(prompt.toLowerCase()).toContain('incident');
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for post-incident-review action', () => {
+      const prompt = buildCisoPrompt('post-incident-review', {});
+      expect(prompt.toLowerCase()).toContain('incident');
+      expect(prompt.toLowerCase()).toContain('report');
     });
   });
 
@@ -304,6 +355,111 @@ describe('CISO Agent', () => {
       );
       const code = fs.readFileSync(edgeFnPath, 'utf-8');
       expect(code).toMatch(/buildThreatIntelPrompt/);
+    });
+  });
+
+  describe('IR Edge Function structure', () => {
+    it('imports executeAgentTask from agent-base.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*executeAgentTask.*agent-base/s);
+    });
+
+    it('imports IR_SYSTEM_PROMPT and createIrTools from ir-tools.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*IR_SYSTEM_PROMPT.*ir-tools/s);
+      expect(code).toMatch(/import.*createIrTools.*ir-tools/s);
+    });
+
+    it('imports IrAnalysisResultSchema from ir-schemas.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*IrAnalysisResultSchema.*ir-schemas/s);
+    });
+
+    it('uses anthropic claude model for text generation', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/anthropic\(["']claude/);
+    });
+
+    it('uses maxSteps: 8 for timeout avoidance', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/maxSteps:\s*8/);
+    });
+
+    it('uses Deno.serve pattern', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/Deno\.serve/);
+    });
+
+    it('uses buildIrPrompt for action-specific prompts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-incident-response/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/buildIrPrompt/);
+    });
+  });
+
+  describe('CISO Deno module structural parity', () => {
+    it('Deno ciso-tools.ts has delegateToIR in CISO_TOOL_NAMES', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toContain('delegateToIR');
+    });
+
+    it('Deno ciso-tools.ts has IR delegation section in CISO_SYSTEM_PROMPT', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toMatch(/Incident.*Response.*Delegation/i);
+    });
+
+    it('Deno ciso-tools.ts imports delegateTask from agent-base.ts', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toMatch(/import.*delegateTask.*agent-base/s);
+    });
+
+    it('Deno ciso-tools.ts hardcodes risk_level high for IR delegation', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      // The delegateToIR section should contain risk_level: 'high'
+      expect(code).toMatch(/risk_level.*high/i);
     });
   });
 });

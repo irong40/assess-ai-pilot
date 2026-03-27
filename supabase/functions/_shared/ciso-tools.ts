@@ -72,6 +72,12 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate scan-iocs to extract and track indicators of compromise from recent CVEs
 - Delegate map-attack-surface for comprehensive risk mapping combining tech stack, compliance gaps, and active threats
 - Threat briefs map CVE threats to specific CMMC controls via CWE categorization
+
+## Incident Response Delegation
+- Use delegateToIR for incident handling after SOC escalation (escalation_status='needs_ir_review')
+- IR actions: 'analyze-incident', 'generate-playbook', 'create-post-incident-report'
+- ALL IR tasks are high-risk -- always set priority to 'critical' or 'high'
+- IR recommendations require human approval before any containment action
 `;
 
 // --------------------------------------------------------------------------
@@ -81,6 +87,7 @@ export const CISO_TOOL_NAMES = [
   "delegateToGRC",
   "delegateToSOC",
   "delegateToThreatIntel",
+  "delegateToIR",
   "readCompletedTaskResults",
   "getCurrentRiskPosture",
   "createFollowUpTask",
@@ -253,6 +260,62 @@ export function createCisoTools(supabase: SupabaseClient, task: AgentTask) {
           action,
           scope,
           priority,
+        };
+      },
+    }),
+
+    /**
+     * Delegates a scoped task to the Incident Response agent.
+     * CRITICAL: Always sets risk_level='high' regardless of action type (IR-04).
+     */
+    delegateToIR: tool({
+      description:
+        "Delegate an incident handling task to the Incident Response agent. " +
+        "Use after SOC escalation (needs_ir_review). ALL IR tasks are high-risk.",
+      parameters: z.object({
+        action: z
+          .string()
+          .describe(
+            "IR action: 'analyze-incident', 'generate-playbook', 'create-post-incident-report'"
+          ),
+        scope: z
+          .object({
+            incident_id: z.string().uuid().optional(),
+            soc_alert_ids: z.array(z.string().uuid()).optional(),
+            incident_type: z.string().optional(),
+          })
+          .describe("Scope of the IR task"),
+        priority: z
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Priority level for the delegated task"),
+      }),
+      execute: async ({ action, scope, priority }) => {
+        const result = await delegateTask(
+          supabase,
+          task,
+          "incident-response",
+          action,
+          {
+            ...scope,
+            company_id: task.company_id,
+            priority,
+            // CRITICAL: Always override risk_level to 'high' for IR tasks (IR-04)
+            risk_level: "high",
+          }
+        );
+
+        if ("error" in result) {
+          return { success: false, error: result.error };
+        }
+
+        return {
+          success: true,
+          taskId: result.taskId,
+          delegated_to: "incident-response",
+          action,
+          scope,
+          priority,
+          risk_level: "high",
         };
       },
     }),
@@ -514,6 +577,25 @@ export function buildCisoPrompt(
         `alert triage to SOC (triage-alerts), ` +
         `and compliance assessment to GRC (gap-analysis). ` +
         `After all delegations complete, synthesize results into an executive security posture report.`
+      );
+
+    case "handle-incident":
+      return (
+        `Handle a security incident requiring IR response. ` +
+        `Incident ID: ${input.incident_id ?? "not specified"}. ` +
+        `SOC alert IDs: ${JSON.stringify(input.soc_alert_ids ?? [])}. ` +
+        `Use delegateToIR to assign analyze-incident to the IR agent. ` +
+        `All IR tasks are high-risk and require human approval. ` +
+        `Schedule a follow-up to review IR containment recommendations.`
+      );
+
+    case "post-incident-review":
+      return (
+        `Conduct a post-incident review for a resolved incident. ` +
+        `Incident ID: ${input.incident_id ?? "not specified"}. ` +
+        `Use delegateToIR to assign create-post-incident-report to the IR agent. ` +
+        `The post-incident report will include root cause analysis, lessons learned, ` +
+        `and compliance impact assessment for CMMC controls 3.6.1-3.6.3.`
       );
 
     default:

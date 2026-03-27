@@ -66,6 +66,12 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate scan-iocs to extract and track indicators of compromise from recent CVEs
 - Delegate map-attack-surface for comprehensive risk mapping combining tech stack, compliance gaps, and active threats
 - Threat briefs map CVE threats to specific CMMC controls via CWE categorization
+
+## Incident Response Delegation
+- Use delegateToIR for incident handling after SOC escalation (escalation_status='needs_ir_review')
+- IR actions: 'analyze-incident', 'generate-playbook', 'create-post-incident-report'
+- ALL IR tasks are high-risk -- always set priority to 'critical' or 'high'
+- IR recommendations require human approval before any containment action
 `;
 
 // --------------------------------------------------------------------------
@@ -75,6 +81,7 @@ export const CISO_TOOL_NAMES = [
   'delegateToGRC',
   'delegateToSOC',
   'delegateToThreatIntel',
+  'delegateToIR',
   'readCompletedTaskResults',
   'getCurrentRiskPosture',
   'createFollowUpTask',
@@ -159,6 +166,25 @@ export function buildCisoPrompt(
         `alert triage to SOC (triage-alerts), ` +
         `and compliance assessment to GRC (gap-analysis). ` +
         `After all delegations complete, synthesize results into an executive security posture report.`
+      );
+
+    case 'handle-incident':
+      return (
+        `Handle a security incident requiring IR response. ` +
+        `Incident ID: ${input.incident_id ?? 'not specified'}. ` +
+        `SOC alert IDs: ${JSON.stringify(input.soc_alert_ids ?? [])}. ` +
+        `Use delegateToIR to assign analyze-incident to the IR agent. ` +
+        `All IR tasks are high-risk and require human approval. ` +
+        `Schedule a follow-up to review IR containment recommendations.`
+      );
+
+    case 'post-incident-review':
+      return (
+        `Conduct a post-incident review for a resolved incident. ` +
+        `Incident ID: ${input.incident_id ?? 'not specified'}. ` +
+        `Use delegateToIR to assign create-post-incident-report to the IR agent. ` +
+        `The post-incident report will include root cause analysis, lessons learned, ` +
+        `and compliance impact assessment for CMMC controls 3.6.1-3.6.3.`
       );
 
     default:
