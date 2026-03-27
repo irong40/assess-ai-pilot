@@ -56,6 +56,13 @@ When planning delegation tasks, follow this strict priority queue:
 - Generate an executive summary that a non-technical CISO can act on
 - Always include SPRS score impact and trend direction
 - Prioritize recommendations by risk reduction value
+
+## SOC Analyst Delegation
+- Use delegateToSOC tool to assign alert triage and correlation tasks
+- Delegate triage-alerts when new CVEs are detected or on scheduled scans
+- Delegate correlate-findings to link SOC alerts with compliance gaps
+- Delegate classify-alert for individual alert investigation
+- SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (IR agent not yet available)
 `;
 
 // --------------------------------------------------------------------------
@@ -63,6 +70,7 @@ When planning delegation tasks, follow this strict priority queue:
 // --------------------------------------------------------------------------
 export const CISO_TOOL_NAMES = [
   "delegateToGRC",
+  "delegateToSOC",
   "readCompletedTaskResults",
   "getCurrentRiskPosture",
   "createFollowUpTask",
@@ -128,6 +136,58 @@ export function createCisoTools(supabase: SupabaseClient, task: AgentTask) {
           success: true,
           taskId: result.taskId,
           delegated_to: "grc-analyst",
+          action,
+          scope,
+          priority,
+        };
+      },
+    }),
+
+    /**
+     * Delegates a scoped task to the SOC Analyst.
+     * Calls the shared delegateTask function from agent-base.ts.
+     */
+    delegateToSOC: tool({
+      description:
+        "Delegate an alert triage, correlation, or classification task to the SOC Analyst agent.",
+      parameters: z.object({
+        action: z
+          .string()
+          .describe(
+            "SOC action: 'triage-alerts', 'correlate-findings', 'classify-alert'"
+          ),
+        scope: z
+          .object({
+            severity_filter: z.string().optional(),
+            time_range_hours: z.number().optional(),
+            alert_ids: z.array(z.string()).optional(),
+          })
+          .describe("Scope of the SOC task"),
+        priority: z
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Priority level for the delegated task"),
+      }),
+      execute: async ({ action, scope, priority }) => {
+        const result = await delegateTask(
+          supabase,
+          task,
+          "soc-analyst",
+          action,
+          {
+            ...scope,
+            company_id: task.company_id,
+            priority,
+          }
+        );
+
+        if ("error" in result) {
+          return { success: false, error: result.error };
+        }
+
+        return {
+          success: true,
+          taskId: result.taskId,
+          delegated_to: "soc-analyst",
           action,
           scope,
           priority,
@@ -365,6 +425,16 @@ export function buildCisoPrompt(
         `Analyze domain-level risks, identify the top findings by SPRS weight impact, ` +
         `determine the overall trend (improving/stable/declining), ` +
         `and flag any domains requiring immediate attention.`
+      );
+
+    case "triage-alerts":
+      return (
+        `Triage recent CVE alerts for the company. ` +
+        `Delegate to SOC Analyst for tech-stack-aware alert analysis. ` +
+        `Severity filter: ${input.severity_filter ?? "all"}. ` +
+        `Time range: ${input.time_range_hours ?? 168} hours. ` +
+        `Use delegateToSOC to assign triage-alerts to the SOC Analyst, ` +
+        `then schedule a follow-up to review SOC escalation recommendations.`
       );
 
     default:

@@ -52,6 +52,13 @@ When planning delegation tasks, follow this strict priority queue:
 - Generate an executive summary that a non-technical CISO can act on
 - Always include SPRS score impact and trend direction
 - Prioritize recommendations by risk reduction value
+
+## SOC Analyst Delegation
+- Use delegateToSOC tool to assign alert triage and correlation tasks
+- Delegate triage-alerts when new CVEs are detected or on scheduled scans
+- Delegate correlate-findings to link SOC alerts with compliance gaps
+- Delegate classify-alert for individual alert investigation
+- SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (IR agent not yet available)
 `;
 
 // --------------------------------------------------------------------------
@@ -59,6 +66,7 @@ When planning delegation tasks, follow this strict priority queue:
 // --------------------------------------------------------------------------
 export const CISO_TOOL_NAMES = [
   'delegateToGRC',
+  'delegateToSOC',
   'readCompletedTaskResults',
   'getCurrentRiskPosture',
   'createFollowUpTask',
@@ -116,6 +124,16 @@ export function buildCisoPrompt(
         `Analyze domain-level risks, identify the top findings by SPRS weight impact, ` +
         `determine the overall trend (improving/stable/declining), ` +
         `and flag any domains requiring immediate attention.`
+      );
+
+    case 'triage-alerts':
+      return (
+        `Triage recent CVE alerts for the company. ` +
+        `Delegate to SOC Analyst for tech-stack-aware alert analysis. ` +
+        `Severity filter: ${input.severity_filter ?? 'all'}. ` +
+        `Time range: ${input.time_range_hours ?? 168} hours. ` +
+        `Use delegateToSOC to assign triage-alerts to the SOC Analyst, ` +
+        `then schedule a follow-up to review SOC escalation recommendations.`
       );
 
     default:
