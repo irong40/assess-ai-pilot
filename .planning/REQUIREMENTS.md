@@ -63,10 +63,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Incident Response Agent
 
-- [ ] **IR-01**: IR agent generates containment recommendations based on incident type
-- [ ] **IR-02**: IR agent provides step-by-step playbook guidance (detect, contain, eradicate, recover)
-- [ ] **IR-03**: IR agent generates post-incident reports
-- [ ] **IR-04**: IR agent recommendations require human approval before any action
+- [x] **IR-01**: IR agent generates containment recommendations based on incident type
+- [x] **IR-02**: IR agent provides step-by-step playbook guidance (detect, contain, eradicate, recover)
+- [x] **IR-03**: IR agent generates post-incident reports
+- [x] **IR-04**: IR agent recommendations require human approval before any action
 
 ### AppSec Engineer Agent
 
@@ -198,10 +198,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | THRT-02 | Phase 5: Security Operations Agents | Complete |
 | THRT-03 | Phase 5: Security Operations Agents | Complete |
 | THRT-04 | Phase 5: Security Operations Agents | Complete |
-| IR-01 | Phase 6: Advanced Agents | Pending |
-| IR-02 | Phase 6: Advanced Agents | Pending |
-| IR-03 | Phase 6: Advanced Agents | Pending |
-| IR-04 | Phase 6: Advanced Agents | Pending |
+| IR-01 | Phase 6: Advanced Agents | Complete |
+| IR-02 | Phase 6: Advanced Agents | Complete |
+| IR-03 | Phase 6: Advanced Agents | Complete |
+| IR-04 | Phase 6: Advanced Agents | Complete |
 | ASEC-01 | Phase 6: Advanced Agents | Pending |
 | ASEC-02 | Phase 6: Advanced Agents | Pending |
 | ASEC-03 | Phase 6: Advanced Agents | Pending |
