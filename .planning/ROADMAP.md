@@ -111,12 +111,12 @@ Plans:
   3. Pen Test agent performs passive vulnerability discovery and scans for known CVE patterns in the customer's declared tech stack, with explicit authorization and scoped permissions required before any scan
   4. IR agent generates post-incident reports that feed into the compliance dashboard
   5. All three agents route through the CISO Orchestrator and appear with full activity and reasoning on the agent dashboard
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 06-01: Incident Response agent (containment, playbooks, post-incident reports)
-- [ ] 06-02: AppSec Engineer agent (dependency scanning, config review, vulnerability reports)
-- [ ] 06-03: Pen Test agent (passive discovery, CVE pattern scanning, authorization gates)
+- [ ] 06-01-PLAN.md -- Incident Response agent (schemas, tools, NIST 800-61r2 playbooks, ir_incidents migration, Edge Function, CISO delegateToIR with risk_level='high')
+- [ ] 06-02-PLAN.md -- AppSec Engineer agent (schemas, manifest parser, CONFIG_SECURITY_RULES, appsec_findings migration, Edge Function, CISO delegateToAppSec)
+- [ ] 06-03-PLAN.md -- Pen Test agent (schemas, passive-only tools, authorization gate, pen_test_findings migration, Edge Function, CISO delegateToPenTest -- completes 7-agent team)
 
 ## Progress
 
