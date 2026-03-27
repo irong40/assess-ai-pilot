@@ -1,11 +1,11 @@
 /**
  * Approval Queue -- displays pending agent approval requests
- * with approve/reject actions restricted to admin and issm roles.
+ * with approve/reject actions restricted by per-agent-type permissions.
  *
  * Features:
  * - Lists all pending approvals with task context
- * - Approve button (immediate) for admin/issm only
- * - Reject button with optional reason dialog for admin/issm only
+ * - Approve/reject buttons shown only when user has can_approve for that agent type
+ * - Permission check uses company_agent_permissions table via useAllAgentPermissions
  * - Loading skeleton state
  * - Empty state with check icon
  */
@@ -28,7 +28,7 @@ import {
   usePendingApprovals,
   useApprovalDecision,
 } from '@/hooks/useAgentApprovals';
-import { useUserProfile } from '@/hooks/useUserProfile';
+import { useAllAgentPermissions } from '@/hooks/useAgentPermissions';
 import type { AgentType } from '@/types/agent';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -57,18 +57,12 @@ function getRiskBadgeClass(risk: string): string {
   }
 }
 
-/** Roles allowed to approve/reject */
-const APPROVER_ROLES = ['admin', 'issm'];
-
 export function ApprovalQueue() {
   const { data: approvals, isLoading } = usePendingApprovals();
-  const { data: profile } = useUserProfile();
+  const { data: permissionsMap } = useAllAgentPermissions();
   const decision = useApprovalDecision();
   const [rejectDialogId, setRejectDialogId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
-
-  const userRole = profile?.role ?? '';
-  const canApprove = APPROVER_ROLES.includes(userRole);
 
   const handleApprove = (approvalId: string) => {
     decision.mutate({ approvalId, status: 'approved' });
@@ -131,6 +125,8 @@ export function ApprovalQueue() {
           AGENT_DISPLAY_NAMES[approval.agent_type] ?? approval.agent_type;
         const reasoning =
           approval.agent_tasks?.reasoning_summary ?? 'No reasoning provided';
+        const canApproveAgent =
+          permissionsMap?.get(approval.agent_type)?.canApprove ?? false;
 
         return (
           <Card key={approval.id}>
@@ -161,7 +157,7 @@ export function ApprovalQueue() {
                   })}
                 </div>
 
-                {canApprove && (
+                {canApproveAgent && (
                   <div className="flex gap-2 pt-2">
                     <Button
                       size="sm"

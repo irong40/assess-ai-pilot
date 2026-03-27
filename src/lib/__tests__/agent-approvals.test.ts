@@ -49,6 +49,20 @@ vi.mock('@/hooks/useAuth', () => ({
   useAuth: () => ({ user: { id: 'user-1' } }),
 }));
 
+// Mock useAgentPermissions for ApprovalQueue permission checks
+const mockPermissionsMap = vi.fn();
+vi.mock('@/hooks/useAgentPermissions', () => ({
+  useAgentPermissions: () => ({
+    data: { canConfigure: true, canApprove: true, canViewLogs: true },
+    isLoading: false,
+  }),
+  useAllAgentPermissions: () => ({
+    data: mockPermissionsMap(),
+    isLoading: false,
+    isSuccess: true,
+  }),
+}));
+
 // ---- Test Data ----
 
 const now = new Date().toISOString();
@@ -186,6 +200,10 @@ describe('ApprovalQueue', () => {
 
   it('renders list of pending approvals with task action, reasoning, and risk level', async () => {
     mockRole.mockReturnValue('admin');
+    mockPermissionsMap.mockReturnValue(new Map([
+      ['incident-response', { canConfigure: true, canApprove: true, canViewLogs: true }],
+      ['pen-test', { canConfigure: true, canApprove: true, canViewLogs: true }],
+    ]));
     mockOrder.mockResolvedValue({ data: mockPendingApprovals, error: null });
 
     const { ApprovalQueue } = await import(
@@ -207,6 +225,10 @@ describe('ApprovalQueue', () => {
 
   it('shows approve/reject buttons only for admin and issm roles', async () => {
     mockRole.mockReturnValue('admin');
+    mockPermissionsMap.mockReturnValue(new Map([
+      ['incident-response', { canConfigure: true, canApprove: true, canViewLogs: true }],
+      ['pen-test', { canConfigure: true, canApprove: true, canViewLogs: true }],
+    ]));
     mockOrder.mockResolvedValue({ data: mockPendingApprovals, error: null });
 
     const { ApprovalQueue } = await import(
@@ -226,6 +248,10 @@ describe('ApprovalQueue', () => {
 
   it('hides action buttons for user and isso roles', async () => {
     mockRole.mockReturnValue('isso');
+    mockPermissionsMap.mockReturnValue(new Map([
+      ['incident-response', { canConfigure: false, canApprove: false, canViewLogs: true }],
+      ['pen-test', { canConfigure: false, canApprove: false, canViewLogs: true }],
+    ]));
     mockOrder.mockResolvedValue({ data: mockPendingApprovals, error: null });
 
     const { ApprovalQueue } = await import(

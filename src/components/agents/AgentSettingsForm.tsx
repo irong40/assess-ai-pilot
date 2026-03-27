@@ -25,6 +25,7 @@ import {
   useAgentSettings,
   useUpdateAgentSettings,
 } from '@/hooks/useAgentSettings';
+import { useAgentPermissions } from '@/hooks/useAgentPermissions';
 import type { AgentSettingsData, AutoApproveThreshold } from '@/hooks/useAgentSettings';
 
 const THRESHOLD_OPTIONS: { value: AutoApproveThreshold; label: string }[] = [
@@ -36,6 +37,8 @@ const THRESHOLD_OPTIONS: { value: AutoApproveThreshold; label: string }[] = [
 export function AgentSettingsForm() {
   const { data: settingsRow, isLoading } = useAgentSettings();
   const updateSettings = useUpdateAgentSettings();
+  const { data: permissions, isLoading: permLoading } = useAgentPermissions('global');
+  const canConfigure = permissions?.canConfigure ?? false;
 
   const [approvalNeeded, setApprovalNeeded] = useState(true);
   const [driftAlert, setDriftAlert] = useState(true);
@@ -86,6 +89,7 @@ export function AgentSettingsForm() {
             <Checkbox
               id="approval-needed"
               checked={approvalNeeded}
+              disabled={!canConfigure}
               onCheckedChange={(checked) =>
                 setApprovalNeeded(checked === true)
               }
@@ -97,6 +101,7 @@ export function AgentSettingsForm() {
             <Checkbox
               id="drift-alert"
               checked={driftAlert}
+              disabled={!canConfigure}
               onCheckedChange={(checked) => setDriftAlert(checked === true)}
             />
             <Label htmlFor="drift-alert">Drift alert</Label>
@@ -106,6 +111,7 @@ export function AgentSettingsForm() {
             <Checkbox
               id="task-complete"
               checked={taskComplete}
+              disabled={!canConfigure}
               onCheckedChange={(checked) => setTaskComplete(checked === true)}
             />
             <Label htmlFor="task-complete">Task complete</Label>
@@ -124,6 +130,7 @@ export function AgentSettingsForm() {
             </Label>
             <Select
               value={threshold}
+              disabled={!canConfigure}
               onValueChange={(val) =>
                 setThreshold(val as AutoApproveThreshold)
               }
@@ -143,9 +150,14 @@ export function AgentSettingsForm() {
         </CardContent>
       </Card>
 
-      <Button onClick={handleSave} disabled={updateSettings.isPending}>
+      <Button onClick={handleSave} disabled={updateSettings.isPending || !canConfigure}>
         {updateSettings.isPending ? 'Saving...' : 'Save Settings'}
       </Button>
+      {!canConfigure && !permLoading && (
+        <p className="text-sm text-muted-foreground mt-2">
+          You do not have permission to configure agent settings.
+        </p>
+      )}
     </div>
   );
 }

@@ -99,6 +99,12 @@ interface UpdateSettingsInput {
 /**
  * Upserts agent settings for the current user's company.
  * Uses INSERT ON CONFLICT UPDATE via Supabase upsert.
+ *
+ * IMPORTANT: Consuming components MUST check useAgentPermissions(agentType).canConfigure
+ * before allowing the user to trigger this mutation. RLS on agent_settings already
+ * restricts writes to admin role at the DB level, so the client-side check is
+ * defense-in-depth. Do NOT add useAgentPermissions inside this hook (hooks cannot
+ * be called conditionally inside other hooks).
  */
 export function useUpdateAgentSettings() {
   const queryClient = useQueryClient();
