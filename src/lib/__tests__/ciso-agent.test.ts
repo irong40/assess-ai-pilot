@@ -44,15 +44,16 @@ describe('CISO Agent', () => {
   });
 
   describe('CISO_TOOL_NAMES', () => {
-    it('exports expected tool names', () => {
+    it('exports expected tool names including delegateToSOC', () => {
       expect(CISO_TOOL_NAMES).toContain('delegateToGRC');
+      expect(CISO_TOOL_NAMES).toContain('delegateToSOC');
       expect(CISO_TOOL_NAMES).toContain('readCompletedTaskResults');
       expect(CISO_TOOL_NAMES).toContain('getCurrentRiskPosture');
       expect(CISO_TOOL_NAMES).toContain('createFollowUpTask');
     });
 
-    it('contains exactly 4 tools', () => {
-      expect(CISO_TOOL_NAMES).toHaveLength(4);
+    it('contains exactly 5 tools', () => {
+      expect(CISO_TOOL_NAMES).toHaveLength(5);
     });
   });
 
@@ -82,6 +83,25 @@ describe('CISO Agent', () => {
     it('returns fallback prompt for unknown action', () => {
       const prompt = buildCisoPrompt('unknown-action', {});
       expect(prompt.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('CISO SOC Delegation', () => {
+    it('CISO_SYSTEM_PROMPT contains SOC Analyst delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/SOC.*Analyst.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToSOC/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions triage-alerts delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/triage.alerts/i);
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for triage-alerts action', () => {
+      const prompt = buildCisoPrompt('triage-alerts', {
+        company_id: 'test-co',
+      });
+      expect(prompt.toLowerCase()).toContain('triage');
+      expect(prompt.toLowerCase()).toContain('soc');
     });
   });
 
@@ -124,6 +144,63 @@ describe('CISO Agent', () => {
       expect(code).toContain('synthesize-results');
       expect(code).toContain('generate-executive-summary');
       expect(code).toContain('assess-risk-posture');
+    });
+  });
+
+  describe('SOC Analyst Edge Function structure', () => {
+    it('imports executeAgentTask from agent-base.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*executeAgentTask.*agent-base/s);
+    });
+
+    it('imports SOC_SYSTEM_PROMPT and createSocTools from soc-tools.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*SOC_SYSTEM_PROMPT.*soc-tools/s);
+      expect(code).toMatch(/import.*createSocTools.*soc-tools/s);
+    });
+
+    it('imports SocTriageResultSchema from soc-schemas.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*SocTriageResultSchema.*soc-schemas/s);
+    });
+
+    it('uses anthropic claude model for text generation', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/anthropic\(["']claude/);
+    });
+
+    it('uses maxSteps: 8 for timeout avoidance', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/maxSteps:\s*8/);
+    });
+
+    it('uses Deno.serve pattern', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-soc-analyst/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/Deno\.serve/);
     });
   });
 });
