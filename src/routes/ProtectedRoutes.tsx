@@ -16,9 +16,28 @@ import DocumentManagement from "@/pages/DocumentManagement";
 import WizardHub from "@/pages/WizardHub";
 import SelfAssessmentWizard from "@/pages/SelfAssessmentWizard";
 import AssessmentResults from "@/pages/AssessmentResults";
+import Onboarding from "@/pages/Onboarding";
+import TrialExpired from "@/pages/TrialExpired";
 
 const ProtectedRoutes = () => (
   <>
+    {/* Onboarding and trial routes -- no NDAGate, no role check */}
+    <Route
+      path="/onboarding"
+      element={
+        <ProtectedRoute>
+          <Onboarding />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/trial-expired"
+      element={
+        <ProtectedRoute>
+          <TrialExpired />
+        </ProtectedRoute>
+      }
+    />
     <Route
       path="/admin"
       element={

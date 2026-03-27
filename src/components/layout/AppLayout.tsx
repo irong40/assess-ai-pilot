@@ -4,9 +4,11 @@ import { LogOut, User, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { TrialBanner } from '@/components/onboarding/TrialBanner';
 import { AppBreadcrumbs } from './AppBreadcrumbs';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { useTrialStatus } from '@/hooks/useTrialStatus';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -15,6 +17,7 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
   const { user, signOut } = useAuth();
   const { data: profile } = useUserProfile();
+  const { trialEndsAt, trialStatus } = useTrialStatus();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -79,6 +82,11 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
         </div>
       </header>
+
+      {/* Trial Banner */}
+      {trialStatus === 'trial' && (
+        <TrialBanner trialEndsAt={trialEndsAt} trialStatus={trialStatus} />
+      )}
 
       {/* Main Content */}
       <main>{children}</main>
