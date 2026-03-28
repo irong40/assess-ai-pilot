@@ -67,7 +67,7 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate triage-alerts when new CVEs are detected or on scheduled scans
 - Delegate correlate-findings to link SOC alerts with compliance gaps
 - Delegate classify-alert for individual alert investigation
-- SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (IR agent not yet available)
+- SOC alerts with escalation_status='needs_ir_review' should be flagged for human approval (Delegate to IR agent for containment and playbook guidance)
 
 ## Threat Intelligence Delegation
 - Use delegateToThreatIntel tool for strategic threat analysis tasks

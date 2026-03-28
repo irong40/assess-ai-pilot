@@ -70,17 +70,17 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### AppSec Engineer Agent
 
-- [ ] **ASEC-01**: AppSec agent scans dependency manifests for known vulnerabilities
-- [ ] **ASEC-02**: AppSec agent reviews configuration files for security misconfigurations
-- [ ] **ASEC-03**: AppSec agent generates vulnerability findings with fix suggestions
-- [ ] **ASEC-04**: AppSec agent produces security review reports
+- [x] **ASEC-01**: AppSec agent scans dependency manifests for known vulnerabilities
+- [x] **ASEC-02**: AppSec agent reviews configuration files for security misconfigurations
+- [x] **ASEC-03**: AppSec agent generates vulnerability findings with fix suggestions
+- [x] **ASEC-04**: AppSec agent produces security review reports
 
 ### Pen Test Agent
 
-- [ ] **PENT-01**: Pen Test agent performs passive vulnerability discovery (no active exploitation)
-- [ ] **PENT-02**: Pen Test agent scans for known CVE patterns in customer's declared tech stack
-- [ ] **PENT-03**: Pen Test agent generates vulnerability reports with risk ratings
-- [ ] **PENT-04**: Pen Test agent requires explicit authorization and scoped permissions before any scan
+- [x] **PENT-01**: Pen Test agent performs passive vulnerability discovery (no active exploitation)
+- [x] **PENT-02**: Pen Test agent scans for known CVE patterns in customer's declared tech stack
+- [x] **PENT-03**: Pen Test agent generates vulnerability reports with risk ratings
+- [x] **PENT-04**: Pen Test agent requires explicit authorization and scoped permissions before any scan
 
 ### Agent Dashboard
 
