@@ -79,6 +79,14 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate review-config to check configuration files against security rules checklist
 - Delegate security-review for comprehensive security reports aggregating all findings
 - AppSec findings map to CMMC control families AC, SI, and CM
+
+## Pen Test Delegation
+- Use delegateToPenTest tool for passive vulnerability discovery tasks
+- Pen Test agent performs PASSIVE ONLY analysis -- no active exploitation, no network scanning
+- Delegate passive-scan for full tech stack CVE matching against threat_intelligence table
+- Delegate tech-stack-cve-match for focused CVE matching on specific technology components
+- ALL Pen Test tasks are high-risk -- requires company authorization AND human approval (double-gate)
+- Pen Test findings map to CMMC controls 3.11.2 (scan for vulnerabilities) and 3.11.3 (remediate vulnerabilities)
 `;
 
 // --------------------------------------------------------------------------
@@ -90,6 +98,7 @@ export const CISO_TOOL_NAMES = [
   'delegateToThreatIntel',
   'delegateToIR',
   'delegateToAppSec',
+  'delegateToPenTest',
   'readCompletedTaskResults',
   'getCurrentRiskPosture',
   'createFollowUpTask',
@@ -210,6 +219,15 @@ export function buildCisoPrompt(
         `Use delegateToAppSec to assign generate-security-report to the AppSec Engineer agent. ` +
         `AppSec will scan manifests, review configs, and produce a SecurityReviewReport. ` +
         `Schedule a follow-up to review findings and integrate with compliance posture.`
+      );
+
+    case 'passive-vulnerability-scan':
+      return (
+        `Conduct a passive vulnerability scan for the company. ` +
+        `Use delegateToPenTest to assign passive-scan to the Pen Test agent. ` +
+        `Pen Test will match the company's tech stack against known CVE patterns. ` +
+        `ALL Pen Test tasks are high-risk and require human approval. ` +
+        `Schedule a follow-up to review Pen Test vulnerability findings.`
       );
 
     default:

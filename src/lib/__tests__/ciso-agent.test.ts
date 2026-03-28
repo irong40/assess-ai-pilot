@@ -61,8 +61,29 @@ describe('CISO Agent', () => {
       expect(CISO_TOOL_NAMES).toContain('delegateToAppSec');
     });
 
-    it('contains exactly 8 tools', () => {
-      expect(CISO_TOOL_NAMES).toHaveLength(8);
+    it('includes delegateToPenTest for pen test delegation', () => {
+      expect(CISO_TOOL_NAMES).toContain('delegateToPenTest');
+    });
+
+    it('contains exactly 9 tools (6 delegations + 3 utility = complete 7-agent team)', () => {
+      expect(CISO_TOOL_NAMES).toHaveLength(9);
+    });
+
+    it('has all 6 specialist delegation tools', () => {
+      const delegationTools = CISO_TOOL_NAMES.filter((n: string) => n.startsWith('delegateTo'));
+      expect(delegationTools).toHaveLength(6);
+      expect(delegationTools).toContain('delegateToGRC');
+      expect(delegationTools).toContain('delegateToSOC');
+      expect(delegationTools).toContain('delegateToThreatIntel');
+      expect(delegationTools).toContain('delegateToIR');
+      expect(delegationTools).toContain('delegateToAppSec');
+      expect(delegationTools).toContain('delegateToPenTest');
+    });
+
+    it('has all 3 utility tools', () => {
+      expect(CISO_TOOL_NAMES).toContain('readCompletedTaskResults');
+      expect(CISO_TOOL_NAMES).toContain('getCurrentRiskPosture');
+      expect(CISO_TOOL_NAMES).toContain('createFollowUpTask');
     });
   });
 
@@ -603,6 +624,181 @@ describe('CISO Agent', () => {
       const code = fs.readFileSync(denoPath, 'utf-8');
       // The delegateToIR section should contain risk_level: 'high'
       expect(code).toMatch(/risk_level.*high/i);
+    });
+
+    it('Deno ciso-tools.ts has delegateToPenTest in CISO_TOOL_NAMES', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toContain('delegateToPenTest');
+    });
+
+    it('Deno ciso-tools.ts has Pen Test delegation section in CISO_SYSTEM_PROMPT', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      expect(code).toMatch(/Pen\s*Test\s*Delegation/i);
+    });
+
+    it('Deno ciso-tools.ts has exactly 9 tool names', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      // Count delegateToX entries in the CISO_TOOL_NAMES array
+      const toolNamesMatch = code.match(/CISO_TOOL_NAMES\s*=\s*\[[\s\S]*?\]\s*as\s*const/);
+      expect(toolNamesMatch).toBeTruthy();
+      const entries = toolNamesMatch![0].match(/"/g);
+      // Each tool name is quoted, so count pairs
+      expect(entries!.length).toBe(18); // 9 tools * 2 quotes each
+    });
+
+    it('Deno ciso-tools.ts hardcodes risk_level high for Pen Test delegation', () => {
+      const denoPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/_shared/ciso-tools.ts'
+      );
+      const code = fs.readFileSync(denoPath, 'utf-8');
+      // The delegateToPenTest section should contain risk_level: 'high'
+      const penTestSection = code.substring(code.indexOf('delegateToPenTest'));
+      expect(penTestSection).toMatch(/risk_level.*"high"/i);
+    });
+  });
+
+  describe('CISO Pen Test Delegation', () => {
+    it('CISO_SYSTEM_PROMPT contains Pen Test Delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Pen\s*Test\s*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToPenTest/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions passive-scan delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/passive-scan/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions tech-stack-cve-match delegation', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/tech-stack-cve-match/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions Pen Test tasks are high-risk', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Pen\s*Test.*high.risk|high.risk.*Pen\s*Test|ALL.*Pen\s*Test.*tasks/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions PASSIVE ONLY for Pen Test', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/PASSIVE\s*ONLY/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT mentions CMMC controls 3.11.2 and 3.11.3', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/3\.11\.2/);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/3\.11\.3/);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing GRC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Delegation Rules/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/delegateToGRC/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing SOC delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/SOC.*Analyst.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing Threat Intel delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Threat.*Intelligence.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing IR delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Incident.*Response.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT preserves existing AppSec delegation rules', () => {
+      expect(CISO_SYSTEM_PROMPT).toMatch(/AppSec.*Engineer.*Delegation/i);
+    });
+
+    it('CISO_SYSTEM_PROMPT has all 6 delegation sections', () => {
+      // Verify all delegation sections exist in the prompt
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Delegation Rules/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/SOC.*Analyst.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Threat.*Intelligence.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Incident.*Response.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/AppSec.*Engineer.*Delegation/i);
+      expect(CISO_SYSTEM_PROMPT).toMatch(/Pen\s*Test\s*Delegation/i);
+    });
+
+    it('buildCisoPrompt returns appropriate prompt for passive-vulnerability-scan action', () => {
+      const prompt = buildCisoPrompt('passive-vulnerability-scan', {});
+      expect(prompt.toLowerCase()).toContain('passive');
+      expect(prompt.toLowerCase()).toContain('vulnerability');
+      expect(prompt.toLowerCase()).toContain('pen test');
+    });
+  });
+
+  describe('Pen Test Edge Function structure', () => {
+    it('imports executeAgentTask from agent-base.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*executeAgentTask.*agent-base/s);
+    });
+
+    it('imports PEN_TEST_SYSTEM_PROMPT and createPenTestTools from pen-test-tools.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*PEN_TEST_SYSTEM_PROMPT.*pen-test-tools/s);
+      expect(code).toMatch(/import.*createPenTestTools.*pen-test-tools/s);
+    });
+
+    it('imports VulnerabilityReportSchema from pen-test-schemas.ts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/import.*VulnerabilityReportSchema.*pen-test-schemas/s);
+    });
+
+    it('uses anthropic claude model for text generation', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/anthropic\(["']claude/);
+    });
+
+    it('uses maxSteps: 8 for timeout avoidance', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/maxSteps:\s*8/);
+    });
+
+    it('uses Deno.serve pattern', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/Deno\.serve/);
+    });
+
+    it('uses buildPenTestPrompt for action-specific prompts', () => {
+      const edgeFnPath = path.resolve(
+        __dirname,
+        '../../../supabase/functions/agent-pen-test/index.ts'
+      );
+      const code = fs.readFileSync(edgeFnPath, 'utf-8');
+      expect(code).toMatch(/buildPenTestPrompt/);
     });
   });
 });

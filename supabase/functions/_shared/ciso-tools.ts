@@ -8,9 +8,12 @@
  * 1. delegateToGRC - Delegates tasks to the GRC Analyst via agent-base delegateTask
  * 2. delegateToSOC - Delegates tasks to the SOC Analyst
  * 3. delegateToThreatIntel - Delegates tasks to the Threat Intelligence agent
- * 4. readCompletedTaskResults - Reads completed subtask outputs
- * 5. getCurrentRiskPosture - Queries latest compliance snapshot
- * 6. createFollowUpTask - Schedules follow-up CISO tasks
+ * 4. delegateToIR - Delegates tasks to the Incident Response agent
+ * 5. delegateToAppSec - Delegates tasks to the AppSec Engineer agent
+ * 6. delegateToPenTest - Delegates tasks to the Pen Test agent (risk_level='high')
+ * 7. readCompletedTaskResults - Reads completed subtask outputs
+ * 8. getCurrentRiskPosture - Queries latest compliance snapshot
+ * 9. createFollowUpTask - Schedules follow-up CISO tasks
  */
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
@@ -85,6 +88,14 @@ When planning delegation tasks, follow this strict priority queue:
 - Delegate review-config to check configuration files against security rules checklist
 - Delegate security-review for comprehensive security reports aggregating all findings
 - AppSec findings map to CMMC control families AC, SI, and CM
+
+## Pen Test Delegation
+- Use delegateToPenTest tool for passive vulnerability discovery tasks
+- Pen Test agent performs PASSIVE ONLY analysis -- no active exploitation, no network scanning
+- Delegate passive-scan for full tech stack CVE matching against threat_intelligence table
+- Delegate tech-stack-cve-match for focused CVE matching on specific technology components
+- ALL Pen Test tasks are high-risk -- requires company authorization AND human approval (double-gate)
+- Pen Test findings map to CMMC controls 3.11.2 (scan for vulnerabilities) and 3.11.3 (remediate vulnerabilities)
 `;
 
 // --------------------------------------------------------------------------
@@ -96,6 +107,7 @@ export const CISO_TOOL_NAMES = [
   "delegateToThreatIntel",
   "delegateToIR",
   "delegateToAppSec",
+  "delegateToPenTest",
   "readCompletedTaskResults",
   "getCurrentRiskPosture",
   "createFollowUpTask",
@@ -377,6 +389,63 @@ export function createCisoTools(supabase: SupabaseClient, task: AgentTask) {
           action,
           scope,
           priority,
+        };
+      },
+    }),
+
+    /**
+     * Delegates a scoped task to the Pen Test agent.
+     * CRITICAL: Always sets risk_level='high' for double-gate authorization
+     * (agent_permissions check + human approval).
+     * Pen Test agent performs PASSIVE ONLY vulnerability discovery.
+     */
+    delegateToPenTest: tool({
+      description:
+        "Delegate a passive vulnerability discovery task to the Pen Test agent. " +
+        "PASSIVE ONLY -- no active exploitation. ALL Pen Test tasks are high-risk.",
+      parameters: z.object({
+        action: z
+          .string()
+          .describe(
+            "Pen Test action: 'passive-scan', 'tech-stack-cve-match', 'generate-vulnerability-report'"
+          ),
+        scope: z
+          .object({
+            tech_stack_keywords: z.array(z.string()).optional(),
+            focus_technologies: z.array(z.string()).optional(),
+          })
+          .describe("Scope of the Pen Test task"),
+        priority: z
+          .enum(["critical", "high", "medium", "low"])
+          .describe("Priority level for the delegated task"),
+      }),
+      execute: async ({ action, scope, priority }) => {
+        const result = await delegateTask(
+          supabase,
+          task,
+          "pen-test",
+          action,
+          {
+            ...scope,
+            company_id: task.company_id,
+            priority,
+            // CRITICAL: Always override risk_level to 'high' for Pen Test tasks (double-gate)
+            risk_level: "high",
+          }
+        );
+
+        if ("error" in result) {
+          return { success: false, error: result.error };
+        }
+
+        return {
+          success: true,
+          taskId: result.taskId,
+          delegated_to: "pen-test",
+          action,
+          scope,
+          priority,
+          risk_level: "high",
         };
       },
     }),
@@ -674,6 +743,15 @@ export function buildCisoPrompt(
         `Use delegateToAppSec to assign generate-security-report to the AppSec Engineer agent. ` +
         `AppSec will scan manifests, review configs, and produce a SecurityReviewReport. ` +
         `Schedule a follow-up to review findings and integrate with compliance posture.`
+      );
+
+    case "passive-vulnerability-scan":
+      return (
+        `Conduct a passive vulnerability scan for the company. ` +
+        `Use delegateToPenTest to assign passive-scan to the Pen Test agent. ` +
+        `Pen Test will match the company's tech stack against known CVE patterns. ` +
+        `ALL Pen Test tasks are high-risk and require human approval. ` +
+        `Schedule a follow-up to review Pen Test vulnerability findings.`
       );
 
     default:
